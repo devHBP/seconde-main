@@ -19,6 +19,7 @@
             </style>
         @endif
     </head>
+    @include('layouts.navigation')
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
             <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" alt="Laravel background" />
@@ -32,7 +33,7 @@
                             <nav class="-mx-3 flex flex-1 justify-end">
                                 @auth
                                     <a
-                                        href="{{ url('/dashboard') }}"
+                                        href=""
                                         class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                     >
                                         Dashboard
