@@ -5,9 +5,11 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 flex flex-col items-center space-y-6 bg-white">
+    <div class="py-12 flex flex-col space-y-6 bg-white">
         @foreach($roles as $role)
-            <x-role-card :title="$role->name" :description="$role->description" />
+            <a href="{{ route('role.sublogin', ['role_name' => strToLower($role->name)]) }}">
+                <x-role-card :title="$role->name" :description="$role->description" />
+            </a>
         @endforeach
     </div>
 </x-app-layout>
