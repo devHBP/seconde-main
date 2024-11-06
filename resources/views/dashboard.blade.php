@@ -7,9 +7,13 @@
 
     <div class="py-12 flex flex-col space-y-6 bg-white">
         @foreach($roles as $role)
-            <a href="{{ route('role.sublogin', ['role_name' => strToLower($role->name)]) }}">
+        <form action={{ route('role.sublogin')}} method="POST">
+            @csrf
+            <input type="hidden" name="role_name" value="{{ $role->name }}">
+            <button type="submit" class="role-card w-full flex justify-center">
                 <x-role-card :title="$role->name" :description="$role->description" />
-            </a>
+            </button>
+        </form>
         @endforeach
     </div>
 </x-app-layout>

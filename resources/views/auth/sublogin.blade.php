@@ -3,7 +3,7 @@
         <h2>{{ $role->name }}</h2>
     </div>
     <div class="login-box">
-        <form method="POST" action="">
+        <form method="POST" action="{{ route('role.authenticate', ['role_name' => strToLower($role->name)]) }}">
             @csrf
             <input type="hidden" name="role_id" value="{{ $role->id }}">
         
