@@ -1,0 +1,47 @@
+
+.dashboard-header{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin:1em 1.5em 1em 1em;
+}
+h2.title{
+    display: flex;
+    flex-direction: column;
+    font-size: 2.5em;
+    font-weight: bold;
+    span{
+        color:lightgray;
+        font-size: 0.4em;
+        align-self:center;
+    }
+}
+.logout-dashboard{
+    svg{
+        width:30px
+    }
+}
+
+div.layout-container{
+    display:flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.6em;
+        background-color: lightgray;
+        height: 150px;
+        width: 40%;
+        border-radius: 10px;
+        border: 1px solid darkgray;
+        div{
+            display:flex;
+        }
+        &:hover{
+            background-color:gainsboro;
+        }
+    }
+}

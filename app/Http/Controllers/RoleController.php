@@ -23,6 +23,7 @@ class RoleController extends Controller
         $role_id = $request->input('role_id');
         
         $role = Role::find($role_id);
+        $role_name = strtolower($role->name);
         $user = User::where('name', $username)->first();
 
         // Authentication maison, on vérifie si il y a bien un User qui correspond, si le password est ok et si dans les roles de l'user 
@@ -30,14 +31,14 @@ class RoleController extends Controller
         if($user && Hash::check($password, $user->password) && $user->roles->contains('id', $role_id)){
             session([
                 'subsession' => [
-                    'username' => $username,
+                    'user' => $user,
                     'role_id' => $role_id,
-                    'role_name' => $role->name,
+                    'role_name' => $role_name,
                 ],
             ]);
-            return redirect()->route('role.dashboard', ['role_name' => strtolower($role->name)]);
+            return redirect()->intended("/$role_name/dashboard");
         }
-        return back()->withErrors(['auth' => 'Identifiants invalide ou rôle non autorisé.']);
+        return redirect()->route('dashboard')->withErrors(['auth' => 'Identifiants invalide ou rôle non autorisé.']);
     }
 
     public function destroy()

@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function (){
     Route::get('/', [HomeController::class, 'getHomePage'])->name('dashboard');
     Route::post('/session', [RoleController::class, 'showRoleLogin'])->name('role.sublogin');
     Route::post('/{role_name}/login', [RoleController::class, 'authenticate'])->name('role.authenticate');
-    Route::get('/{role_name}/logout', [RoleController::class, 'destroy']);
+    Route::get('/session/logout', [RoleController::class, 'destroy'])->name('role.logout');
 });
 
 /**
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/user/{id}', [FakeController::class, 'getUser']);
 });
 
-Route::middleware(['auth', 'subsession.role'])->group(function(){
+Route::middleware('auth')->group(function(){
     /**
      * Routes concernant les admins
      */
@@ -39,7 +39,7 @@ Route::middleware(['auth', 'subsession.role'])->group(function(){
     Route::post('/administrateur/user/create', [AdminController::class, 'createUser']);
     Route::get('/administrateur/user/{user_id}', [AdminController::class, 'modifyUser'])->name('admin.user.modify'); // Formulaire
     Route::put('/administrateur/user/{user_id}', [AdminController::class, 'modifyUser']);
-    Route::delete('/administrateur/user/{user_id}', [AdminController::class, 'deleteUser']);
+    Route::delete('/administrateur/user/{user_id}', [AdminController::class, 'deleteUser'])->name('admin.user.delete');
     // Gestion des marques
     Route::get('/administrateur/marques', [AdminController::class, 'getBrands'])->name('admin.brands');
     Route::get('/administrateur/marque/create', [AdminController::class, 'createBrand'])->name('admin.brand.create'); // Formulaire de création
