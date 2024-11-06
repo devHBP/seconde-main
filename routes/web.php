@@ -40,6 +40,37 @@ Route::middleware(['auth', 'subsession.role'])->group(function(){
     Route::get('/administrateur/user/{user_id}', [AdminController::class, 'modifyUser'])->name('admin.user.modify'); // Formulaire
     Route::put('/administrateur/user/{user_id}', [AdminController::class, 'modifyUser']);
     Route::delete('/administrateur/user/{user_id}', [AdminController::class, 'deleteUser']);
+    // Gestion des marques
+    Route::get('/administrateur/marques', [AdminController::class, 'getBrands'])->name('admin.brands');
+    Route::get('/administrateur/marque/create', [AdminController::class, 'createBrand'])->name('admin.brand.create'); // Formulaire de création
+    Route::post('/administrateur/marque/create', [AdminController::class, 'createBrand']);
+    Route::get('/administrateur/marque/{brand_id}', [AdminController::class, 'modifyBrand'])->name('admin.brand.modify'); // Formulaire de modif
+    Route::put('/administrateur/marque/{brand_id}', [AdminController::class, 'modifyBrand']);
+    Route::delete('/administrateur/marque/{brand_id}', [AdminController::class, 'deleteBrand']);
+    // Gestion des types
+    Route::get('/administrateur/types', [AdminController::class, 'getTypes'])->name('admin.types');
+    Route::get('/administrateur/type/create', [AdminController::class, 'createType'])->name('admin.type.create'); // Formulaire de création
+    Route::post('/administrateur/type/create', [AdminController::class, 'createType']);
+    Route::get('/administrateur/type/{type_id}', [AdminController::class, 'modifyType'])->name('admin.type.modify'); // Formulaire de modif
+    Route::put('/administrateur/marque/{type_id}', [AdminController::class, 'modifyType']);
+    Route::delete('/administrateur/marque/{type_id}', [AdminController::class, 'deleteBrand']);
+    // Gestion des etats 
+    Route::get('/administrateur/etats', [AdminController::class, 'getStates'])->name('admin.states');
+    Route::get('/administrateur/etat/create', [AdminController::class, 'createState'])->name('admin.state.create'); // Formulaire de création
+    Route::post('/administrateur/etat/create', [AdminController::class, 'createState']);
+    Route::get('/administrateur/etat/{state_id}', [AdminController::class, 'modifyState'])->name('admin.state.modify'); // Formulaire de modif
+    Route::put('/administrateur/etat/{state_id}', [AdminController::class, 'modifyState']);
+    Route::delete('/administrateur/etat/{state_id}', [AdminController::class, 'deleteState']);
+    // Gestion des produits
+    Route::get('/administrateur/produits', [AdminController::class, 'getProducts'])->name('admin.products');
+    Route::get('/administrateur/produit/create', [AdminController::class, 'createProduct'])->name('admin.product.create'); // Formulaire de création
+    Route::post('/administrateur/produit/create', [AdminController::class, 'createProduct']);
+    Route::get('/administrateur/produit/{product_id}', [AdminController::class, 'modifyProduct'])->name('admin.product.modify'); // Formulaire de modif
+    Route::put('/administrateur/produit/{product_id}', [AdminController::class, 'modifyProduct']);
+    Route::delete('/administrateur/produit/{product_id}', [AdminController::class, 'deleteProduct']);
+    // Tickets remises et Statistiques
+    Route::get('/administrateur/tickets', [AdminController::class, 'getTickets'])->name('admin.tickets');
+    Route::get('/administrateur/stats', [AdminController::class, 'getStats'])->name('admin.stats');
     
     /**
      * Routes concernant l'encaissement
