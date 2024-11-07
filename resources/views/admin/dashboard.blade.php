@@ -21,7 +21,7 @@
         <a href="{{ route('admin.types') }}">
             <div class="dashboard-cards">Types</div>
         </a>
-        <a href="">
+        <a href="{{ route('admin.states') }}">
             <div class="dashboard-cards">Etats</div>
         </a>
         <a href="">

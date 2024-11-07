@@ -6,12 +6,12 @@ use App\Models\Scopes\AccountScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Model;
 
-
 #[ScopedBy([AccountScope::class])]
-class Brand extends Model
+class State extends Model
 {
-    protected $fillable = [
-        "name"
+    protected $fillable =[
+        'name',
+        'definition'
     ];
 
     public function account()

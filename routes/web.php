@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/administrateur/etat/create', [AdminController::class, 'createState']);
     Route::get('/administrateur/etat/{state_id}', [AdminController::class, 'modifyState'])->name('admin.state.modify'); // Formulaire de modif
     Route::put('/administrateur/etat/{state_id}', [AdminController::class, 'modifyState']);
-    Route::delete('/administrateur/etat/{state_id}', [AdminController::class, 'deleteState']);
+    Route::delete('/administrateur/etat/{state_id}', [AdminController::class, 'deleteState'])->name('admin.state.delete');
     // Gestion des produits
     Route::get('/administrateur/produits', [AdminController::class, 'getProducts'])->name('admin.products');
     Route::get('/administrateur/produit/create', [AdminController::class, 'createProduct'])->name('admin.product.create'); // Formulaire de création

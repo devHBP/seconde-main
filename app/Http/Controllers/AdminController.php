@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Role;
+use App\Models\State;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -136,7 +137,7 @@ class AdminController
             $validatedData['name'] = strtoupper($validatedData['name']);
             $brand->update($validatedData);
 
-            return redirect()->route('admin.brands');
+            return redirect()->route('admin.brands')->with('success', 'Marque modifiée avec succès');
         }
         return view('admin.brands.create-or-modify', ['brand' => $brand]);
     }
@@ -183,7 +184,7 @@ class AdminController
             $validatedData['name'] = strtoupper($validatedData['name']); 
             $type->update($validatedData);
 
-            return redirect()->route('admin.types');
+            return redirect()->route('admin.types')->with('success', 'Type modifié avec succès');
         }
         return view('admin.types.create-or-modify', ['type' => $type]);
     }
@@ -200,28 +201,49 @@ class AdminController
      */
     public function getStates()
     {
-        //
+        return view('admin.states.states', ['states' => State::all()]);
     }
 
     public function createState(Request $request)
     {
         if($request->isMethod('post')){
-            // Case formulaire posté
+            $account = $request->user();
+            $validatedData = $request->validate([
+                "name" => "required|string|max:255",
+                "definition" => "nullable|string",
+            ]);
+            $state = new State();
+            $state->account_id = $account->id;
+            $state->name = strtoupper($validatedData['name']);
+            $state->definition = $validatedData['definition'];
+            $state->save();
+
+            return redirect()->route('admin.states')->with('success', 'Etat créé avec succès.');
         }
-        // Vue formulaire
+        return view('admin.states.create-or-update');
     }
 
     public function modifyState(Request $request, $state_id)
     {
+        $state = State::findOrFail($state_id);
         if($request->isMethod('put')){
-            // Case formulaire posté
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'definition' => 'nullable|string',
+            ]);
+            $validatedData['name'] = strtoupper($validatedData['name']); 
+            $state->update($validatedData);
+
+            return redirect()->route('admin.states')->with('success', 'Etat modifié avec succès');
         }
-        // Vue formulaire
+        return view('admin.states.create-or-update', ['state' => $state]);
     }
 
     public function deleteState($state_id)
     {
-        //
+        $state = State::findOrFail($state_id);
+        $state->delete();
+        return redirect()->route('admin.states')->with('success', 'Etat supprimé avec succès.');
     }
 
     /**
