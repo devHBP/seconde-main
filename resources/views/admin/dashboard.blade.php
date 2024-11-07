@@ -15,7 +15,7 @@
         <a href="{{ route('admin.users') }}">
             <div class="dashboard-cards">Utilisateurs</div>
         </a>
-        <a href="">
+        <a href="{{ route('admin.brands') }}">
             <div class="dashboard-cards">Marques</div>
         </a>
         <a href="">

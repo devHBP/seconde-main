@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -103,28 +104,46 @@ class AdminController
      */
     public function getBrands()
     {
-        //
+        return view('admin.brands.brands', ['brands' => Brand::all()]);
     }
 
     public function createBrand(Request $request)
     {
         if($request->isMethod('post')){
-            // Case formulaire posté
+            $account = $request->user();
+            $validatedData = $request->validate([
+                "name" => "required|string|max:120",
+            ]);
+            $brand = new Brand();
+            $brand->account_id = $account->id;
+            $brand->name = $validatedData['name'];
+            $brand->save();
+
+            return redirect()->route('admin.brands')->with('success', 'Marque créée avec succès.');
         }
-        // Vue Formulaire
+        return view('admin.brands.create-or-modify');
     }
 
     public function modifyBrand(Request $request, $brand_id)
     {
+        $brand = Brand::findOrFail($brand_id);
         if($request->isMethod('put')){
-            // Case formulaire posté
+
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:120',
+            ]);
+            $brand->update($validatedData);
+
+            return redirect()->route('admin.brands');
         }
-        // Vue formulaire
+        return view('admin.brands.create-or-modify', ['brand' => $brand]);
     }
 
     public function deleteBrand($brand_id)
     {
-        //
+        $brand = Brand::findOrFail($brand_id);
+        $brand->delete();
+        return redirect()->route('admin.brands');
     }
 
     /**
