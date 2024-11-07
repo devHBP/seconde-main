@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/administrateur/type/create', [AdminController::class, 'createType'])->name('admin.type.create'); // Formulaire de création
     Route::post('/administrateur/type/create', [AdminController::class, 'createType']);
     Route::get('/administrateur/type/{type_id}', [AdminController::class, 'modifyType'])->name('admin.type.modify'); // Formulaire de modif
-    Route::put('/administrateur/marque/{type_id}', [AdminController::class, 'modifyType']);
-    Route::delete('/administrateur/marque/{type_id}', [AdminController::class, 'deleteBrand']);
+    Route::put('/administrateur/type/{type_id}', [AdminController::class, 'modifyType']);
+    Route::delete('/administrateur/type/{type_id}', [AdminController::class, 'deleteType'])->name('admin.type.delete');
     // Gestion des etats 
     Route::get('/administrateur/etats', [AdminController::class, 'getStates'])->name('admin.states');
     Route::get('/administrateur/etat/create', [AdminController::class, 'createState'])->name('admin.state.create'); // Formulaire de création

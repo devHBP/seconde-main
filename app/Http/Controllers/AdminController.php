@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Role;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -116,7 +117,7 @@ class AdminController
             ]);
             $brand = new Brand();
             $brand->account_id = $account->id;
-            $brand->name = $validatedData['name'];
+            $brand->name = strtoupper($validatedData['name']);
             $brand->save();
 
             return redirect()->route('admin.brands')->with('success', 'Marque créée avec succès.');
@@ -132,6 +133,7 @@ class AdminController
             $validatedData = $request->validate([
                 'name' => 'required|string|max:120',
             ]);
+            $validatedData['name'] = strtoupper($validatedData['name']);
             $brand->update($validatedData);
 
             return redirect()->route('admin.brands');
@@ -151,28 +153,46 @@ class AdminController
      */ 
     public function getTypes()
     {
-        //
+        return view('admin.types.types', ['types' => Type::all()]);
     }
 
     public function createType(Request $request)
     {
         if($request->isMethod('post')){
-            //
+            $account = $request->user();
+            $validatedData = $request->validate([
+                "name" => "required|string|max:120",
+            ]);
+            $type = new Type();
+            $type->account_id = $account->id;
+            $type->name = strtoupper($validatedData['name']);
+            $type->save();
+
+            return redirect()->route('admin.types')->with('success', 'Type créé avec succès.');
         }
-        //
+        return view('admin.types.create-or-modify');
     }
 
     public function modifyType(Request $request, $type_id)
     {
+        $type = Type::findOrFail($type_id);
         if($request->isMethod('put')){
-            //
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:120',
+            ]);
+            $validatedData['name'] = strtoupper($validatedData['name']); 
+            $type->update($validatedData);
+
+            return redirect()->route('admin.types');
         }
-        //
+        return view('admin.types.create-or-modify', ['type' => $type]);
     }
 
     public function deleteType($type_id)
     {
-        //
+        $type = Type::findOrFail($type_id);
+        $type->delete();
+        return redirect()->route('admin.types')->with('success', 'Type supprimé avec succès.');
     }
 
     /**
