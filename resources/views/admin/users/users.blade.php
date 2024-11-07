@@ -40,7 +40,7 @@
                                 {{ $user->roles->pluck('name')->join(', ') }}
                             </td>
                             <td class="px-5 py-5 border-b border-gray-200 bg-white dark:bg-gray-800 text-sm text-center">
-                                <a href="{{ route('admin.user.modify', $user->id) }}" class="text-lime-600 hover:text-lime-900 mr-2">Modifier</a>
+                                <a href="{{ route('admin.user.modify', $user) }}" class="text-lime-600 hover:text-lime-900 mr-2">Modifier</a>
                                 <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
