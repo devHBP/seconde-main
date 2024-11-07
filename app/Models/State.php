@@ -18,4 +18,11 @@ class State extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_state')
+                    ->withPivot('prix_remboursement', 'prix_bon_achat')
+                    ->withTimestamps();
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\State;
 use App\Models\Type;
@@ -220,7 +221,7 @@ class AdminController
 
             return redirect()->route('admin.states')->with('success', 'Etat créé avec succès.');
         }
-        return view('admin.states.create-or-update');
+        return view('admin.states.create-or-modify');
     }
 
     public function modifyState(Request $request, $state_id)
@@ -236,7 +237,7 @@ class AdminController
 
             return redirect()->route('admin.states')->with('success', 'Etat modifié avec succès');
         }
-        return view('admin.states.create-or-update', ['state' => $state]);
+        return view('admin.states.create-or-modify', ['state' => $state]);
     }
 
     public function deleteState($state_id)
@@ -251,7 +252,7 @@ class AdminController
      */
     public function getProducts()
     {
-        //
+        return view('admin.products.products', ['products' => Product::all()]);
     }
 
     public function createProduct(Request $request)
@@ -259,7 +260,11 @@ class AdminController
         if($request->isMethod('post')){
             // Case formulaire posté
         }
-        // Vue formulaire
+        return view('admin.products.create-or-modify', [
+            "types" => Type::all(),
+            "brands" => Brand::all(),
+            "states" => State::all(),
+        ]);
     }
 
     public function modifyProduct(Request $request, $product_id)
@@ -267,7 +272,11 @@ class AdminController
         if($request->isMethod('put')){
             // Case formulaire posté
         }
-        // Vue formulaire
+        return view('admin.products.create-or-modify', [
+            "types" => Type::all(),
+            "brands" => Brand::all(),
+            "states" => State::all(),
+        ]);
     }
 
     public function deleteProduct($product_id)
