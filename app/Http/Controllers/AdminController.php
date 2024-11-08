@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use function PHPUnit\Framework\isNull;
+
 class AdminController
 {
     /**
@@ -257,31 +259,105 @@ class AdminController
 
     public function createProduct(Request $request)
     {
+        $states = State::all();
         if($request->isMethod('post')){
-            // Case formulaire posté
+            $account = $request->user();
+            $validatedData = $request->validate([
+                'type' => 'required|exists:types,id',
+                'brand' => 'required|exists:brands,id',
+            ]);
+
+            $product = new Product();
+            $product->type_id = $validatedData['type'];
+            $product->brand_id = $validatedData['brand'];
+            $product->account_id = $account->id;
+
+            $product->save();
+
+            foreach ($states as $state) {
+                $prixRemboursementKey = 'prix_remboursement_state_' . $state->id;
+                $prixBonAchatKey = 'prix_bon_achat_state_' . $state->id;
+                if($request->has($prixRemboursementKey) || $request->has($prixBonAchatKey)){
+                    
+                    // Validation des données 
+                    $validatedPrices = $request->validate([
+                        $prixRemboursementKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
+                        $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+                    ]);
+
+                    $prixRemboursement = $validatedPrices[$prixRemboursementKey] ?? null;
+                    $prixBonAchat = $validatedPrices[$prixBonAchatKey];
+                    if($prixRemboursement !== null || $prixBonAchat !== null){
+                        $product->states()->attach($state->id, [
+                            'prix_remboursement' => $prixRemboursement,
+                            'prix_bon_achat' => $prixBonAchat,
+                        ]);
+                    }
+                }
+            }
+            return redirect()->route('admin.products')->with('success', 'Produit ajouté avec succès');
         }
         return view('admin.products.create-or-modify', [
             "types" => Type::all(),
             "brands" => Brand::all(),
-            "states" => State::all(),
+            "states" => $states,
         ]);
     }
 
     public function modifyProduct(Request $request, $product_id)
-    {
+    {   
+        $states = State::all();
+        $product = Product::findOrFail($product_id);
         if($request->isMethod('put')){
-            // Case formulaire posté
+            $validatedData = $request->validate([
+                'type' => 'required|exists:types,id',
+                'brand' => 'required|exists:brands,id'
+            ]);
+            $updatedData = [
+                'type_id' => $validatedData['type'],
+                'brand_id' => $validatedData['brand'],
+            ];
+            $product->update($updatedData);
+
+            $stateData = [];
+            foreach ($states as $state) {
+                $prixRemboursementKey = "prix_remboursement_state_{$state->id}";
+                $prixBonAchatKey = "prix_bon_achat_state_{$state->id}";
+                // Validation des données 
+                $validatedPrices = $request->validate([
+                    $prixRemboursementKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
+                    $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+                ]);
+                $prixRemboursement = $validatedPrices[$prixRemboursementKey];
+                $prixBonAchat = $validatedPrices[$prixBonAchatKey];
+
+                if(is_null($prixRemboursement) && is_null($prixBonAchat)){
+                    $product->states()->detach($state->id);
+                }
+                else if(!is_null($prixRemboursement || !is_null($prixBonAchat))){
+                    $stateData[$state->id] = [
+                        'prix_remboursement' => $prixRemboursement,
+                        'prix_bon_achat' => $prixBonAchat
+                    ];
+                }
+            }
+            $product->states()->sync($stateData);
+
+            return redirect()->route('admin.products')->with('success', 'Poduit modifié avec succès.');
         }
         return view('admin.products.create-or-modify', [
+            "product" => $product,
             "types" => Type::all(),
             "brands" => Brand::all(),
-            "states" => State::all(),
+            "states" => $states,
         ]);
     }
 
     public function deleteProduct($product_id)
     {
-        //
+        $product = Product::findorFail($product_id);
+        $product->delete();
+        return redirect()->route('admin.products')->with('success', 'Produit supprimé avec succès.');
     }
 
     /**

@@ -21,7 +21,7 @@ class State extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_state')
+        return $this->belongsToMany(Product::class, 'product_states')
                     ->withPivot('prix_remboursement', 'prix_bon_achat')
                     ->withTimestamps();
     }

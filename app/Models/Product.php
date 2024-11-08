@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Scopes\AccountScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Model;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
+//use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 #[ScopedBy([AccountScope::class])]
 class Product extends Model
@@ -36,7 +36,7 @@ class Product extends Model
 
     public function states()
     {
-        return $this->belongsToMany(State::class, 'product_state')
+        return $this->belongsToMany(State::class, 'product_states')
                     ->withPivot('prix_remboursement', 'prix_bon_achat')
                     ->withTimestamps();
     }
