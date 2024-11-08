@@ -1,0 +1,24 @@
+/* See layout-container in @dashnboard.css */
+div.layout-container.tiles{
+    flex-direction: row;
+    flex-wrap: wrap;
+    form{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        .tile{
+            height: 150px;
+            margin: 0.5em 0.5em;
+            padding:1em;
+            width: 20%;
+            background-color: white;
+            border: 1px solid darkgray;
+            border-radius: 10px;
+            &:hover{
+                background-color: rgb(236, 236, 236);
+            }
+        }
+    }
+
+}

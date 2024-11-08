@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FakeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +80,10 @@ Route::middleware('auth')->group(function(){
     /**
      * Routes concernant la reception
      */
+    Route::get('/reception/dashboard', [ReceptionController::class, 'dashboard'])->name('reception.dashboard');
+    // Reprise de produits -> post et stockage en session en dans le storage ?
+    Route::get('/reception/produit', [ReceptionController::class, 'addProduct'])->name('reception.add.product');
+    Route::post('/reception/produit', [Receptioncontroller::class, 'addProduct'])->name('reception.selection.store');
 
     /**
      * Routes concernant les visiteurs

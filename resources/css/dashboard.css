@@ -32,16 +32,27 @@ div.layout-container{
         justify-content: center;
         align-items: center;
         margin: 0.6em;
-        background-color: lightgray;
+        background-color: white;
         height: 150px;
         width: 40%;
         border-radius: 10px;
         border: 1px solid darkgray;
         div{
             display:flex;
+            font-size: 1.1em;
+            font-weight: 600;
         }
         &:hover{
-            background-color:gainsboro;
+            background-color:whitesmoke;
         }
+    }
+}
+div.layout-container.reception{
+    flex-flow: nowrap;
+    flex-direction: column;
+
+    align-items: center;
+    a{
+        width: 70%;
     }
 }
