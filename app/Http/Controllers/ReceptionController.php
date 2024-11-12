@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Client;
 use App\Models\Product;
 use App\Models\Type;
 use Illuminate\Http\Request;
@@ -94,6 +95,43 @@ class ReceptionController
             session()->forget('state_id');
         }
         return redirect()->route('reception.dashboard');
+    }
+
+    // Gestion des utilisateurs 
+    public function getClient()
+    {
+        return view('reception.clients.clients', ["clients" => Client::all()]);
+    }
+
+    public function createClient(Request $request)
+    {
+        if($request->isMethod('post')){
+            $account = $request->user();
+            $validatedData = $request->validate([
+                "firstname" => 'required|string|max:255',
+                "lastname" => 'required|string|max:255',
+                "email" => 'email|required_unless:phone, null',
+                "phone" => 'digits:10|required_unless:email, null',
+                "consent" => 'required|boolean'
+            ]);
+            $client = new Client();
+            $client->firstname = $validatedData['firstname'];
+            $client->lastname = $validatedData['lastname'];
+            if($validatedData['email']){
+                $client->email = $validatedData['email'];
+            }
+            if($validatedData['phone']){
+                $client->phone = $validatedData['phone'];
+            }
+            $client->consent = $validatedData['consent'];
+            $client->account_id = $account->id;
+
+            $client->save();
+
+            return redirect()->route('reception.clients')->with('success', 'Client ajouté avec succès');
+        }
+        
+        return view('reception.clients.create-or-modify');
     }
     
 }

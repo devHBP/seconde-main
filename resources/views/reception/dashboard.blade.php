@@ -18,7 +18,7 @@
         <a href="">
             <div class="dashboard-cards">Panier</div>
         </a>
-        <a href="">
+        <a href="{{ route('reception.clients')}}">
             <div class="dashboard-cards">Clients</div>
         </a>
     </div>

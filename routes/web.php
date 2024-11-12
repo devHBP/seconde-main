@@ -86,7 +86,16 @@ Route::middleware('auth')->group(function(){
     Route::post('/reception/produit', [Receptioncontroller::class, 'addProduct'])->name('reception.selection.store');
     Route::post('/reception/finalize', [ReceptionController::class, 'finalize'])->name('reception.product.finalize');
     Route::get('/reception/cancel', [ReceptionController::class, 'cancel'])->name('reception.product.cancel');
+    // Gestion des clients
 
+    Route::get('/reception/clients/', [ReceptionController::class, 'getClient'])->name('reception.clients');
+    Route::get('/reception/client/create', [ReceptionController::class, 'createClient'])->name('reception.client.create');
+    Route::post('/reception/client/create', [ReceptionController::class, 'createClient']);
+    Route::get('/reception/client/{client_id}', [ReceptionController::class, 'getClient'])->name('reception.client.get'); 
+    Route::put('/reception/client/modify/{client_id}', [ReceptionController::class, 'modifyClient'])->name('reception.client.modify');
+    Route::delete('/reception/client/delete/{client_id}', [ReceptionController::class, 'deleteClient'])->name('reception.client.delete');
+    
+    
     /**
      * Routes concernant les visiteurs
      */
