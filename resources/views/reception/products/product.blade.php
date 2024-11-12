@@ -49,19 +49,31 @@
             @foreach ($states as $state)
                 <button type="submit" name="state_id" value="{{ $state->id }}" class="tile">
                     {{ $state->name }}
+                    <p class="state-definition">{{ $state->definition }}</p>
                 </button>
             @endforeach
         </form>
     </div>
     @endif
 
-    {{-- Validation finale --}}
-    @if (session('type_id') && session('brand_id') && session('state_id'))
-        <div class="layout-container tiles">
-            <form method="POST" action="{{ route('finalize') }}">
-                @csrf
-                <button type="submit" class="btn bg-green-500">Valider le Panier</button>
-            </form>
+    {{-- Afficher les prix et les options une fois l'état sélectionné --}}
+    @if (session('state_id') && $selectedState)
+        <div class="bg-gray-100 p-6 rounded shadow mt-6 price-box">
+            <h3 class="text-xl font-bold">{{ $selectedState->name }}</h3>
+            <div class='prices'>
+                <p>Prix de remboursement : <span>{{ $selectedState->pivot->prix_remboursement ?? 'N/A' }} €</span></p>
+                <p class="price-focus">Prix de bon d'achat : <span>{{ $selectedState->pivot->prix_bon_achat ?? 'N/A' }} €</span></p>
+            </div>
+            {{-- Boutons "Valider" et "Annuler" --}}
+            <div class="validation">
+                <form method="POST" action="{{ route('reception.product.finalize') }}" class="mt-4">
+                    @csrf
+                    <button type="submit" class="">Envoyer dans le Panier</button>
+                </form>
+            </div>
         </div>
     @endif
+
+    <a href="{{ route('reception.product.cancel') }}" class="annulation">Annuler</a>
+
 </x-app-layout>

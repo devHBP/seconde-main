@@ -84,6 +84,8 @@ Route::middleware('auth')->group(function(){
     // Reprise de produits -> post et stockage en session en dans le storage ?
     Route::get('/reception/produit', [ReceptionController::class, 'addProduct'])->name('reception.add.product');
     Route::post('/reception/produit', [Receptioncontroller::class, 'addProduct'])->name('reception.selection.store');
+    Route::post('/reception/finalize', [ReceptionController::class, 'finalize'])->name('reception.product.finalize');
+    Route::get('/reception/cancel', [ReceptionController::class, 'cancel'])->name('reception.product.cancel');
 
     /**
      * Routes concernant les visiteurs
