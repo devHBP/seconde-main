@@ -17,6 +17,9 @@
                     <div class="mb-3">
                         <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Nom du type</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $type->name ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Bouton de soumission -->

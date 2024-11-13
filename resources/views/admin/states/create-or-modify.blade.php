@@ -17,13 +17,18 @@
                     <div class="mb-3">
                         <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Nom/Désignation de l'état</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $state->name ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- Définition de l'état -->
                     <div class="mb-3">
                         <label for="definition" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Définition de l'état</label>
                         <input type="text" name="definition" id="definition" value="{{ old('definition', $state->definition ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('definition')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
-
                     <!-- Bouton de soumission -->
                     <div class="flex items-center justify-between">
                         <button type="submit" class="bg-lime-600 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

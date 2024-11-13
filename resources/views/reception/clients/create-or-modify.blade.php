@@ -17,21 +17,33 @@
                     <div class="mb-3">
                         <label for="firstname" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Prénom</label>
                         <input type="text" name="firstname" id="firstname" value="{{ old('firstname', $client->firstname ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('firstname')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- Nom de famille -->
                     <div class="mb-3">
                         <label for="lastname" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Nom de famille</label>
                         <input type="text" name="lastname" id="lastname" value="{{ old('lastname', $client->lastname ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('lastname')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- email -->
                     <div class="mb-3">
                         <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Adresse mail</label>
                         <input type="text" name="email" id="email" value="{{ old('email', $client->email ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('email')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- téléphone -->
                     <div class="mb-3">
                         <label for="phone" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Téléphone</label>
                         <input type="text" name="phone" id="phone" value="{{ old('phone', $client->phone ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('phone')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- Consentement -->
                     <div class="mb-4">
@@ -61,6 +73,9 @@
                                 <span class="ml-2 text-gray-700 dark:text-gray-300">Non</span>
                             </label>
                         </div>
+                        @error('consent')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- Bouton de soumission -->
                     <div class="flex items-center justify-between">

@@ -21,6 +21,9 @@
                                 <option value="{{ $type->id }}" {{ isset($product) && old('type', $product->type->id ) == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
                             @endforeach
                         </select>
+                        @error('type')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Marque Produit -->
@@ -31,6 +34,9 @@
                                 <option value="{{ $brand->id }}" {{ isset($product) && old('brand', $product->brand->id ) == $brand->id ? 'selected' : ''}} >{{ $brand->name }}</option>
                             @endforeach
                         </select>
+                        @error('brand')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- États -->
@@ -54,6 +60,9 @@
                                 value="{{ isset($product) ? old("prix_bon_achat_state_{$state->id}", $product->states->where('id', $state->id)->first()?->pivot->prix_bon_achat) : 'NC'}}"
                                 class="shadow border rounded w-20 py-1 px-2 text-gray-700 dark:text-gray-300 focus:outline-none focus:shadow-outline">
                         </div>
+                        @error('state')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     @endforeach
 

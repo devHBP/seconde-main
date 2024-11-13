@@ -87,14 +87,15 @@ Route::middleware('auth')->group(function(){
     Route::post('/reception/finalize', [ReceptionController::class, 'finalize'])->name('reception.product.finalize');
     Route::get('/reception/cancel', [ReceptionController::class, 'cancel'])->name('reception.product.cancel');
     // Gestion des clients
-
     Route::get('/reception/clients/', [ReceptionController::class, 'getClient'])->name('reception.clients');
     Route::get('/reception/client/create', [ReceptionController::class, 'createClient'])->name('reception.client.create');
     Route::post('/reception/client/create', [ReceptionController::class, 'createClient']);
-    Route::get('/reception/client/{client_id}', [ReceptionController::class, 'getClient'])->name('reception.client.get'); 
-    Route::put('/reception/client/modify/{client_id}', [ReceptionController::class, 'modifyClient'])->name('reception.client.modify');
+    Route::get('/reception/client/{client_id}', [ReceptionController::class, 'showClient'])->name('reception.client.get'); 
+    Route::get('/reception/client/modify/{client_id}', [ReceptionController::class, 'modifyClient'])->name('reception.client.modify');
+    Route::put('/reception/client/modify/{client_id}', [ReceptionController::class, 'modifyClient']);
     Route::delete('/reception/client/delete/{client_id}', [ReceptionController::class, 'deleteClient'])->name('reception.client.delete');
-    
+    // Gestion du panier
+    Route::get('/reception/cart', [ReceptionController::class, 'addToCart'])->name('reception.cart.add');
     
     /**
      * Routes concernant les visiteurs

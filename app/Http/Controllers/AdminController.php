@@ -214,11 +214,13 @@ class AdminController
             $validatedData = $request->validate([
                 "name" => "required|string|max:255",
                 "definition" => "nullable|string",
+                "infos" => 'nullable|string'
             ]);
             $state = new State();
             $state->account_id = $account->id;
             $state->name = strtoupper($validatedData['name']);
             $state->definition = $validatedData['definition'];
+            $state->infos = $validatedData['infos'];
             $state->save();
 
             return redirect()->route('admin.states')->with('success', 'Etat créé avec succès.');

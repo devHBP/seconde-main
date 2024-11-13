@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Client;
 use App\Models\Product;
 use App\Models\Type;
+use Exception;
 use Illuminate\Http\Request;
 
 class ReceptionController
@@ -110,19 +111,15 @@ class ReceptionController
             $validatedData = $request->validate([
                 "firstname" => 'required|string|max:255',
                 "lastname" => 'required|string|max:255',
-                "email" => 'email|required_unless:phone, null',
-                "phone" => 'digits:10|required_unless:email, null',
+                "email" => 'nullable|email|required_without:phone',
+                "phone" => 'nullable|digits:10|required_without:email',
                 "consent" => 'required|boolean'
             ]);
             $client = new Client();
             $client->firstname = $validatedData['firstname'];
             $client->lastname = $validatedData['lastname'];
-            if($validatedData['email']){
-                $client->email = $validatedData['email'];
-            }
-            if($validatedData['phone']){
-                $client->phone = $validatedData['phone'];
-            }
+            $client->email = $validatedData['email'] ?? null;
+            $client->phone = $validatedData['phone'] ?? null;
             $client->consent = $validatedData['consent'];
             $client->account_id = $account->id;
 
@@ -133,5 +130,59 @@ class ReceptionController
         
         return view('reception.clients.create-or-modify');
     }
+
+    public function modifyClient(Request $request, $client_id)
+    {
+        $client = Client::findOrFail($client_id);
+
+        if($request->isMethod('put')){
+            $validatedData = $request->validate([
+                "firstname" => 'required|string|max:255',
+                "lastname" => 'required|string|max:255',
+                "email" => 'nullable|email|required_without:phone',
+                "phone" => 'nullable|digits:10|required_without:email',
+                "consent" => 'required|boolean'
+            ]);
+            $updatedData = [
+                "firstname" => $validatedData["firstname"],
+                "lastname" => $validatedData["lastname"],
+                "email" => $validatedData["email"] ?? null,
+                "phone" => $validatedData["phone"] ?? null,
+                "consent" => $validatedData["consent"],
+            ];
+
+            $client->update($updatedData);
+            return redirect()->route('reception.clients')->with('success', "Client modifié avec succès");
+        }
+        return view('reception.clients.create-or-modify', ['client' => $client]);
+    }
+
+    public function deleteClient($client_id)
+    {
+        $client = Client::findOrFail($client_id);
+        $client->delete();
+        return redirect()->route('reception.clients')->with('success', 'Client supprimé avec succès.');
+    }
+
+    public function showClient($client_id)
+    {
+        if(!$client_id){
+            return redirect()->back()->with('error', "Le client n'a pas été trouvé");
+        }
+        $client = Client::findOrFail($client_id);
+        return view('reception.clients.client', ["client" => $client]);
+    }
     
+    /**
+     * Gestion du Panier
+     */
+    public function addToCart(Request $request)
+    {   
+        // if(!$request->isMethod('post')){
+        //     //
+        // }
+        // Receive data within array format as $user['user'=> User::class , 'role_id'=> "2", 'role_name' => 'reception']
+        $user = session('subsession');
+        
+    }
 }

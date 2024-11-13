@@ -17,24 +17,36 @@
                     <div class="mb-3">
                         <label for="name" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Nom de l'utilisateur</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $user->name ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- E-mail -->
                     <div class="mb-3">
                         <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">E-mail</label>
                         <input type="email" name="email" id="email" value="{{ old('email', $user->email ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" required>
+                        @error('email')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Mot de passe -->
                     <div class="mb-3">
                         <label for="password" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Mot de passe</label>
                         <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" {{ isset($user) ? '' : 'required' }}>
+                        @error('password')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Mot de passe -->
                     <div class="mb-3">
                         <label for="confirm_password" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Confirmer le mot de passe</label>
                         <input type="password" name="confirm_password" id="confirm_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline" {{ isset($user) ? '' : 'required' }}>
+                        @error('comfirm_password')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>  
 
                     <!-- Rôles -->
@@ -48,6 +60,9 @@
                                 </label>
                             @endforeach
                         </div>
+                        @error('roles')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Bouton de soumission -->

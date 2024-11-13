@@ -11,15 +11,22 @@
             </div>
         </div>
     </x-slot>
-    <div class="layout-container reception">
-        <a href="{{ route('reception.add.product') }}">
-            <div class="dashboard-cards">Reprise produit</div>
-        </a>
-        <a href="">
-            <div class="dashboard-cards">Panier</div>
-        </a>
-        <a href="{{ route('reception.clients')}}">
-            <div class="dashboard-cards">Clients</div>
-        </a>
+    <div>
+        @if (session('success'))
+            <div class="bg-lime-500 text-white p-4 rounded mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="layout-container reception">
+            <a href="{{ route('reception.add.product') }}">
+                <div class="dashboard-cards">Reprise produit</div>
+            </a>
+            <a href="">
+                <div class="dashboard-cards">Panier</div>
+            </a>
+            <a href="{{ route('reception.clients')}}">
+                <div class="dashboard-cards">Clients</div>
+            </a>
+        </div>
     </div>
 </x-app-layout>
