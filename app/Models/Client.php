@@ -25,4 +25,9 @@ class Client extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function paniers()
+    {
+        return $this->hasMany(Panier::class);
+    }
 }

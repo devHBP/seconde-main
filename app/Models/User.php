@@ -61,4 +61,9 @@ class User extends Model
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
+
+    public function paniers()
+    {
+        return $this->hasMany(Panier::class);
+    }
 }

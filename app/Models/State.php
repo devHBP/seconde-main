@@ -11,7 +11,8 @@ class State extends Model
 {
     protected $fillable =[
         'name',
-        'definition'
+        'definition',
+        'infos',
     ];
 
     public function account()

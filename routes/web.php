@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function(){
     // Reprise de produits -> post et stockage en session en dans le storage ?
     Route::get('/reception/produit', [ReceptionController::class, 'addProduct'])->name('reception.add.product');
     Route::post('/reception/produit', [Receptioncontroller::class, 'addProduct'])->name('reception.selection.store');
-    Route::post('/reception/finalize', [ReceptionController::class, 'finalize'])->name('reception.product.finalize');
+    //Route::post('/reception/finalize', [ReceptionController::class, 'finalize'])->name('reception.product.finalize');
     Route::get('/reception/cancel', [ReceptionController::class, 'cancel'])->name('reception.product.cancel');
     // Gestion des clients
     Route::get('/reception/clients/', [ReceptionController::class, 'getClient'])->name('reception.clients');
@@ -95,8 +95,18 @@ Route::middleware('auth')->group(function(){
     Route::put('/reception/client/modify/{client_id}', [ReceptionController::class, 'modifyClient']);
     Route::delete('/reception/client/delete/{client_id}', [ReceptionController::class, 'deleteClient'])->name('reception.client.delete');
     // Gestion du panier
-    Route::get('/reception/cart', [ReceptionController::class, 'addToCart'])->name('reception.cart.add');
-    
+    Route::get('/reception/panier', [ReceptionController::class, 'getCart'])->name('reception.cart');
+    Route::post('/reception/panier', [ReceptionController::class, 'addToCart'])->name('reception.cart.add');
+    Route::post('/reception/panier/increase', [ReceptionController::class, 'increaseQuantity'])->name('reception.cart.increase');
+    Route::post('/reception/panier/decrease', [ReceptionController::class, 'decreaseQuantity'])->name('reception.cart.decrease');
+    Route::delete('/reception/panier/products', [ReceptionController::class, 'dropProducts'])->name('reception.cart.drop.products');
+    Route::delete('/reception/panier/drop', [ReceptionController::class, 'dropCart'])->name('reception.cart.drop');
+    Route::post('/reception/panier/validate', [ReceptionController::class, 'validate'])->name('reception.cart.validate');
+    Route::get('/reception/panier/validate/search', [ReceptionController::class, 'showClientSearch'])->name('reception.cart.search');
+    Route::post('/reception/panier/associate', [Receptioncontroller::class, 'associate'])->name('reception.cart.associate');
+    // Génréation du ticket depuis la Reception
+    Route::get('/reception/panier/generate/{panier_id}',[ReceptionController::class, 'generateTicketReprise'])->name('reception.cart.generate');
+
     /**
      * Routes concernant les visiteurs
      */

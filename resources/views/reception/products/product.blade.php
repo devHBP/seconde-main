@@ -10,6 +10,7 @@
                 > Etat
                 @endif
             </h2>
+            <a href="{{ route('reception.dashboard') }}">Retour</a>
         </div>
     </x-slot>
     
@@ -66,7 +67,7 @@
             </div>
             {{-- Boutons "Valider" et "Annuler" --}}
             <div class="validation">
-                <form method="POST" action="{{ route('reception.product.finalize') }}" class="mt-4">
+                <form method="POST" action="{{ route('reception.cart.add') }}" class="mt-4">
                     @csrf
                     <button type="submit" class="">Envoyer dans le Panier</button>
                 </form>

@@ -29,6 +29,15 @@
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <!-- Définition des infos si besoin  -->
+                    <div class="mb-3">
+                        <label for="infos" class="block text-gray-700 dark:text-gray-300 text-sm font-bold">Info de l'état</label>
+                        <input type="text" name="infos" id="infos" value="{{ old('infos', $state->infos ?? '')}}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('infos')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <!-- Bouton de soumission -->
                     <div class="flex items-center justify-between">
                         <button type="submit" class="bg-lime-600 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">

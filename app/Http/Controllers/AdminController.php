@@ -235,6 +235,7 @@ class AdminController
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'definition' => 'nullable|string',
+                'infos' => 'nullable|string'
             ]);
             $validatedData['name'] = strtoupper($validatedData['name']); 
             $state->update($validatedData);

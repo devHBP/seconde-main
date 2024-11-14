@@ -40,4 +40,11 @@ class Product extends Model
                     ->withPivot('prix_remboursement', 'prix_bon_achat')
                     ->withTimestamps();
     }
+
+    public function paniers()
+    {
+        return $this->belongsToMany(Panier::class, 'product_panier')
+            ->with('prix_remboursement', 'prix_bon_achat', 'state', 'quantity')
+            ->withTimeStamps();
+    }
 }
