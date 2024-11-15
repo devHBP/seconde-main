@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketRepriseMail;
 use App\Models\Brand;
 use App\Models\Client;
 use App\Models\Panier;
 use App\Models\Product;
 use App\Models\State;
+use App\Models\TicketReprise;
 use App\Models\Type;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Milon\Barcode\DNS1D;
 
 class ReceptionController
 {
@@ -177,7 +182,7 @@ class ReceptionController
         $account = $request->user();
         $user = session('subsession');
         $panier = Panier::where('user_id', $user['user']->id)
-                        ->where('is_validated', false)
+                        ->where('status', 'en_cours')
                         ->first();
         if(!$panier){
             $panier = new Panier();
@@ -233,7 +238,7 @@ class ReceptionController
     {
         $user = session('subsession');
         $panier = Panier::where('user_id', $user['user']->id)
-                        ->where('is_validated', false)
+                        ->where('status', 'en_cours')
                         ->with('products')
                         ->first();
 
@@ -248,6 +253,10 @@ class ReceptionController
             $totalBonAchat += floatval($product->pivot->prix_bon_achat) * $product->pivot->quantity;
         }
 
+        $panier->total_remboursement = $totalRemboursement;
+        $panier->total_bon_achat = $totalBonAchat;
+        $panier->save();
+
         return view('reception.cart.cart', [
             "panier" => $panier,
             "total_remboursement" => $totalRemboursement,
@@ -259,7 +268,7 @@ class ReceptionController
     {
         $user = session("subsession");
         $panier = Panier::where('user_id', $user['user']->id)
-                        ->where('is_validated', false)
+                        ->where('status', 'en_cours')
                         ->first();
 
         // Check des données envoyées dans la requête. 
@@ -295,7 +304,7 @@ class ReceptionController
         // Récupération du Panier en cours
         $user = session('subsession');
         $panier = Panier::where('user_id', $user['user']->id)
-                        ->where('is_validated', false)
+                        ->where('status', 'en_cours')
                         ->first();
 
         // Check des données envoyées dans la requête. 
@@ -370,7 +379,7 @@ class ReceptionController
         ]);
         $panierId = $validatedData['panier_id'];
         
-        $panier = Panier::where('id', $panierId)->where('is_validated', false)->first();
+        $panier = Panier::where('id', $panierId)->where('status', 'en_cours')->first();
         if($panier){
             $panier->products()->detach();
             $panier->delete();
@@ -434,24 +443,94 @@ class ReceptionController
             // On viens chopper le client fraichement crée pour l'associer au panier.
             $client_id = $client->id;
         }
+        else{
+            $validatedData = $request->validate([
+                'client_id' => 'required|numeric|exists:clients,id',
+                'panier_id' => 'required|numeric|exists:paniers,id'
+            ]);
+            $client_id = $validatedData['client_id'];
+            $panier_id =$validatedData['panier_id'];
+        }
         
         $panier = Panier::find($panier_id);
         if($panier){
             // Logique de transition/dasactivation du panier <-> ticket
             $panier->client_id = $client_id;
-            $panier->is_validated = true;
+            $panier->status = 'valide';
             $panier->save();
-            // Logique de création du ticket_reprise
         }
 
         return redirect()->route('reception.cart.generate', ['panier_id' => $panier_id]);
     }
 
+
     public function generateTicketReprise($panier_id)
     {
-        //TODO
+        $currentUser = session('subsession');
+        $user = User::findOrFail($currentUser['user']->id);
+        if(session("panier_id")){
+            session()->forget('panier_id');
+        }
+
+        $panier = Panier::findOrFail($panier_id);
+        if($panier->status !== 'valide'){
+            return redirect()->route('reception.cart')->withErrors("Un problème à été détécté avec le status du panier.");
+        }
+
+        // Création du TicketReprise
+        $ticket = new TicketReprise();
+        $ticket->uuid = $this->generateCustomTicketCode($panier->account->id, $user->id);
+        $ticket->panier_id = $panier->id;
+        $ticket->client_id = $panier->client_id;
+        $ticket->account_id = $panier->account_id;
+        $ticket->created_by = $user->id;
+        $ticket->created_by_name = $user->name;
+        $ticket->deactivated_by_name = '';
+        $ticket->save();
+
+        $uuid = (string) $ticket->uuid;
+        $barcodeGenerator = new DNS1D();
+        $barcode = $barcodeGenerator->getBarcodePNG($uuid, 'C128', 2, 70);
+        // if($ticket->client->email){
+        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket));
+        // }
+        // Génération d'un code barre ?
+        // logique de mailing || sms ?
+
+        return view('emails.ticket_reprise', ['ticket'=>$ticket, 'barcode'=>$barcode] );
     }
-    
+    public function generateTicketRepriseDeactivated($panier_id)
+    {
+        $currentUser = session('subsession');
+        $user = User::findOrFail($currentUser['user']->id);
+        if(session("panier_id")){
+            session()->forget('panier_id');
+        }
+
+        $panier = Panier::findOrFail($panier_id);
+        if($panier->status !== 'valide'){
+            return redirect()->route('reception.cart')->withErrors("Un problème à été détécté avec le status du panier.");
+        }
+
+        // Création du TicketReprise
+        $ticket = new TicketReprise();
+        $ticket->panier_id = $panier->id;
+        $ticket->client_id = $panier->client_id;
+        $ticket->account_id = $panier->account_id;
+        $ticket->created_by = $user->id;
+        $ticket->created_by_name = $user->name;
+        $ticket->deactivated_by_name = '';
+        $ticket->save();
+
+        if($ticket->client->email){
+            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket));
+        }
+        // Génération d'un code barre ?
+        // logique de mailing || sms ?
+
+        return redirect()->route('reception.cart')->with('success', "Ticket n°$ticket->uuid envoyé à l'encaissement");
+    }
+
     /**
      * Fonction utilitaire pour supprimer un produit de la session
      * @return void
@@ -467,5 +546,16 @@ class ReceptionController
         if(session('state_id')){
             session()->forget('state_id');
         }
+    }
+
+    public function generateCustomTicketCode($accountId, $userId)
+    {
+        $ticketCount = TicketReprise::where('account_id', $accountId)->count();
+
+        $ticketNumber = str_pad($ticketCount + 1, 6, '0', STR_PAD_LEFT);
+        $formattedAccountId = str_pad($accountId, 2, '0', STR_PAD_LEFT);
+        $formattedUserId = str_pad($userId, 2, '0', STR_PAD_LEFT);
+
+        return "S{$formattedAccountId}{$formattedUserId}-{$ticketNumber}";
     }
 }

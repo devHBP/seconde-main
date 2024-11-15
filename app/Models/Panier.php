@@ -9,8 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 #[ScopedBy([AccountScope::class])]
 class Panier extends Model
 {
+
+    /**
+     * Ajout du status['en_cours', 'valide', 'annule', 'restitue']
+     */
     protected $fillable =[
-        "is_validated",
+        "status",
     ];
 
     protected $hidden = [
