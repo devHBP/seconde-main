@@ -29,6 +29,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imprimer</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                         </tr>
                     </thead>
@@ -38,16 +39,21 @@
                                 <td class="px-6 py-4">{{ $client->firstname }} {{ $client->lastname }}</td>
                                 <td class="px-6 py-4">{{ $client->email ?? 'Non renseigné' }}</td>
                                 <td class="px-6 py-4">{{ $client->phone ?? 'Non renseigné' }}</td>
-                                <td class="px-6 py-4">
-                                    <form method="POST" action="{{ route('reception.cart.associate') }}">
-                                        @csrf
+                                <form method="POST" action="{{ route('reception.cart.associate') }}">
+                                    @csrf
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" id="print_ticket" name="print_ticket" checked> Ticket Papier
+                                        </label>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <input type="hidden" name="client_id" value="{{ $client->id }}">
                                         <input type="hidden" name="panier_id" value="{{ $panier_id }}">
                                         <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
                                             Associer
                                         </button>
-                                    </form>
-                                </td>
+                                    </td>
+                                </form>
                             </tr>
                         @endforeach
                     </tbody>

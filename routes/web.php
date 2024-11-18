@@ -104,8 +104,9 @@ Route::middleware('auth')->group(function(){
     Route::post('/reception/panier/validate', [ReceptionController::class, 'validate'])->name('reception.cart.validate');
     Route::get('/reception/panier/validate/search', [ReceptionController::class, 'showClientSearch'])->name('reception.cart.search');
     Route::post('/reception/panier/associate', [Receptioncontroller::class, 'associate'])->name('reception.cart.associate');
-    // Génréation du ticket depuis la Reception
+    // Génération du ticket depuis la Reception
     Route::get('/reception/panier/generate/{panier_id}',[ReceptionController::class, 'generateTicketReprise'])->name('reception.cart.generate');
+    //Route::get('/reception/panier/print/{panier_id)', [ReceptionController::class, 'printTicketReprise'])->name('reception.cart.print');
 
     /**
      * Routes concernant les visiteurs

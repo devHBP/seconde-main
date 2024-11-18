@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Models\TicketReprise;
 use App\Models\Type;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -409,6 +410,7 @@ class ReceptionController
             ->when($query, function($q) use ($query){
                 return $q->where('email', 'LIKE', "%$query%")
                     ->orWhere('phone', 'LIKE', "%$query%")
+                    ->orWhere('firstname', 'LIKE', "%$query%")
                 ;
             })
             ->get();
@@ -417,10 +419,7 @@ class ReceptionController
 
     public function associate(Request $request)
     {
-        if(session("panier_id")){
-            $panier_id = session()->pull('panier_id');
-        }
-
+        //dd($request->all());
         // Si le client id n'existe pas mais que nous sommes dans cette fonction c'est que nous avons créer un client à la volée
         if(!$request->has('client_id')){
             //dd($request->all());
@@ -446,12 +445,19 @@ class ReceptionController
         else{
             $validatedData = $request->validate([
                 'client_id' => 'required|numeric|exists:clients,id',
-                'panier_id' => 'required|numeric|exists:paniers,id'
+                'panier_id' => 'required|numeric|exists:paniers,id',
+                'print_ticket' => 'nullable'
             ]);
             $client_id = $validatedData['client_id'];
             $panier_id =$validatedData['panier_id'];
+            $printTicket = $validatedData['print_ticket'] ?? null;
+
+            $client = Client::findOrFail($client_id);
         }
         
+        if(session("panier_id")){
+            $panier_id = session()->pull('panier_id');
+        }
         $panier = Panier::find($panier_id);
         if($panier){
             // Logique de transition/dasactivation du panier <-> ticket
@@ -460,10 +466,32 @@ class ReceptionController
             $panier->save();
         }
 
-        return redirect()->route('reception.cart.generate', ['panier_id' => $panier_id]);
+        $ticket = $this->generateTicketReprise($panier->id);
+
+        $barcodeGenerator = new DNS1D();
+        
+        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
+        $barcodeBinary = base64_decode($barcode);
+        $barcodeBase64 = base64_encode($barcodeBinary);
+        $filename = $ticket->uuid . '.png';
+
+        if($client->email){
+            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
+        }
+
+        if(!$client->email || $printTicket === "on"){
+            return $this->printTicketReprise($ticket, $barcodeBase64);
+        }
+
+        return redirect()->route('reception.dashboard')->with('success', 'Panier envoyé en encaissement.');
     }
 
-
+    /**
+     * Fonction de génération du TicketReprise
+     *
+     * @param PANIER $panier_id
+     * @return TicketReprise $ticket
+     */
     public function generateTicketReprise($panier_id)
     {
         $currentUser = session('subsession');
@@ -488,47 +516,32 @@ class ReceptionController
         $ticket->deactivated_by_name = '';
         $ticket->save();
 
-        $uuid = (string) $ticket->uuid;
-        $barcodeGenerator = new DNS1D();
-        $barcode = $barcodeGenerator->getBarcodePNG($uuid, 'C128', 2, 70);
-        // if($ticket->client->email){
-        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket));
+        // if(!$ticket->client->email){
+        //     // J'imprime .
+        //     $this->printTicketReprise($ticket, $barcode);
         // }
-        // Génération d'un code barre ?
-        // logique de mailing || sms ?
-
-        return view('emails.ticket_reprise', ['ticket'=>$ticket, 'barcode'=>$barcode] );
+        // else if($printTicket === "on"){
+        //     // Autrement j'envoie un mail et j'imprime
+        //     $this->printTicketReprise($ticket, $barcode);
+        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
+        // }
+        // else{
+        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
+        // }
+        return $ticket;
     }
-    public function generateTicketRepriseDeactivated($panier_id)
+
+    public function printTicketReprise(TicketReprise $ticketParam, $barcode)
     {
-        $currentUser = session('subsession');
-        $user = User::findOrFail($currentUser['user']->id);
-        if(session("panier_id")){
-            session()->forget('panier_id');
-        }
+        $ticket = TicketReprise::findOrFail($ticketParam->id);
+        $data = [
+            'ticket' => $ticket,
+            'barcode' => $barcode
+        ];
 
-        $panier = Panier::findOrFail($panier_id);
-        if($panier->status !== 'valide'){
-            return redirect()->route('reception.cart')->withErrors("Un problème à été détécté avec le status du panier.");
-        }
-
-        // Création du TicketReprise
-        $ticket = new TicketReprise();
-        $ticket->panier_id = $panier->id;
-        $ticket->client_id = $panier->client_id;
-        $ticket->account_id = $panier->account_id;
-        $ticket->created_by = $user->id;
-        $ticket->created_by_name = $user->name;
-        $ticket->deactivated_by_name = '';
-        $ticket->save();
-
-        if($ticket->client->email){
-            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket));
-        }
-        // Génération d'un code barre ?
-        // logique de mailing || sms ?
-
-        return redirect()->route('reception.cart')->with('success', "Ticket n°$ticket->uuid envoyé à l'encaissement");
+        $pdf = Pdf::loadView('pdf.ticket_reprise', $data)
+            ->setPaper([0, 0, 226, 600]);
+        return $pdf->download("Ticket-{$ticket->uuid}.pdf");
     }
 
     /**
@@ -552,9 +565,9 @@ class ReceptionController
     {
         $ticketCount = TicketReprise::where('account_id', $accountId)->count();
 
-        $ticketNumber = str_pad($ticketCount + 1, 6, '0', STR_PAD_LEFT);
+        $ticketNumber = str_pad($ticketCount + 1, 7, '0', STR_PAD_LEFT);
         $formattedAccountId = str_pad($accountId, 2, '0', STR_PAD_LEFT);
-        $formattedUserId = str_pad($userId, 2, '0', STR_PAD_LEFT);
+        $formattedUserId = str_pad($userId, 3, '0', STR_PAD_LEFT);
 
         return "S{$formattedAccountId}{$formattedUserId}-{$ticketNumber}";
     }

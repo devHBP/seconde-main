@@ -6,6 +6,7 @@ use App\Models\TicketReprise;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -17,16 +18,17 @@ class TicketRepriseMail extends Mailable
 
 
     public TicketReprise $ticket;
-    public string $barcode;
+    public $barcodeBase64;
+    public $filename;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(TicketReprise $ticket)
+    public function __construct(TicketReprise $ticket, $barcodeBase64, $filename)
     {
         $this->ticket = $ticket;
-        $barcodeGenerator = new DNS1D();
-        $this->barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
+        $this->barcodeBase64 = $barcodeBase64;
+        $this->filename = $filename;
     }
 
     /**
@@ -48,7 +50,6 @@ class TicketRepriseMail extends Mailable
             view: 'emails.ticket_reprise',
             with:([
                 'ticket' => $this->ticket,
-                'barcode' => $this->barcode,
             ]),
         );
     }
@@ -60,6 +61,11 @@ class TicketRepriseMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromData(
+                fn() => $this->barcodeBase64,
+                $this->filename
+            )->withMime('image/png')
+        ];
     }
 }
