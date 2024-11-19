@@ -6,28 +6,22 @@ use App\Models\TicketReprise;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TicketRepriseMail extends Mailable
+class TicketConsume extends Mailable
 {
     use Queueable, SerializesModels;
 
 
-    public TicketReprise $ticket;
-    public $barcodeBase64;
-    public $filename;
-
+    protected $ticket;
     /**
      * Create a new message instance.
      */
-    public function __construct(TicketReprise $ticket, $barcodeBase64, $filename)
+    public function __construct(TicketReprise $ticket)
     {
         $this->ticket = $ticket;
-        $this->barcodeBase64 = $barcodeBase64;
-        $this->filename = $filename;
     }
 
     /**
@@ -36,7 +30,7 @@ class TicketRepriseMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre Ticket de Reprise',
+            subject: 'Comsommation de votre ticket de reprise',
         );
     }
 
@@ -46,10 +40,8 @@ class TicketRepriseMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.ticket_reprise',
-            with:([
-                'ticket' => $this->ticket,
-            ]),
+            view: 'emails.ticket_consume',
+            with: ["ticket" => $this->ticket],
         );
     }
 
@@ -60,11 +52,6 @@ class TicketRepriseMail extends Mailable
      */
     public function attachments(): array
     {
-        return [
-            Attachment::fromData(
-                fn() => $this->barcodeBase64,
-                $this->filename
-            )->withMime('image/png')
-        ];
+        return [];
     }
 }

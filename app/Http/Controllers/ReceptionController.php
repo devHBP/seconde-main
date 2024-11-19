@@ -419,10 +419,8 @@ class ReceptionController
 
     public function associate(Request $request)
     {
-        //dd($request->all());
         // Si le client id n'existe pas mais que nous sommes dans cette fonction c'est que nous avons créer un client à la volée
         if(!$request->has('client_id')){
-            //dd($request->all());
             $account = $request->user();
             $validatedData = $request->validate([
                 "firstname" => 'required|string|max:255',
@@ -480,7 +478,8 @@ class ReceptionController
         }
 
         if(!$client->email || $printTicket === "on"){
-            return $this->printTicketReprise($ticket, $barcodeBase64);
+            session()->flash('print_ticket_uuid', $ticket->uuid);
+            session()->flash('print_barcode', $barcodeBase64);
         }
 
         return redirect()->route('reception.dashboard')->with('success', 'Panier envoyé en encaissement.');
@@ -515,25 +514,24 @@ class ReceptionController
         $ticket->created_by_name = $user->name;
         $ticket->deactivated_by_name = '';
         $ticket->save();
-
-        // if(!$ticket->client->email){
-        //     // J'imprime .
-        //     $this->printTicketReprise($ticket, $barcode);
-        // }
-        // else if($printTicket === "on"){
-        //     // Autrement j'envoie un mail et j'imprime
-        //     $this->printTicketReprise($ticket, $barcode);
-        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
-        // }
-        // else{
-        //     Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
-        // }
+        
         return $ticket;
     }
 
-    public function printTicketReprise(TicketReprise $ticketParam, $barcode)
+    public function printTicket($ticket_uuid)
     {
-        $ticket = TicketReprise::findOrFail($ticketParam->id);
+        $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+        $barcodeGenerator = new DNS1D();
+        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
+        $barcodeBinary = base64_decode($barcode);
+        $barcodeBase64 = base64_encode($barcodeBinary);
+
+        return view('reception.ticket.print', ["ticket" => $ticket_uuid, "barcode" => $barcodeBase64]);
+    }
+
+    public function generateTicket($ticketParam, $barcode)
+    {
+        $ticket = TicketReprise::findOrFail($ticketParam);
         $data = [
             'ticket' => $ticket,
             'barcode' => $barcode
@@ -541,7 +539,7 @@ class ReceptionController
 
         $pdf = Pdf::loadView('pdf.ticket_reprise', $data)
             ->setPaper([0, 0, 226, 600]);
-        return $pdf->download("Ticket-{$ticket->uuid}.pdf");
+        return $pdf->stream("Ticket-{$ticket->uuid}.pdf");
     }
 
     /**

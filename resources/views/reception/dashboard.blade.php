@@ -38,4 +38,14 @@
             </a>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const printTicketUuid = "{{ session('print_ticket_uuid') }}";
+            if(printTicketUuid){
+                const printUrl = "{{ route('reception.ticket.print', ':uuid')}}"
+                    .replace(':uuid', printTicketUuid)
+                window.open(printUrl, "_blank");
+            } 
+        });
+    </script>
 </x-app-layout>
