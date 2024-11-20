@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\AccountScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ScopedBy([AccountScope::class])]
 class Type extends Model
 {
     protected $fillable = [

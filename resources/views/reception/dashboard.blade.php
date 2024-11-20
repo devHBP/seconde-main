@@ -36,6 +36,10 @@
             <a href="{{ route('reception.clients')}}">
                 <div class="dashboard-cards">Clients</div>
             </a>
+            <a href="{{ route('reception.carts.to-return')}}" class="flex flex-col">
+                <div class="dashboard-cards">Paniers à rendre</div>
+                <span>{{ $panierCount }}</span>
+            </a>
         </div>
     </div>
     <script>

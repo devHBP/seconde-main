@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\AccountScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+#[ScopedBy([AccountScope::class])]
 class TicketReprise extends Model
 {
     protected $table = "tickets_reprise";

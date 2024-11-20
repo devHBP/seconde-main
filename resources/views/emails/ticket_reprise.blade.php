@@ -43,10 +43,12 @@
         <img src="{{ $message->embedData($barcodeBase64, $filename, 'image/png') }}" alt="Code-barres">
         <p>{{$ticket->uuid}}</p>
     </div>
-
+    @php
+        $created_by = str_pad($ticket->created_by, 3, '0', STR_PAD_LEFT)
+    @endphp
     <p>Date de création : {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
     <p>Date limite de validité : {{ $ticket->date_limite->format('d/m/Y H:i')}}</p>
-    <p>Crée par : {{ $ticket->createdBy->name }}</p>
+    <p>Crée par : {{ $created_by }}</p>
 
     <div class="footer">
         <p>Merci de présenter ce ticket en caisse pour bénéficier de votre reprise.</p>

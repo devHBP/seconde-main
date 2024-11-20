@@ -101,10 +101,15 @@ Route::middleware('auth')->group(function(){
     Route::post('/reception/panier/validate', [ReceptionController::class, 'validate'])->name('reception.cart.validate');
     Route::get('/reception/panier/validate/search', [ReceptionController::class, 'showClientSearch'])->name('reception.cart.search');
     Route::post('/reception/panier/associate', [Receptioncontroller::class, 'associate'])->name('reception.cart.associate');
+    // Gestion des panier à restituer 
+    Route::get('/reception/paniers/retours', [ReceptionController::class, 'getAllCartsToReturn'])->name('reception.carts.to-return');
+    Route::get('/reception/panier/search', [ReceptionController::class, 'cartToSearch'])->name('reception.cart.search');
+    Route::get('/reception/panier/{panier_id}/retour', [ReceptionController::class, 'cartToReturn'])->name('reception.cart.to-return');
+    Route::post('/reception/panier/{panier_id}/retour', [ReceptionController::class, 'cartToReturn'])->name('reception.cart.returned');
     // Génération du ticket depuis la Reception
     Route::get('/reception/panier/generate/{panier_id}',[ReceptionController::class, 'generateTicketReprise'])->name('reception.cart.generate');
     Route::get('/reception/panier/{ticket_uuid}/print', [ReceptionController::class, 'printTicket'])->name('reception.ticket.print');
-    Route::get('/reception/panier/generate/{ticket_uuid}/{barcode}', [ReceptionController::class, 'generateTicket'])->name('reception.ticket.print.get');
+    Route::get('/reception/ticket/{ticket_uuid}/print', [ReceptionController::class, 'printTicketEmbededView'])->name('reception.ticket.print.get');
 
     /**
      * Routes concernant l'encaissement
@@ -113,7 +118,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/encaissement/ticket/search', [EncaissementController::class, 'searchTicket'])->name('encaissement.ticket.search');
     Route::post('/encaissement/ticket/validate', [EncaissementController::class, 'consumeTicket'])->name('encaissement.ticket.consume');
     Route::post('/encaissement/ticket/restitute', [EncaissementController::class, 'restituteTicket'])->name('encaissement.ticket.restitute');
-
+    Route::get('/encaissement/ticket/restitute/{ticket_uuid}',[EncaissementController::class, 'restituteIFrameRedirect']);
+    Route::get('/encaissement/ticket/restitute/{ticket_uuid}/print', [EncaissementController::class, 'printTicketOfRestitute'])->name('encaissement.ticket.restitute.print');
     Route::get('/encaissement/ticket/{ticket_uuid}', [EncaissementController::class, 'showTicket'])->name('encaissement.ticket.show');
     Route::get('/encaissement/ticket/{ticket_uuid}/print', [EncaissementController::class, 'printTicket'])->name('encaissement.ticket.print');
     Route::get('/encaissement/ticket/{ticket_uuid}/generate', [EncaissementController::class, 'printTicketUsed'])->name('encaissement.ticket.print.used');

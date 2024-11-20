@@ -7,8 +7,8 @@
             font-family: Arial, sans-serif;
             font-size: 11px;
             margin: 0;
-            margin-top: -35px;
-            margin-left: -35px;
+            margin-top: -32px;
+            margin-left: -32px;
             padding: 0;
         }
         .container {
@@ -16,10 +16,19 @@
         }
         .header, .footer {
             text-align: left;
-            margin-bottom: 5px;
+            margin-bottom: 0;
+            padding:0;
         }
-        h2{
+        .header p:last-child{
+            margin-bottom:10px;
+        }
+        h2, h3{
+            margin-top: 2px;
             margin-bottom: 2px;
+            padding: 0;
+        }
+        .uuid, .client{
+            margin-bottom: 10px;
         }
         .content {
             margin-bottom: 5px;
@@ -64,14 +73,21 @@
             width: 90%;
             height: auto;
         }
+        .footer{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- En-tête du ticket -->
+        @php
+            $created_by = str_pad($ticket->created_by, 3, '0', STR_PAD_LEFT)
+        @endphp
         <div class="header">
             <h2>Ticket de Reprise</h2>
-            <p>Réceptionné par : {{ $ticket->created_by_name }}</p>
+            <h3 class='uuid'>{{ $ticket->uuid }}</h3>
+            <p>Réceptionné par : {{ $created_by }}</p>
             <p>Date : {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
             <p>Date de Validité : {{ $ticket->date_limite->format('d/m/Y H:i')}}</p>
         </div>
@@ -104,11 +120,11 @@
 
         <!-- Totaux -->
         <table>
-            <tr>
+            <tr class="details">
                 <td class="bold">Total Remboursement :</td>
                 <td>{{ number_format($ticket->panier->total_remboursement, 2, ',', ' ') }} €</td>
             </tr>
-            <tr>
+            <tr class="details">
                 <td class="bold">Total Bon d'Achat :</td>
                 <td>{{ number_format($ticket->panier->total_bon_achat, 2, ',', ' ') }} €</td>
             </tr>
@@ -123,7 +139,8 @@
 
         <!-- Pied de page -->
         <div class="footer">
-            <p>Merci de votre visite !</p>
+            <p>Veuillez faire scanner ce code-barres en caisse</p>
+            <p>afin de bénéficier de votre remise ou remboursement.</p>
         </div>
     </div>
 </body>

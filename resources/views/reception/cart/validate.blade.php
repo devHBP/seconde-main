@@ -53,6 +53,9 @@
                                             Associer
                                         </button>
                                     </td>
+                                    @error('print_ticket')
+                                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                                    @enderror
                                 </form>
                             </tr>
                         @endforeach

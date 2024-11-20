@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\TicketConsume;
+use App\Mail\TicketRestitute;
 use App\Models\TicketReprise;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Error;
@@ -97,14 +98,51 @@ class EncaissementController extends Controller
     }
 
     // Route Post de restitution.
-    public function restituteTicket($ticket_uuid)
+    public function restituteTicket(Request $request)
     {
-        
-        // Logique de deactivation && suppression du ticket && mail de retitution ou impression ?
-        // bascule du panier en état Annulé && prévoir de passer le panier en Restitué ?
+        $validatedData = $request->validate([
+            'ticket_uuid' => 'required|string|max:14|exists:tickets_reprise,uuid',
+        ], [
+            "uuid.exists" => "Le code barre ne correspond à aucuns ticket valide",
+        ]);
+
+        $ticket = TicketReprise::where('uuid', $validatedData['ticket_uuid'])->first();
+        $ticket->deactivated_by = $this->user->id;
+        $ticket->deactivated_by_name = $this->user->name;
+        $ticket->deactivation_date = now();
+        $ticket->type_utilisation = 'annule';
+        $ticket->is_activated = true;
+        $ticket->save();
+
+        $panier = $ticket->panier;
+        $panier->status = 'annule';
+        $panier->save();
+
+        session()->flash('print_ticket_return', $ticket->uuid);
+        if($ticket->client->email){
+            Mail::to($ticket->client->email)->send(new TicketRestitute($ticket));
+        }
+        return redirect()->route('encaissement.dashboard')->with('success', "Le Ticket $ticket->uuid à bien été annulé.");
     }
 
+    public function restituteIFrameRedirect($ticket_uuid)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_uuid);
+        return view('pdf.print-restitute', ['ticket' => $ticket]);
+    }
 
+    public function printTicketOfRestitute($ticket_uuid)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+
+        $data = [
+            'ticket' => $ticket,
+        ];
+
+        $pdf = Pdf::loadView('pdf.ticket_restitute', $data)
+            ->setPaper(0, 0, 226, 600);
+        return $pdf->stream('ticket-{ $ticket->uuid }.pdf');
+    }
     // Tests et mise à l'épreuve du système.
 
     public function printTicket($ticket_uuid)

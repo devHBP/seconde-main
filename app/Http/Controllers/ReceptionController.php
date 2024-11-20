@@ -24,7 +24,8 @@ class ReceptionController
     {
         $user = session('subsession.user');
         $roleName = session('subsession.role_name');
-        return view('reception.dashboard', ['user' => $user, 'role' => $roleName]);
+        $panierCount = count(Panier::where('status', 'annule')->get());
+        return view('reception.dashboard', ['user' => $user, 'role' => $roleName, 'panierCount'=>$panierCount]);
     }
 
     public function addProduct(Request $request)
@@ -458,7 +459,7 @@ class ReceptionController
         }
         $panier = Panier::find($panier_id);
         if($panier){
-            // Logique de transition/dasactivation du panier <-> ticket
+            // Logique de transition/desactivation du panier <-> ticket
             $panier->client_id = $client_id;
             $panier->status = 'valide';
             $panier->save();
@@ -479,7 +480,6 @@ class ReceptionController
 
         if(!$client->email || $printTicket === "on"){
             session()->flash('print_ticket_uuid', $ticket->uuid);
-            session()->flash('print_barcode', $barcodeBase64);
         }
 
         return redirect()->route('reception.dashboard')->with('success', 'Panier envoyé en encaissement.');
@@ -521,26 +521,84 @@ class ReceptionController
     public function printTicket($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+
+        return view('reception.ticket.print', ["ticket" => $ticket]);
+    }
+
+    public function printTicketEmbededView($ticket_uuid)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+
         $barcodeGenerator = new DNS1D();
         $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
-
-        return view('reception.ticket.print', ["ticket" => $ticket_uuid, "barcode" => $barcodeBase64]);
-    }
-
-    public function generateTicket($ticketParam, $barcode)
-    {
-        $ticket = TicketReprise::findOrFail($ticketParam);
+        
         $data = [
             'ticket' => $ticket,
-            'barcode' => $barcode
+            'barcode' => $barcodeBase64
         ];
 
         $pdf = Pdf::loadView('pdf.ticket_reprise', $data)
             ->setPaper([0, 0, 226, 600]);
         return $pdf->stream("Ticket-{$ticket->uuid}.pdf");
     }
+
+
+    /**
+     * Gestion des paniers retours
+     */
+    public function getAllCartsToReturn()
+    {
+        $ticketsAborted = TicketReprise::where('is_activated', true)
+            ->whereHas('panier', function ($query){
+                $query->where('status', 'annule');
+            })->get();
+        return view('reception.returns.carts', ["tickets" => $ticketsAborted]);
+    }
+
+    public function cartToSearch(Request $request)
+    {
+        $account = $request->user();
+        $validatedData = $request->validate([
+            'query' => 'nullable|string|max:14',
+        ]);
+
+        $query = $validatedData['query'];
+        if(!empty($query)){
+            $ticket = TicketReprise::where('account_id', $account->id)
+                ->where('uuid', $query)
+                ->whereHas('panier', function($q){
+                    $q->where('status', 'annule');
+                })->get();
+            if(!$ticket){
+                $ticket = null;
+            }
+        }
+        else{
+            $ticket = TicketReprise::where('is_activated', true)
+                ->whereHas('panier', function($q){
+                    $q->where('status', 'annule');
+                })->get();
+        }
+
+        return view('reception.returns.carts', ["tickets" => $ticket]);
+    }
+
+    public function cartToReturn(Request $request, $panier_id)
+    {
+        $panier = Panier::findOrFail($panier_id);
+        if($request->isMethod('post')){
+            $panier->status = 'restitue';
+            $panier->save();
+            //? Envisager une impression si besoin est.
+            return redirect()->route('reception.dashboard')->with('success', 'Le panier à été correctement réstitué.');
+        }
+
+        // case où nous affichons le panier
+        return view('reception.returns.cart', ["panier" => $panier]);
+    }
+
 
     /**
      * Fonction utilitaire pour supprimer un produit de la session

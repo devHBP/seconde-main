@@ -12,6 +12,6 @@
     </script>
 </head>
 <body>
-    <iframe id="ticket-pdf" src="{{ route('reception.ticket.print.get', ['ticket_uuid' => $ticket->uuid ]) }}" type="application/pdf" style="width:100%;height:100vh;"></iframe>
+    <iframe id="ticket-pdf" src="{{ route('encaissement.ticket.restitute.print', ['ticket_uuid' => $ticket->uuid]) }}" type="application/pdf" style="width:100%;height:100vh;"></iframe>
 </body>
 </html>

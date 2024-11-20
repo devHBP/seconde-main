@@ -11,10 +11,10 @@
     </style>
 </head>
 <body>
-    <h2>Comsommation de votre Ticket</h2>
+    <h2>Votre ticket n°{{ $ticket->uuid }}</h2>
     <p>Bonjour {{ $ticket->client->firstname }} {{ $ticket->client->lastname }},</p>
 
-    <p>Votre ticket de reprise à été comsommé</p>
+    <p>Votre ticket de reprise à été annulé</p>
 
     <table>
         <tr>
@@ -31,22 +31,16 @@
         @endforeach
     </table>
 
-    <p>Vous avez choisis
-        @if($ticket->type_utilisation === "remboursement")
-            <strong>le remboursement pour un total de</strong> {{ $ticket->panier->total_remboursement }} €
-        @elseif($ticket->type_utilisation === "bon_achat")
-            <strong>la remise en bon d'achat pour un total de</strong> {{ $ticket->panier->total_bon_achat }} €
-        @endif
-    </p>
+    <p>Vous avez choisis d'<strong>annuler</strong></p>
 
-    @php
-        $dactivated_by = str_pad($ticket->created_by, 3, '0', STR_PAD_LEFT)
-    @endphp
     <p>Date de comsommation : {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
-    <p>Validé par : {{ $dactivated_by }}</p>
+    @php
+        $deactivated_by = str_pad($ticket->deactivated_by, '3', 0, STR_PAD_LEFT);
+    @endphp
+    <p>Validé par : {{ $deactivated_by }}</p>
 
     <div class="footer">
-        <p>Merci de votre visite, tout l'équipe vous remercies, A bientôt chez Account->name</p>
+        <p>Veuillez vous rendre à l'accueil Seconde-Main de votre magasin, pour la restition de vos articles précedemment déposés.</p> 
     </div>
 </body>
 </html>

@@ -75,7 +75,7 @@
                 </form>
             </div>
             <!-- Bouton de restitution -->
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('encaissement.ticket.restitute')}}">
                 @csrf
                 <input type="hidden" name="ticket_uuid" value="{{ $ticket->uuid }}">
                 <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Restitution</button>

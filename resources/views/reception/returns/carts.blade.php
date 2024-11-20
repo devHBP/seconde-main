@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="dashboard-header h-4">
-            <h2 class="title">Bonjour {{ $user->name }} <span>*Connecté en rôle Encaissement</span></h2>
-            <h3>Tickets en Cours</h3>
+            <h3>Paniers à restituer</h3>
             <div class="header-right-button">
                 <div class="logout-dashboard">
                     <a href="{{ route('role.logout')}}">
@@ -21,8 +20,8 @@
             </div>
         @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
-            <!-- Formulaire de recherche client -->
-            <form method="GET" action="{{ route('encaissement.ticket.search') }}" class="mb-6">
+            <!-- Formulaire de recherche de panier via uuid-->
+            <form method="GET" action="" class="mb-6">
                 <div class="flex items-center gap-4">
                     <input type="text" name="query" placeholder="Scanner le code barre / Entrer le numéro de ticket de reprise"
                         @if(isset($query))
@@ -39,7 +38,7 @@
             <ul>
                 @if(count($tickets)>0)
                     @foreach ($tickets as $ticket)
-                    <a href="{{ route('encaissement.ticket.show', ['ticket_uuid' => $ticket->uuid] ) }}">
+                    <a href="{{ route('reception.cart.to-return', ['panier_id' => $ticket->panier->id] ) }}">
                         <li class="flex justify-between p-4 bg-white cursor-pointer border border-gray-300 hover:bg-slate-100">
                             <span>{{ $ticket->uuid }}</span>
                             <span>{{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</span>
@@ -52,18 +51,4 @@
             </ul>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const printTicketUuid = "{{ session('print_ticket_uuid') }}";
-            const restituteTicketUuid = "{{ session('print_ticket_return')}}"
-            if(printTicketUuid){
-                const printUrl = "{{ route('encaissement.ticket.print', ':uuid') }}".replace(':uuid', printTicketUuid);
-                window.open(printUrl, "_blank");
-            }
-            if(restituteTicketUuid){
-                const printRestituteUrl = "{{ route('encaissement.ticket.restitute.print', ':uuid') }}".replace(':uuid', restituteTicketUuid);
-                window.open(printRestituteUrl, "_blank");
-            }
-        });
-    </script>
 </x-app-layout>
