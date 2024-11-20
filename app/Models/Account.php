@@ -13,7 +13,9 @@ class Account extends Authenticatable
 
     protected $fillable = [
         'login',
+        'name',
         'password',
+        'icon_path'
     ];
 
     protected $hidden = [
@@ -23,5 +25,10 @@ class Account extends Authenticatable
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function picture()
+    {
+        return $this->belongsTo(Picture::class, 'icon_path', 'id');
     }
 }

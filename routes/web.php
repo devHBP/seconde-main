@@ -123,6 +123,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/encaissement/ticket/{ticket_uuid}', [EncaissementController::class, 'showTicket'])->name('encaissement.ticket.show');
     Route::get('/encaissement/ticket/{ticket_uuid}/print', [EncaissementController::class, 'printTicket'])->name('encaissement.ticket.print');
     Route::get('/encaissement/ticket/{ticket_uuid}/generate', [EncaissementController::class, 'printTicketUsed'])->name('encaissement.ticket.print.used');
+    
     /**
      * Routes concernant les visiteurs
      */

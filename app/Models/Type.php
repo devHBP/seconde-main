@@ -11,10 +11,16 @@ class Type extends Model
 {
     protected $fillable = [
         'name',
+        'icon_path'
     ];
 
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function picture()
+    {
+        return $this->belongsTo(Picture::class, 'icon_path', 'id');
     }
 }
