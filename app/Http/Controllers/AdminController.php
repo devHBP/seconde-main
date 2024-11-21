@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Brand;
+use App\Models\Picture;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\State;
@@ -15,6 +17,47 @@ use function PHPUnit\Framework\isNull;
 
 class AdminController
 {
+    /**
+     * Settings
+     */
+    public function getSettings(Request $request)
+    {
+        $user = $request->user();
+        $account = Account::findOrFail($user->id);
+        if($request->isMethod('put')){
+            
+            $validatedData = $request->validate([
+                "name" => 'nullable|string|max:255',
+                "custom_background_primary" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "custom_background_secondary" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "custom_font_primary" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "custom_font_secondary" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "pattern_logo" => 'nullable|file|mimes:png,svg|max:2048',
+            ]);
+            if($request->has('pattern_logo')){
+                $path = $request->file('pattern_logo')->store('customisation', 'public');
+                $picture = new Picture();
+                $picture->name = $request->file('pattern_logo')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+
+                $account->pattern_logo = $picture->id;
+            }
+
+            $account->name = $validatedData['name'];
+            $account->custom_background_primary = $validatedData['custom_background_primary'];
+            $account->custom_background_secondary = $validatedData['custom_background_secondary'];
+            $account->custom_font_primary = $validatedData['custom_font_primary'];
+            $account->custom_font_secondary = $validatedData['custom_font_secondary'];
+            $account->save();
+
+            return redirect()->route('admin.dashboard');
+        }
+
+        return view('admin.settings', [ "account"=> $account ]);
+    }
+
     /**
      * Dashboard
      */
@@ -114,35 +157,78 @@ class AdminController
 
     public function createBrand(Request $request)
     {
+        $pictures = Picture::all();
         if($request->isMethod('post')){
             $account = $request->user();
             $validatedData = $request->validate([
                 "name" => "required|string|max:120",
+                "icon_path" => "nullable|exists:pictures,id",
+                "new_icon" => "nullable|file|mimes:png,svg|max:2048"
             ]);
+
+            $brandName = strtoupper($validatedData['name']);
             $brand = new Brand();
+
+            // Upload d'une icone
+            if($request->has('new_icon')){
+                $path = $request->file('new_icon')->store('icons', 'public');
+
+                // Enregistrement de l'entité Picture et mise en place de la relation implicite
+                $picture = new Picture();
+                $picture->name = $request->file('new_icon')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+
+                $brand->icon_path = $picture->id;
+            }
+            elseif($request->filled('icon_path')){
+                $brand->icon_path = $validatedData['icon_path'];
+            }
+
             $brand->account_id = $account->id;
-            $brand->name = strtoupper($validatedData['name']);
+            $brand->name = $brandName;
             $brand->save();
 
             return redirect()->route('admin.brands')->with('success', 'Marque créée avec succès.');
         }
-        return view('admin.brands.create-or-modify');
+        return view('admin.brands.create-or-modify', ["pictures" => $pictures]);
     }
 
     public function modifyBrand(Request $request, $brand_id)
     {
         $brand = Brand::findOrFail($brand_id);
+        $pictures = Picture::all();
         if($request->isMethod('put')){
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:120',
+                "icon_path" => "nullable|exists:pictures,id",
+                "new_icon" => "nullable|file|mimes:png,svg|max:2048"
             ]);
             $validatedData['name'] = strtoupper($validatedData['name']);
-            $brand->update($validatedData);
+            
+            if($request->has('new_icon')){
+                $path = $request->file('new_icon')->store('icons', 'public');
+                // Enregistrement de l'entité Picture et mise en place de la relation implicite
+                $picture = new Picture();
+                $picture->name = $request->file('new_icon')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+
+                $brand->icon_path = $picture->id;
+            }            
+            elseif($request->filled('icon_path')){
+                $brand->icon_path = $validatedData['icon_path'];
+            }
+            
+            $brand->name = $validatedData['name'];
+            $brand->save();
 
             return redirect()->route('admin.brands')->with('success', 'Marque modifiée avec succès');
         }
-        return view('admin.brands.create-or-modify', ['brand' => $brand]);
+        return view('admin.brands.create-or-modify', ['brand' => $brand, 'pictures' => $pictures]);
     }
 
     public function deleteBrand($brand_id)
@@ -162,34 +248,71 @@ class AdminController
 
     public function createType(Request $request)
     {
+        $pictures = Picture::all();
         if($request->isMethod('post')){
             $account = $request->user();
             $validatedData = $request->validate([
                 "name" => "required|string|max:120",
+                "icon_path" => "nullable|exists:pictures,id",
+                "new_icon" => "nullable|file|mimes:png,svg|max:2048"
             ]);
             $type = new Type();
             $type->account_id = $account->id;
+            
+            if($request->has('new_icon')){
+                $path = $request->file('new_icon')->store('icons', 'public');
+                // Enregistrement de l'entité Picture et mise en place de la relation implicite
+                $picture = new Picture();
+                $picture->name = $request->file('new_icon')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+
+                $type->icon_path = $picture->id;
+            }
+            elseif($request->filled('icon_path')){
+                $type->icon_path = $validatedData['icon_path'];
+            }
+            
             $type->name = strtoupper($validatedData['name']);
             $type->save();
 
             return redirect()->route('admin.types')->with('success', 'Type créé avec succès.');
         }
-        return view('admin.types.create-or-modify');
+        return view('admin.types.create-or-modify', ["pictures" => $pictures]);
     }
 
     public function modifyType(Request $request, $type_id)
     {
+        $pictures = Picture::all();
         $type = Type::findOrFail($type_id);
         if($request->isMethod('put')){
             $validatedData = $request->validate([
                 'name' => 'required|string|max:120',
+                "icon_path" => "nullable|exists:pictures,id",
+                "new_icon" => "nullable|mimes:png,svg|max:2048"
             ]);
-            $validatedData['name'] = strtoupper($validatedData['name']); 
-            $type->update($validatedData);
+            
+            if($request->has('new_icon')){
+                $path = $request->file('new_icon')->store('icons', 'public');
+                $picture = new Picture();
+                $picture->name = $request->file('new_icon')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+                
+                $type->icon_path = $picture->id; 
+            }
+            elseif($request->filled('icon_path')){
+                $type->icon_path = $validatedData['icon_path'];
+            }
+            
+            $type->name = strtoupper($validatedData['name']); 
+            $type->save();
 
             return redirect()->route('admin.types')->with('success', 'Type modifié avec succès');
         }
-        return view('admin.types.create-or-modify', ['type' => $type]);
+        return view('admin.types.create-or-modify', ['type' => $type, 'pictures' => $pictures]);
     }
 
     public function deleteType($type_id)

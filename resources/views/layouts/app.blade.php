@@ -16,6 +16,19 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            dump($theme);
+        @endphp
+        @if(isset($theme))
+        <style>
+            :root {
+                --background-primary: {{ $theme['background_primary'] }};
+                --background-secondary: {{ $theme['background_secondary'] }};
+                --font-primary: {{ $theme['font_primary'] }};
+                --font-secondary: {{ $theme['font_secondary'] }};
+            }
+        </style>
+    @endif
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -23,7 +36,7 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow-lg">
+                <header class="shadow-md" style="background-color:{{ Auth::user()->custom_background_secondary }}">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>

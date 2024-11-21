@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function(){
     /**
      * Routes concernant les admins
      */
+    Route::get('/administrateur/settings', [AdminController::class, 'getSettings'])->name('admin.settings');
+    Route::put('/administrateur/settings', [AdminController::class, 'getSettings'])->name('admin.settings.update');
     Route::get('/administrateur/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     // Gestion des Utilisateurs
     Route::get('/administrateur/users', [AdminController::class, 'getUsers'])->name('admin.users');

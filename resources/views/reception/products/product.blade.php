@@ -20,8 +20,11 @@
             <form method="POST" action="{{ route('reception.selection.store') }}">
                 @csrf
                 @foreach ($types as $type)
-                    <button type="submit" name="type_id" value="{{ $type->id }}" class="tile">
-                        {{ $type->name }}
+                    <button type="submit" name="type_id" value="{{ $type->id }}" class="tile flex flex-col flex-nowrap {{ $type->icon_path ? 'justify-around' : 'justify-center' }}">
+                        @if($type->icon_path)
+                            <img class="self-center content-baseline" width="100px" src="{{ asset('storage/' . $type->picture->path) }}" alt="{{ $type->picture->name }}">
+                        @endif
+                        <p class="text-xs self-center justify-self-center">{{ $type->name }}</p>
                     </button>
                 @endforeach
             </form>
@@ -34,8 +37,11 @@
             <form method="POST" action="{{ route('reception.selection.store') }}">
                 @csrf
                 @foreach ($brands as $brand)
-                    <button type="submit" name="brand_id" value="{{ $brand->id }}" class="tile">
-                        {{ $brand->name }}
+                    <button type="submit" name="brand_id" value="{{ $brand->id }}" class="tile flex flex-col flex-nowrap {{ $brand->icon_path ? 'justify-around' : 'justify-center' }}">
+                            @if($brand->icon_path)
+                                <img class="self-center content-baseline" width="100px" src="{{ asset('storage/' . $brand->picture->path) }}" alt="{{ $brand->picture->name }}">
+                            @endif
+                            <p class="text-xs self-center justify-self-center">{{ $brand->name }}</p>
                     </button>
                 @endforeach
             </form>

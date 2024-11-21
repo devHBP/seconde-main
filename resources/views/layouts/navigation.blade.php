@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }">
+<nav x-data="{ open: false }" style="background-color:{{ Auth::user()->custom_background_primary}};">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -34,10 +34,12 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('admin.settings')">
+                            {{__('Paramètres')}} 
+                        </x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -76,6 +78,9 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link>
+                    <a href="">Paramètres</a>
+                </x-responsive-nav-link>
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -83,7 +88,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                            {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
