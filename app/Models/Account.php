@@ -29,6 +29,6 @@ class Account extends Authenticatable
 
     public function picture()
     {
-        return $this->belongsTo(Picture::class, 'icon_path', 'id');
+        return $this->belongsTo(Picture::class, 'pattern_logo', 'id');
     }
 }

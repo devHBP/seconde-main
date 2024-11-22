@@ -72,7 +72,7 @@
                                 Image actuelle
                                 <img src="{{ asset('storage/' . $account->picture->path) }}"  width="120px" alt="">
                             </div>
-                        @endif
+                        @endif 
                     </div>
 
                     @error('pattern_logo')

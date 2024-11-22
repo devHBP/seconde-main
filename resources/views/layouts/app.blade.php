@@ -16,9 +16,6 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @php
-            dump($theme);
-        @endphp
         @if(isset($theme))
         <style>
             :root {
@@ -26,17 +23,18 @@
                 --background-secondary: {{ $theme['background_secondary'] }};
                 --font-primary: {{ $theme['font_primary'] }};
                 --font-secondary: {{ $theme['font_secondary'] }};
+                --pattern-logo: "{{ asset($theme['pattern_logo']) }}";
             }
         </style>
     @endif
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="shadow-md" style="background-color:{{ Auth::user()->custom_background_secondary }}">
+                <header class="shadow-md">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -48,6 +46,53 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+            const pattern = {
+
+                init: () => {
+                    const headerNav = document.querySelector('nav.header__nav');
+                    const mainBloc = document.querySelector('main');
+                    const patternLogo = "{{ asset('/storage/'.Auth::user()->picture->path ) }}"
+                    if(headerNav && patternLogo){
+                        pattern.applyBackground(headerNav, patternLogo);
+                    }
+                    if(mainBloc && patternLogo){
+                        pattern.applyBackground(mainBloc, patternLogo);
+                    }
+                    
+                },
+
+                applyBackground: (element, logoUrl) => {
+                    const elementWidth = element.offsetWidth;
+                    const elementHeight = element.offsetHeight;
+
+                    const spacingX = 120; // Intervalle horizontal entre chaque SVG (en px)
+                    const spacingY = 120; // Intervalle vertical entre chaque SVG (en px)
+
+                    for (let y = 0; y < elementHeight; y += spacingY) {
+                        for (let x = 0; x < elementWidth; x += spacingX) {
+                            const svgElement = document.createElement('img');
+                            svgElement.src = logoUrl;
+                            svgElement.classList.add("svg-pattern");
+
+                            // Rotation aléatoire
+                            const randomRotation = Math.random() * 120;
+
+                            // Placement à des intervalles réguliers
+                            svgElement.style.left = `${x}px`;
+                            svgElement.style.top = `${y}px`;
+                            svgElement.style.transform = `rotate(${randomRotation}deg)`;
+
+                            element.appendChild(svgElement);
+                        }
+        }
+    }
+            }
+            document.addEventListener('DOMContentLoaded', pattern.init);
+        </script>
     </body>
+    
+
+
     @stack('scripts')
 </html>

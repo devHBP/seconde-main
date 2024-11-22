@@ -20,7 +20,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 layout-search">
             <!-- Formulaire de recherche client -->
             <form method="GET" action="{{ route('encaissement.ticket.search') }}" class="mb-6">
                 <div class="flex items-center gap-4">
@@ -28,14 +28,14 @@
                         @if(isset($query))
                             value="{{ $query }}"
                         @endif
-                        class="w-full py-2 px-4 border border-gray-300 dark:border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-lime-500">
-                    <button type="submit" class="bg-lime-600 text-white px-4 py-2 rounded hover:bg-lime-700">
+                        class="w-full py-2 px-4 rounded focus:outline-none">
+                    <button type="submit" class="text-white px-4 py-2 rounded">
                         Rechercher
                     </button>
                 </div>
             </form>
         </div>
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-7xl mx-auto layout-liste">
             <ul>
                 @if(count($tickets)>0)
                     @foreach ($tickets as $ticket)
