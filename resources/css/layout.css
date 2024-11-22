@@ -49,6 +49,14 @@ header{
     background-color: var(--font-secondary);
     color: var(--background-primary);
     text-transform: uppercase;
+    padding:0;
+    .title{
+        font-size: 30px;
+    }
+    a{
+        text-decoration: none;
+        color: var(--font-primary);
+    }
 }
 
 main{
@@ -111,4 +119,22 @@ main{
     color:var(--background-primary);
     width:95%;
     margin-bottom: 1em;
+}
+
+.layout-ticket{
+    position: relative;
+    z-index: 2;
+    background-color: var(--font-secondary);
+    color: var(--background-primary);
+    border-radius: 10px;
+    h1, h2{
+        color: var(--background-primary);
+    }
+    p{
+        color: var(--background-primary);
+    }
+    th{
+        background-color: var(--background-primary);
+        color: var(--font-primary);
+    }
 }

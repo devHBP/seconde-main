@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="dashboard-header h-4">
+        <div class="dashboard-header">
             <h2 class="title">Bonjour {{ $user->name }} <span>*Connecté en rôle Encaissement</span></h2>
             <h3>Tickets en Cours</h3>
             <div class="header-right-button">

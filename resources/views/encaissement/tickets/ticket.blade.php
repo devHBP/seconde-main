@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="dashboard-header h-4">
+        <div class="dashboard-header">
             <h2 class="title">Bonjour {{ $user->name }} <span>*Connecté en rôle Encaissement</span></h2>
             <h3>Ticket n° {{ $ticket->uuid }}</h3>
             <div class="header-right-button">
-                <a href="{{ route('encaissement.dashboard') }}" class="text-blue-500 hover:underline">Retour au tableau de bord</a>
+                <a href="{{ route('encaissement.dashboard') }}" class="hover:underline">Retour au tableau de bord</a>
             </div>
         </div>
     </x-slot>
-    <div class="container mx-auto my-8 p-6 bg-white rounded shadow-lg">
+    <div class="container mx-auto my-8 p-6 layout-ticket">
         <!-- Titre -->
         <h1 class="text-2xl font-bold text-gray-700 mb-4">Détail du Ticket #{{ $ticket->uuid }}</h1>
 
