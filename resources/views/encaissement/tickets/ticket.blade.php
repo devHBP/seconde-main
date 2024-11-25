@@ -1,8 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="dashboard-header">
-            <h2 class="title">Bonjour {{ $user->name }} <span>*Connecté en rôle Encaissement</span></h2>
-            <h3>Ticket n° {{ $ticket->uuid }}</h3>
+            <div>
+                <p class="title-reminder">{{ $user->name }} <span> * Connecté en rôle Encaissement</span></p>
+                <h2>Ticket n° {{ $ticket->uuid }}</h2>
+            </div>
             <div class="header-right-button">
                 <a href="{{ route('encaissement.dashboard') }}" class="hover:underline">Retour au tableau de bord</a>
             </div>

@@ -2,28 +2,65 @@
 div.layout-container.tiles{
     flex-direction: row;
     flex-wrap: wrap;
+    padding-bottom: 2em;
     form{
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         .tile{
-            height: 150px;
             margin: 0.5em 0.5em;
             padding:1em;
-            width: 20%;
-            background-color: white;
-            border: 1px solid darkgray;
+            width: 30%;
+            height: 20%;
+            background-color: var(--font-secondary);
             border-radius: 10px;
+            color: var(--font-primary);
+            font-weight: bold;
+            .state-definition{
+                font-size: 12px;
+                color: var(--background-secondary);
+                font-weight: 100;
+            }
+            svg{
+                fill:var(--background-primary);
+
+            }
             &:hover{
-                background-color: rgb(236, 236, 236);
+                filter: brightness(0.8);
+            }
+        }
+        .tile-state{
+            display: flex;
+            flex-direction: row;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            .state-wwd{
+                font-size: 14px;
+                font-weight: 100;
+                font-style: italic;
+                span{
+                    font-weight: bold;
+                }
             }
         }
     }
 }
+
 .price-box{
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: 2em auto;
+    background-color: var(--font-secondary);
+    border-radius: 10px;
+    width:80%;
+    padding:1em;
     &>.prices{
         margin-top: 2em;
         display: flex;
@@ -32,57 +69,60 @@ div.layout-container.tiles{
         &>p{
             display: flex ;
             flex-direction: column;
-            background-color: white;
+            background-color: var(--font-primary);
+            color: var(--background-primary);
             padding:1em;
             border-radius: 10px;
-            box-shadow: 1px 1px 1px;
+            box-shadow: 1px 1px 1px var(--background-primary);
             span{
                 align-self: center;
             }
         }
         .price-focus{
             font-weight: bold;
-            box-shadow: 2px 2px 2px greenyellow;
+            color: darkgreen;
+            box-shadow: 2px 2px 2px var(--background-primary);
             span{
-                font-size: 1.2em;
+                font-size: 1.3em;
             }
         }
 
     }
     div.validation{
-        margin-top: 2em;
+
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         align-items: baseline;
+        font-weight: bold;
         gap:1em;
         button{
             padding: 1em;
-            background-color: limegreen;
+            background-color: var(--background-primary);
             border-radius: 10px;
-            border:1px solid olive;
             &:hover{
-                background-color: olive;
+                filter: brightness(0.8);
             }
-        }
-        a{
-            padding: 1em;
-            color: red;
         }
     }
 }
-.annulation{
-    display:block;
-    width:20%;
-    margin:1em auto 1em auto;
-    text-align: center;
-    padding: 1em;
-    background-color: white;
-    border:1px solid lightgray;
-    border-radius: 10px;
-    color: red;
-    &:hover{
-        background-color: whitesmoke;
+
+.annulation-container{
+    margin-top: 4em;
+    .annulation{
+        position:relative;
+        z-index: 2;
+        display:block;
+        width:17%;
+        margin:1em auto 1em auto;
+        text-align: center;
+        padding: 0.8em;
+        background-color: var(--font-primary);
+        border-radius: 10px;
+        color: darkred;
+        &:hover{
+            filter:brightness(0.8);
+        }
     }
 }

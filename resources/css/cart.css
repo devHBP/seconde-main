@@ -1,0 +1,104 @@
+table{
+    position:relative;
+    z-index: 2;
+    th{
+        background-color: var(--background-primary);
+        filter: brightness(0.8);
+    }
+    td{
+        background-color: var(--font-secondary);
+        button{
+            background-color: var(--background-primary);
+            border-radius: 10px;
+            &:hover{
+                filter: brightness(0.8);
+            }
+        }
+    }
+    .button-increase, .button-decrease{
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .button-increase{
+        color: darkgreen;
+    }
+    .button-decrease{
+        color: darkred;
+    }
+    .button-substract{
+        color: darkred;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+    tfoot{
+        tr td:first-child{
+            border-color:slategray;
+        }
+        tr td:last-child{
+            border-color: darkgreen;
+        }
+    }
+}
+
+input#print_ticket[type="checkbox"]:checked{
+    background-color: var(--background-primary);
+}
+
+input{
+    color: var(--background-primary);
+}
+.validate-cart, .delete-cart{
+    position:relative;
+    z-index: 2;
+    border-radius: 10px;
+}
+.validate-cart{
+    background-color: var(--font-secondary);
+    &:hover{
+        filter:brightness(0.8);
+    }
+}
+.delete-cart{
+    background-color: darkred;
+    &:hover{
+        filter:brightness(0.8);
+    }
+}
+
+div.layout-search input{
+    color: var(--background-primary);
+    &::focus{
+        border: 2px solid var(--font-secondary);
+    }
+}
+button.button-search{
+    padding: 0.5em;
+    border-radius: 10px;
+    color: var(--font-primary);
+}
+
+.cart-create-client{
+    position:relative;
+    z-index: 2;
+    background-color: var(--font-secondary);
+    border-radius: 10px;
+    color: var(--font-primary);
+    input{
+        color: var(--background-primary);
+    }
+    button{
+        background-color: var(--background-primary);
+        &:hover{
+            filter:brightness(0.8);
+        }
+    }
+}
+
+.client-infos{
+    position:relative;
+    z-index: 2;
+    padding:1em 0 2.5em 1em;
+    border-radius: 10px 10px 0 0;
+    background-color: var(--font-secondary);
+}

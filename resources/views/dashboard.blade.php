@@ -1,8 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl">
-            Se connecter avec quel poste ?
-        </h2>
+        <div class="dashboard-primary">
+            <h2>
+                Se connecter avec quel poste ?
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12 flex flex-col space-y-6">

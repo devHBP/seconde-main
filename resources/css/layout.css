@@ -44,21 +44,6 @@ main{
     z-index: 1;
 }
 
-header{
-    /* Ici inversion de design */
-    background-color: var(--font-secondary);
-    color: var(--background-primary);
-    text-transform: uppercase;
-    padding:0;
-    .title{
-        font-size: 30px;
-    }
-    a{
-        text-decoration: none;
-        color: var(--font-primary);
-    }
-}
-
 main{
     color: var(--font-primary);
     background-color: var(--background-primary);
@@ -70,11 +55,13 @@ main{
     flex-direction: column;
     align-items: center;
     margin-bottom: 1em;
+    
     .role-card{
         &:hover{
             filter:brightness(0.8);
         }
         width:70%;
+        box-shadow: 1px 2px 1px black;
         background-color: var(--font-secondary);
         border-radius: 10px;
         h3{
@@ -101,12 +88,15 @@ main{
     z-index: 2;
     button{
         background-color: var(--font-secondary);
+        border-radius: 10px;
         color: var(--background-primary);
+        color: var(--font-primary);
         &:hover{
             filter: brightness(0.8);
         }
     }
     input{
+        color: var(--background-primary);
         &:focus{
             border: 2px solid black;
         }
@@ -125,7 +115,7 @@ main{
     position: relative;
     z-index: 2;
     background-color: var(--font-secondary);
-    color: var(--background-primary);
+    color: var(--font-primary);
     border-radius: 10px;
     h1, h2{
         color: var(--background-primary);
@@ -136,5 +126,15 @@ main{
     th{
         background-color: var(--background-primary);
         color: var(--font-primary);
+    }
+}
+.button-returned{
+    position:relative;
+    z-index:2;
+    background-color: darkred;
+    border-radius: 10px;
+    padding: 0.6em;
+    &:hover{
+        filter:brightness(0.8);
     }
 }

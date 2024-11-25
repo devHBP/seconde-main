@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2>Entrer vos identifiants</h2>
+        <div class="dashboard-primary">
+            <h2>Entrer vos identifiants</h2>
+        </div>
     </x-slot>
     <div class="form-container">
         <div class="title">
@@ -18,7 +20,7 @@
             
                 <div>
                     <label for="password">Mot de passe</label>
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" class="" required>
                 </div>
             
                 <button type="submit">Se connecter</button>

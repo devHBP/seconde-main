@@ -4,7 +4,6 @@
     flex-flow: row nowrap;
     align-items: center;
     justify-content: space-between;
-    margin:1em 1.5em 1em 1em;
 }
 h2.title{
     display: flex;
@@ -32,26 +31,50 @@ div.layout-container{
     display:flex;
     flex-flow: row wrap;
     justify-content: center;
+    margin-top: 2em;
     a{
         display: flex;
+        flex-direction: column;
+        gap:0.7em;
         justify-content: center;
         align-items: center;
         margin: 0.6em;
-        background-color: white;
+        background-color: var(--font-secondary);
+        color: var(--font-primary);
         height: 150px;
         width: 40%;
         border-radius: 10px;
-        border: 1px solid darkgray;
         div{
             display:flex;
             font-size: 1.1em;
             font-weight: 600;
         }
+        svg{
+            fill:var(--font-primary);
+        }
         &:hover{
-            background-color:whitesmoke;
+        filter:brightness(0.8);
+        }
+    }
+    a.cart-returned{
+        svg{
+            stroke:var(--font-primary);
         }
     }
 }
+.cart-returned{
+    position: relative;
+    span{
+        position:absolute;
+        top:0;
+        right:-5px;
+        background-color: var(--font-primary);
+        color:darkred;
+        border-radius: 50%;
+        padding:0 7px;
+    }
+}
+
 div.layout-container.reception{
     flex-flow: nowrap;
     flex-direction: column;

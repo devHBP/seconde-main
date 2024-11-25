@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/reception/panier/associate', [Receptioncontroller::class, 'associate'])->name('reception.cart.associate');
     // Gestion des panier à restituer 
     Route::get('/reception/paniers/retours', [ReceptionController::class, 'getAllCartsToReturn'])->name('reception.carts.to-return');
-    Route::get('/reception/panier/search', [ReceptionController::class, 'cartToSearch'])->name('reception.cart.search');
+    Route::get('/reception/panier/search', [ReceptionController::class, 'cartToSearch'])->name('reception.cart.search.return');
     Route::get('/reception/panier/{panier_id}/retour', [ReceptionController::class, 'cartToReturn'])->name('reception.cart.to-return');
     Route::post('/reception/panier/{panier_id}/retour', [ReceptionController::class, 'cartToReturn'])->name('reception.cart.returned');
     // Génération du ticket depuis la Reception

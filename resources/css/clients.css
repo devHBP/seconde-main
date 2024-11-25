@@ -1,0 +1,42 @@
+table.clients-list{
+    tr{
+    }
+
+    a{
+        background-color: var(--background-primary);
+        padding:1em;
+        border-radius: 10px;
+        &:hover{
+            filter: brightness(0.8);
+        }
+    }
+    button{
+        padding:0.8em;
+        background-color: darkred;
+        color: var(--font-primary);
+        &:hover{
+            color:var(--font-primary);
+            filter: brightness(0.8);
+        }
+    }
+}
+
+.create-or-modify{
+    h3{
+        font-size: 24px;
+        margin-bottom: 1em;
+    }
+    position:relative;
+    z-index: 2;
+    border-radius: 10px;
+    background-color: var(--font-secondary);
+    button, a{
+        padding: 0.6em;
+        border-radius: 10px;
+        color:var(--font-primary);
+        background-color: var(--background-primary);
+        &:hover{
+            filter:brightness(0.8);
+        }
+    }
+}

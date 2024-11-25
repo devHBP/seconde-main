@@ -30,6 +30,9 @@ class ReceptionController
 
     public function addProduct(Request $request)
     {
+        $userId = session('subsession');
+        $user = User::findOrFail($userId['user']->id);
+        $role = session('subsession.role_name'); 
         $account = $request->user();
         $types = Type::all();
         $brands = Brand::all();
@@ -73,6 +76,8 @@ class ReceptionController
             // Validation, Controle
             // Creation d'un panier ou retour en arrière 
             return view('reception.products.product', compact(
+                'role',
+                'user',
                 'states',
                 'product',
                 'brands',
@@ -81,17 +86,14 @@ class ReceptionController
             ));
         }
         return view('reception.products.product', [
+            'role' => $role,
+            'user' => $user,
             'types' => $types,
             'brands' => $brands,
             'product' => $product,
             'states' => $states,
             'selectedState' => $selectedState
         ]);
-    }
-
-    public function storeProduct()
-    {
-
     }
 
     public function cancel()
@@ -103,7 +105,7 @@ class ReceptionController
     // Gestion des utilisateurs 
     public function getClient()
     {
-        return view('reception.clients.clients', ["clients" => Client::all()]);
+        return view('reception.clients.clients', ["clients" => Client::all(), "user" => session('subsession.user')]);
     }
 
     public function createClient(Request $request)
@@ -130,7 +132,7 @@ class ReceptionController
             return redirect()->route('reception.clients')->with('success', 'Client ajouté avec succès');
         }
         
-        return view('reception.clients.create-or-modify');
+        return view('reception.clients.create-or-modify', ['user'=>session('subsession.user')]);
     }
 
     public function modifyClient(Request $request, $client_id)
@@ -156,7 +158,7 @@ class ReceptionController
             $client->update($updatedData);
             return redirect()->route('reception.clients')->with('success', "Client modifié avec succès");
         }
-        return view('reception.clients.create-or-modify', ['client' => $client]);
+        return view('reception.clients.create-or-modify', ['client' => $client, 'user' => session('subsession.user')]);
     }
 
     public function deleteClient($client_id)
@@ -172,7 +174,7 @@ class ReceptionController
             return redirect()->back()->with('error', "Le client n'a pas été trouvé");
         }
         $client = Client::findOrFail($client_id);
-        return view('reception.clients.client', ["client" => $client]);
+        return view('reception.clients.create-or-modify', ["client" => $client, 'user' => session('subsession.user')]);
     }
     
     /**
@@ -260,6 +262,7 @@ class ReceptionController
         $panier->save();
 
         return view('reception.cart.cart', [
+            "user" => $user['user'],
             "panier" => $panier,
             "total_remboursement" => $totalRemboursement,
             "total_bon_achat" => $totalBonAchat
@@ -393,16 +396,18 @@ class ReceptionController
     
     public function validate(Request $request)
     {
+        $user = session('subsession.user');
         $validatedData = $request->validate([
             'panier_id' => 'required|numeric|exists:paniers,id'
         ]);
         if($request->has('panier_id')){
             session(['panier_id' => $validatedData['panier_id']]);
         }
-        return view('reception.cart.validate', ["panier_id" => $validatedData['panier_id']]);
+        return view('reception.cart.validate', ["panier_id" => $validatedData['panier_id'], "user" => $user]);
     }
 
     public function showClientSearch(Request $request){
+        $user = session('subsession.user');
         $account = $request->user();
         $panier_id = session('panier_id');
         $query = $request->input('query');
@@ -415,7 +420,7 @@ class ReceptionController
                 ;
             })
             ->get();
-        return view('reception.cart.validate', compact('clients', 'query', 'panier_id'));
+        return view('reception.cart.validate', compact('clients', 'query', 'panier_id', 'user'));
     }
 
     public function associate(Request $request)
@@ -554,7 +559,7 @@ class ReceptionController
             ->whereHas('panier', function ($query){
                 $query->where('status', 'annule');
             })->get();
-        return view('reception.returns.carts', ["tickets" => $ticketsAborted]);
+        return view('reception.returns.carts', ["tickets" => $ticketsAborted, 'user'=>session('subsession.user')]);
     }
 
     public function cartToSearch(Request $request)
@@ -596,7 +601,7 @@ class ReceptionController
         }
 
         // case où nous affichons le panier
-        return view('reception.returns.cart', ["panier" => $panier]);
+        return view('reception.returns.cart', ["panier" => $panier, 'user'=>session('subsession.user')]);
     }
 
 

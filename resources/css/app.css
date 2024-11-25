@@ -2,6 +2,9 @@
 @import './dashboard.css';
 @import './products.css';
 @import './layout.css';
+@import './header.css';
+@import './cart.css';
+@import './clients.css';
 
 @tailwind base;
 @tailwind components;

@@ -1,14 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="dashboard-header h-4">
-            <h3>Paniers à restituer</h3>
+        <div class="dashboard-header">
+            <div>
+                <p class="title-reminder">{{ $user->name }}<span> * Connecté en rôle Reception</span></p>
+                <h2 class="title">Paniers à restituer</h3>
+            </div>
             <div class="header-right-button">
                 <div class="logout-dashboard">
-                    <a href="{{ route('role.logout')}}">
-                        <div>
-                            <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 3V12M18.3611 5.64001C19.6195 6.8988 20.4764 8.50246 20.8234 10.2482C21.1704 11.994 20.992 13.8034 20.3107 15.4478C19.6295 17.0921 18.4759 18.4976 16.9959 19.4864C15.5159 20.4752 13.776 21.0029 11.9961 21.0029C10.2162 21.0029 8.47625 20.4752 6.99627 19.4864C5.51629 18.4976 4.36274 17.0921 3.68146 15.4478C3.00019 13.8034 2.82179 11.994 3.16882 10.2482C3.51584 8.50246 4.37272 6.8988 5.6311 5.64001" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                        </div>
-                    </a>
+                    <a href="{{ route('reception.dashboard') }}">Retour au dashboard</a>
                 </div>
             </div>
         </div>
@@ -19,7 +18,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 layout-search">
             <!-- Formulaire de recherche de panier via uuid-->
             <form method="GET" action="" class="mb-6">
                 <div class="flex items-center gap-4">
@@ -27,14 +26,14 @@
                         @if(isset($query))
                             value="{{ $query }}"
                         @endif
-                        class="w-full py-2 px-4 border border-gray-300 dark:border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-lime-500">
-                    <button type="submit" class="bg-lime-600 text-white px-4 py-2 rounded hover:bg-lime-700">
+                        class="w-full py-2 px-4 border">
+                    <button type="submit" class="bg-lime-600 text-white px-4 py-2">
                         Rechercher
                     </button>
                 </div>
             </form>
         </div>
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-7xl mx-auto layout-liste">
             <ul>
                 @if(count($tickets)>0)
                     @foreach ($tickets as $ticket)
