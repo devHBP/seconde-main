@@ -19,6 +19,8 @@ header{
     }
 }
 div.dashboard-primary{
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     height: 100%;
@@ -70,6 +72,14 @@ div.dashboard-header{
     .logout-dashboard svg{
         stroke: var(--font-primary);
     }
-
+}
+div.dropdown{
+    position: fixed;
+    width: 190px;
+    z-index: 5;
+}
+button.dropdown{
+    position: relative;
+    z-index: 2;
 }
 

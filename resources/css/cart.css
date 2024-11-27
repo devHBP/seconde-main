@@ -14,8 +14,12 @@ table{
                 filter: brightness(0.8);
             }
         }
+        &:last-child{
+            text-align: center;
+        }
     }
     .button-increase, .button-decrease{
+        background-color: unset;
         font-size: 20px;
         font-weight: 600;
     }
@@ -26,7 +30,8 @@ table{
         color: darkred;
     }
     .button-substract{
-        color: darkred;
+        background-color: darkred;
+        color: var(--font-primary);
         &:hover{
             text-decoration: underline;
         }

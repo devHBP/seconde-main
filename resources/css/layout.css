@@ -138,3 +138,15 @@ main{
         filter:brightness(0.8);
     }
 }
+
+div.layout-container a.disabled{
+    filter: brightness(0.6);
+    cursor:not-allowed;
+    &:hover{
+        filter: 0.6;
+    }   
+}
+/* nav.header__nav div.dropdown{
+    position:absolute;
+    z-index:99;
+} */

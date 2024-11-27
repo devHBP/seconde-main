@@ -1,0 +1,50 @@
+/* Gestion des tableaux */
+table{
+    td, th{
+        border-right:1px solid var(--font-primary);
+        &:last-child{
+            border-right: none;
+        }
+    }
+    thead{
+        th{
+            color: antiquewhite;
+            text-align: left;
+            &:first-child{
+                border-radius: 10px 0 0 0;
+            }
+            &:last-child{
+                text-align: center;
+                border-radius: 0 10px 0 0;
+            }
+        }
+    }
+    color: var(--background-primary);
+    button, a{
+        padding:0.6em;
+        color:var(--font-primary);
+        &:hover{
+            filter: brightness(0.8);
+        }
+    }
+    a{
+        padding: 0.75em;
+        border-radius: 10px;
+        background-color: var(--background-primary);
+    }
+    form button{
+        background-color: darkred;
+    }
+}
+
+a.cancel{
+    background-color: darkred;
+}
+
+form input, form select{
+    color: var(--background-primary);
+}
+.form-actions{
+    display: flex;
+    gap:0.5em;
+}

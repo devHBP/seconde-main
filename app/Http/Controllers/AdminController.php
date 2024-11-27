@@ -17,6 +17,18 @@ use function PHPUnit\Framework\isNull;
 
 class AdminController
 {
+
+    /**
+     * @property session(subsession) $user , récupère l'user dans la session
+     */
+    private $user ;
+
+    public function __construct()
+    {
+        $this->user = session('subsession.user');
+    }
+
+
     /**
      * Settings
      */
@@ -46,16 +58,17 @@ class AdminController
             }
 
             $account->name = $validatedData['name'];
+            $account->getSlugOptions();
             $account->custom_background_primary = $validatedData['custom_background_primary'];
             $account->custom_background_secondary = $validatedData['custom_background_secondary'];
             $account->custom_font_primary = $validatedData['custom_font_primary'];
             $account->custom_font_secondary = $validatedData['custom_font_secondary'];
             $account->save();
 
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('dashboard');
         }
 
-        return view('admin.settings', [ "account"=> $account ]);
+        return view('admin.settings', [ "account"=> $account, "user" => $this->user ]);
     }
 
     /**
@@ -63,9 +76,8 @@ class AdminController
      */
     public function dashboard(Request $request)
     {
-        $user = session('subsession.user');
         $roleName = session('subsession.role_name');
-        return view('admin.dashboard', ["user" => $user, "role" => $roleName]);
+        return view('admin.dashboard', ["user" => $this->user, "role" => $roleName]);
     }
 
     /**
@@ -73,7 +85,7 @@ class AdminController
      */
     public function getUsers()
     {
-        return view('admin.users.users', ['users' => User::all()]);
+        return view('admin.users.users', ['users' => User::all(), "currentUser" => $this->user]);
     }
     
     public function createUser(Request $request)
@@ -102,7 +114,7 @@ class AdminController
 
             return redirect()->route('admin.users')->with('success', 'Utilisateur créé avec succès');
         }
-        return view('admin.users.create-or-modify', ["roles" => Role::all()]);
+        return view('admin.users.create-or-modify', ["roles" => Role::all(), "currentUser" => $this->user]);
     }
 
     public function modifyUser(Request $request, $user_id)
@@ -135,6 +147,7 @@ class AdminController
             }
         }
         return view('admin.users.create-or-modify',[
+            "currentUser" => $this->user,
             "user" => $user,
             "roles" => Role::all(),
         ]);
@@ -152,7 +165,7 @@ class AdminController
      */
     public function getBrands()
     {
-        return view('admin.brands.brands', ['brands' => Brand::all()]);
+        return view('admin.brands.brands', ['brands' => Brand::all(), "user" => $this->user]);
     }
 
     public function createBrand(Request $request)
@@ -192,7 +205,7 @@ class AdminController
 
             return redirect()->route('admin.brands')->with('success', 'Marque créée avec succès.');
         }
-        return view('admin.brands.create-or-modify', ["pictures" => $pictures]);
+        return view('admin.brands.create-or-modify', ["pictures" => $pictures, "user" => $this->user]);
     }
 
     public function modifyBrand(Request $request, $brand_id)
@@ -228,7 +241,7 @@ class AdminController
 
             return redirect()->route('admin.brands')->with('success', 'Marque modifiée avec succès');
         }
-        return view('admin.brands.create-or-modify', ['brand' => $brand, 'pictures' => $pictures]);
+        return view('admin.brands.create-or-modify', ['brand' => $brand, 'pictures' => $pictures, "user" => $this->user]);
     }
 
     public function deleteBrand($brand_id)
@@ -243,7 +256,7 @@ class AdminController
      */ 
     public function getTypes()
     {
-        return view('admin.types.types', ['types' => Type::all()]);
+        return view('admin.types.types', ['types' => Type::all(), "user" => $this->user]);
     }
 
     public function createType(Request $request)
@@ -279,7 +292,7 @@ class AdminController
 
             return redirect()->route('admin.types')->with('success', 'Type créé avec succès.');
         }
-        return view('admin.types.create-or-modify', ["pictures" => $pictures]);
+        return view('admin.types.create-or-modify', ["pictures" => $pictures, "user" => $this->user]);
     }
 
     public function modifyType(Request $request, $type_id)
@@ -312,7 +325,7 @@ class AdminController
 
             return redirect()->route('admin.types')->with('success', 'Type modifié avec succès');
         }
-        return view('admin.types.create-or-modify', ['type' => $type, 'pictures' => $pictures]);
+        return view('admin.types.create-or-modify', ['type' => $type, 'pictures' => $pictures, "user" => $this->user]);
     }
 
     public function deleteType($type_id)
@@ -327,7 +340,7 @@ class AdminController
      */
     public function getStates()
     {
-        return view('admin.states.states', ['states' => State::all()]);
+        return view('admin.states.states', ['states' => State::all(), "user" => $this->user]);
     }
 
     public function createState(Request $request)
@@ -348,7 +361,7 @@ class AdminController
 
             return redirect()->route('admin.states')->with('success', 'Etat créé avec succès.');
         }
-        return view('admin.states.create-or-modify');
+        return view('admin.states.create-or-modify', ["user" => $this->user]);
     }
 
     public function modifyState(Request $request, $state_id)
@@ -365,7 +378,7 @@ class AdminController
 
             return redirect()->route('admin.states')->with('success', 'Etat modifié avec succès');
         }
-        return view('admin.states.create-or-modify', ['state' => $state]);
+        return view('admin.states.create-or-modify', ['state' => $state, "user" => $this->user]);
     }
 
     public function deleteState($state_id)
@@ -380,7 +393,7 @@ class AdminController
      */
     public function getProducts()
     {
-        return view('admin.products.products', ['products' => Product::all()]);
+        return view('admin.products.products', ['products' => Product::all(), "user" => $this->user]);
     }
 
     public function createProduct(Request $request)
@@ -424,6 +437,7 @@ class AdminController
             return redirect()->route('admin.products')->with('success', 'Produit ajouté avec succès');
         }
         return view('admin.products.create-or-modify', [
+            "user" => $this->user,
             "types" => Type::all(),
             "brands" => Brand::all(),
             "states" => $states,
@@ -472,6 +486,7 @@ class AdminController
             return redirect()->route('admin.products')->with('success', 'Poduit modifié avec succès.');
         }
         return view('admin.products.create-or-modify', [
+            "user" => $this->user,
             "product" => $product,
             "types" => Type::all(),
             "brands" => Brand::all(),

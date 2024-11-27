@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Account extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasSlug;
+
 
     protected $fillable = [
         'login',
@@ -21,6 +24,16 @@ class Account extends Authenticatable
     protected $hidden = [
         "password",
     ];
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(function($model){
+                return str_replace('/', '-', $model->name);
+            })
+            ->saveSlugsTo('slug')
+            ->usingLanguage('fr');
+    }
 
     public function users(): HasMany
     {

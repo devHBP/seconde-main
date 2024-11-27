@@ -187,6 +187,10 @@
                 </form>
             </div>
         </div>
+    @else
+        <div class="price-box">
+            <p>Nous ne reprenons pas ce type d'articles ou l'article n'existe pas encore en base de données</p>
+        </div>
     @endif
 
     <div class="annulation-container">

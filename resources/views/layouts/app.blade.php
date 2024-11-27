@@ -83,8 +83,8 @@
 
                             element.appendChild(svgElement);
                         }
-        }
-    }
+                    }
+                }
             }
             document.addEventListener('DOMContentLoaded', pattern.init);
         </script>

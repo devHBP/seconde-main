@@ -20,6 +20,11 @@ class Brand extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function picture()
     {
         return $this->belongsTo(Picture::class, 'icon_path', 'id');

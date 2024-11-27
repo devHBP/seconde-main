@@ -5,6 +5,7 @@
 @import './header.css';
 @import './cart.css';
 @import './clients.css';
+@import './admin.css';
 
 @tailwind base;
 @tailwind components;

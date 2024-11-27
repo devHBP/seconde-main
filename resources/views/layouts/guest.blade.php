@@ -15,7 +15,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
-    <h1>Accueil Guest</h1>
-    {{ $slot }}
+    @include('layouts.navigation-guest')
+    @isset($header)
+        <header>
+                {{ $header }}
+        </header>
+    @endisset
+        {{ $slot }}
 </body>
 </html>

@@ -45,7 +45,7 @@ class ReceptionController
             $product = null;
             $states = [];
             $stateId = null;
-            //dd($request->all());
+
             if($request->has('type_id')){
                 session(['type_id' => $request->input('type_id')]);
             }
@@ -59,18 +59,23 @@ class ReceptionController
             $brandId = session('brand_id');
             $stateId = session('state_id');
 
+            if($typeId){
+                $brands = Brand::whereHas('products', function($query) use ($typeId){
+                    $query->where('type_id', $typeId);
+                })->distinct()->get();
+            }
+
             if($typeId && $brandId){
                 $product = Product::where('type_id', $typeId)
                     ->where('brand_id', $brandId)
                     ->first();
                 
-                    if($product){
-                        $states = $product->states()->get();
-                    }
-
+                if($product){
+                    $states = $product->states()->get();
                     if($stateId){
                         $selectedState = $states->firstWhere('id', $stateId);
                     }
+                }
             }
             
             // Validation, Controle
@@ -198,6 +203,9 @@ class ReceptionController
         $brandId = session('brand_id');
         $stateId = session('state_id');
 
+        if($typeId){
+            
+        }
         $product = Product::where('type_id', $typeId)
                             ->where('brand_id', $brandId)
                             ->with('states')
