@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/administrateur/produit/{product_id}', [AdminController::class, 'modifyProduct'])->name('admin.product.modify'); // Formulaire de modif
     Route::put('/administrateur/produit/{product_id}', [AdminController::class, 'modifyProduct']);
     Route::delete('/administrateur/produit/{product_id}', [AdminController::class, 'deleteProduct'])->name('admin.product.delete');
+    Route::get('/administrateur/produits/filter-name/{filter_name}', [AdminController::class, 'dropSessionFilters'])->name('admin.products.drop.filters');
     // Tickets remises et Statistiques
     Route::get('/administrateur/tickets', [AdminController::class, 'getTickets'])->name('admin.tickets');
     Route::get('/administrateur/stats', [AdminController::class, 'getStats'])->name('admin.stats');

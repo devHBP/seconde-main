@@ -391,9 +391,45 @@ class AdminController
     /**
      * Produits / Products
      */
-    public function getProducts()
+    public function getProducts(Request $request)
     {
-        return view('admin.products.products', ['products' => Product::all(), "user" => $this->user, "types" => Type::all()]);
+        $typeId = $request->input('type');
+        $brandId = $request->input('brand');
+
+        if($brandId !== null){
+            session(['brand_filter' => $brandId]);
+        }
+        if($typeId !== null){
+            session(['type_filter' => $typeId]);
+        }
+        $brandFilter = session('brand_filter', null);
+        $typeFilter = session('type_filter', null);
+        
+        switch (true) {
+            case ($brandFilter && $typeFilter):
+                $products = Product::where('brand_id', $brandFilter)
+                    ->where('type_id', $typeFilter)
+                    ->get();
+                break;
+            case ($brandFilter):
+                $products = Product::where('brand_id', $brandFilter)
+                    ->get();
+                break;
+            case ($typeFilter):
+                $products = Product::where('type_id', $typeFilter)
+                    ->get();
+                break;
+            default:
+                $products = Product::all();
+                break;
+        }
+
+        return view('admin.products.products', ['products' => $products, "user" => $this->user, "types" => Type::all(), "brands"=>Brand::all()]);
+    }
+
+    public function dropSessionFilters($filter_name){
+        session()->forget($filter_name);
+        return redirect()->route('admin.products');
     }
 
     public function createProduct(Request $request)

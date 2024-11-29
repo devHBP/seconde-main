@@ -9,6 +9,9 @@ export default {
         './resources/**/*.js',
         './resources/**/*.vue',
     ],
+    safelist:[
+        'open',
+    ],
     theme: {
         extend: {
             fontFamily: {

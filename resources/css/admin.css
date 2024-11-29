@@ -8,6 +8,7 @@ table{
     }
     thead{
         th{
+            position: relative;
             color: antiquewhite;
             text-align: left;
             &:first-child{
@@ -16,6 +17,14 @@ table{
             &:last-child{
                 text-align: center;
                 border-radius: 0 10px 0 0;
+            }
+            &.filter1{
+                position: relative;
+                z-index:8;
+            }
+            &.filter2{
+                position: relative;
+                z-index: 7;
             }
         }
     }
@@ -47,4 +56,39 @@ form input, form select{
 .form-actions{
     display: flex;
     gap:0.5em;
+}
+
+/* #brand-filter-form,
+#type-filter-form {
+    display: none;
+    &.open{
+        display: block;
+    }
+}
+/* Style des boutons */
+#brand-filter-form button,
+#type-filter-form button {
+    cursor: pointer;
+} 
+
+#type-filter-dialog button, #brand-filter-dialog button{
+    font-size: 14px;
+    padding: 0.2em 0.4em;
+    background-color: unset;
+    color:var(--background-primary);
+    &:hover{
+        filter: unset;
+        background-color: var(--background-primary);
+        color: var(--font-primary);
+    }
+}
+
+#drop-session-type, #drop-session-brand{
+    background-color: unset;
+    svg{
+        fill:darkred;
+    }
+    &svg:hover{
+        filter: brightness(0.8);
+    }
 }
