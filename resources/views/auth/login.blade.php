@@ -78,6 +78,9 @@
                     padding-top:2em;
                 }
             }
+            input#login, input#password{
+                color: black;
+            }
         }
     </style>
 </x-app-layout>

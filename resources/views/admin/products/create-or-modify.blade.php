@@ -68,6 +68,14 @@
                                 value="{{ isset($product) ? old("prix_bon_achat_state_{$state->id}", $product->states->where('id', $state->id)->first()?->pivot->prix_bon_achat) : 'NC'}}"
                                 class="shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
                         </div>
+
+                        <!--  Champ code_caisse -->
+                        <div class="flex items-center space-x-2 w-1/2">
+                            <label for="code_caisse_state_{{ $state->id }}" class="text-sm">Code caisse :</label>
+                            <input type="text" name="code_caisse_state_{{ $state->id }}" id="code_caisse_state_{{ $state->id }}"
+                                value="{{ isset($product) ? old("code_caisse_state_{ $state->id }", $product->states->where('id', $state->id)->first()?->pivot->code_caisse) : 'NC'}}"
+                                class="shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
+                        </div>
                         @error('state')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror

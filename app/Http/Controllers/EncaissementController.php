@@ -89,6 +89,7 @@ class EncaissementController extends Controller
             $ticket->save();
 
             session()->flash('print_ticket_uuid', $ticket->uuid);
+            session()->flash('print_supplier_delivery', $ticket_uuid);
             // Si mail , envoi du mail avec un récap de la comsommation du ticket 
             if($ticket->client->email){
                 Mail::to($ticket->client->email)->send(new TicketConsume($ticket));
@@ -153,7 +154,6 @@ class EncaissementController extends Controller
         ]);
     }
 
-
     public function printTicketUsed($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
@@ -166,4 +166,26 @@ class EncaissementController extends Controller
 
         return $pdf->stream("ticket-{ $ticket->uuid }.pdf");
     }
+
+    /**
+     * Generation du BL avec le client comme fournisseur
+     */
+    public function printSupplierDelivery($ticket_uuid)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+        return view('pdf.supplier-print', [
+            'ticket' => $ticket,
+        ]);
+    }
+    public function generateSupplierDelivery($ticket_uuid)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+        $data = [
+            'ticket' => $ticket,
+        ];
+        $pdf = Pdf::loadView('pdf.supplier-generate', $data)
+            ->setPaper('a4', 'landscape');
+        return $pdf->stream("ticket-{ $ticket->uuid }.pdf");
+    }
+
 }

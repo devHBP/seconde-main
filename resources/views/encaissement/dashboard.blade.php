@@ -59,10 +59,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const printTicketUuid = "{{ session('print_ticket_uuid') }}";
-            const restituteTicketUuid = "{{ session('print_ticket_return')}}"
+            const restituteTicketUuid = "{{ session('print_ticket_return')}}";
+            const printSupplierDelivery = "{{ session('print_supplier_delivery') }}";
             if(printTicketUuid){
                 const printUrl = "{{ route('encaissement.ticket.print', ':uuid') }}".replace(':uuid', printTicketUuid);
                 window.open(printUrl, "_blank");
+            }
+            if(printSupplierDelivery){
+                const printDeliveryUrl = "{{ route('encaissement.ticket.supplier.print', ':uuid') }}".replace(':uuid', printSupplierDelivery);
+                window.open(printDeliveryUrl, "_blank");
             }
             if(restituteTicketUuid){
                 const printRestituteUrl = "{{ route('encaissement.ticket.restitute.print', ':uuid') }}".replace(':uuid', restituteTicketUuid);

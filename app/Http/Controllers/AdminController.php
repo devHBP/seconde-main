@@ -77,6 +77,17 @@ class AdminController
     public function dashboard(Request $request)
     {
         $roleName = session('subsession.role_name');
+        
+        // Petit clean session au cas où l'utilisateur viendrais d'un filtre sur produits.
+        if(session('brand_filter') || session('type_filter')){
+            if(session('brand_filter')){
+                session()->forget('brand_filter');
+            }
+            if(session('type_filter')){
+                session()->forget('type_filter');
+            }
+        }
+
         return view('admin.dashboard', ["user" => $this->user, "role" => $roleName]);
     }
 
@@ -452,20 +463,23 @@ class AdminController
             foreach ($states as $state) {
                 $prixRemboursementKey = 'prix_remboursement_state_' . $state->id;
                 $prixBonAchatKey = 'prix_bon_achat_state_' . $state->id;
-                if($request->has($prixRemboursementKey) || $request->has($prixBonAchatKey)){
-                    
+                $codeCaisseKey = 'code_caisse_state_' . $state->id;
+                if($request->has($prixRemboursementKey) || $request->has($prixBonAchatKey) || $request->has($codeCaisseKey)){
                     // Validation des données 
                     $validatedPrices = $request->validate([
                         $prixRemboursementKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
-                        $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+                        $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
+                        $codeCaisseKey => 'nullable|string|max:13',
                     ]);
 
                     $prixRemboursement = $validatedPrices[$prixRemboursementKey] ?? null;
-                    $prixBonAchat = $validatedPrices[$prixBonAchatKey];
-                    if($prixRemboursement !== null || $prixBonAchat !== null){
+                    $prixBonAchat = $validatedPrices[$prixBonAchatKey] ?? null;
+                    $codeCaisse = $validatedPrices[$codeCaisseKey] ?? null;
+                    if($prixRemboursement !== null || $prixBonAchat !== null || $codeCaisse !== null ){
                         $product->states()->attach($state->id, [
                             'prix_remboursement' => $prixRemboursement,
                             'prix_bon_achat' => $prixBonAchat,
+                            'code_caisse' => $codeCaisse,
                         ]);
                     }
                 }
@@ -499,23 +513,30 @@ class AdminController
             foreach ($states as $state) {
                 $prixRemboursementKey = "prix_remboursement_state_{$state->id}";
                 $prixBonAchatKey = "prix_bon_achat_state_{$state->id}";
+                $codeCaisseKey = "code_caisse_state_{$state->id}";
                 // Validation des données 
                 $validatedPrices = $request->validate([
                     $prixRemboursementKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
-                    $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/'
+                    $prixBonAchatKey => 'nullable|numeric|regex:/^\d+(\.\d{1,2})?$/',
+                    $codeCaisseKey => 'nullable|string|max:13',
                 ]);
                 $prixRemboursement = $validatedPrices[$prixRemboursementKey];
                 $prixBonAchat = $validatedPrices[$prixBonAchatKey];
+                $codeCaisse = $validatedPrices[$codeCaisseKey];
 
-                if(is_null($prixRemboursement) && is_null($prixBonAchat)){
+                if(is_null($prixRemboursement) && is_null($prixBonAchat) && is_null($codeCaisse)){
                     $product->states()->detach($state->id);
                 }
-                else if(!is_null($prixRemboursement || !is_null($prixBonAchat))){
+                else if(!is_null($prixRemboursement || !is_null($prixBonAchat) || !is_null($codeCaisse))){
                     $stateData[$state->id] = [
                         'prix_remboursement' => $prixRemboursement,
-                        'prix_bon_achat' => $prixBonAchat
+                        'prix_bon_achat' => $prixBonAchat,
+                        'code_caisse' => $codeCaisse,
                     ];
                 }
+            }
+            foreach($product->states as $state){
+                dd($state);
             }
             $product->states()->sync($stateData);
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VisitorController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -127,10 +128,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/encaissement/ticket/{ticket_uuid}', [EncaissementController::class, 'showTicket'])->name('encaissement.ticket.show');
     Route::get('/encaissement/ticket/{ticket_uuid}/print', [EncaissementController::class, 'printTicket'])->name('encaissement.ticket.print');
     Route::get('/encaissement/ticket/{ticket_uuid}/generate', [EncaissementController::class, 'printTicketUsed'])->name('encaissement.ticket.print.used');
-    
-    /**
-     * Routes concernant les visiteurs
-     */
+    Route::get('/encaissement/ticket/supplier/{ticket_uuid}/print', [EncaissementController::class, 'printSupplierDelivery'])->name('encaissement.ticket.supplier.print');
+    Route::get('/encaissement/ticket/supplier/{ticket_uuid}/generate', [EncaissementController::class, 'generateSupplierDelivery'])->name('encaissement.ticket.supplier.generate');
+
 
 });
 
