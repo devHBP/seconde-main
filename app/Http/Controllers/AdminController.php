@@ -65,7 +65,7 @@ class AdminController
             $account->custom_font_secondary = $validatedData['custom_font_secondary'];
             $account->save();
 
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         return view('admin.settings', [ "account"=> $account, "user" => $this->user ]);
@@ -393,7 +393,7 @@ class AdminController
      */
     public function getProducts()
     {
-        return view('admin.products.products', ['products' => Product::all(), "user" => $this->user]);
+        return view('admin.products.products', ['products' => Product::all(), "user" => $this->user, "types" => Type::all()]);
     }
 
     public function createProduct(Request $request)

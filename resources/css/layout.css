@@ -146,7 +146,81 @@ div.layout-container a.disabled{
         filter: 0.6;
     }   
 }
-/* nav.header__nav div.dropdown{
-    position:absolute;
-    z-index:99;
-} */
+
+@media  screen and (max-width: 500px){
+    .header__nav{
+        font-size: 19px;
+        height: 24vh;
+        .header__store-logo__app{
+            margin-bottom: 0.1em;
+        }
+        &>div{
+            &>div{
+                flex-direction: column;
+            }
+        }
+        .simulateur-rigth-header{
+            margin-top: 0.3em;
+            p{
+                width:50%;
+                rotate: 0deg;
+                font-size: 18px;
+                margin: 3px auto;
+            }
+        }
+    }
+    header{
+        .dashboard-header{
+            h2{
+                font-size: 18px;
+            }
+        }
+    }
+    div.layout-container.tiles {
+        & form {
+            & .tile {
+                width: 80%;
+            }
+        }
+    }
+    div.annulation-container{
+        a.annulation{
+            width: max-content;
+        }
+    }
+    .price-box>.prices{
+        flex-direction: column;
+    }
+    div.price-box.simulateur{
+        .prices{
+            .prices-simulateur{
+                display: flex;
+                div.img-container{
+                    position:relative;
+                    margin-top: -35px;
+                }
+            }            
+        }
+
+        div.title-price-container{
+            h3.title-simulateur, p{
+                font-size: 18px;
+            }
+            h3.title-simulateur{
+                width: 100%;
+            }
+        }
+    }
+    div.price-box.simulateur{
+        .prices{
+            .prices-simulateur{
+                width:100%;
+            }
+        }
+    }
+    .notice-shop{
+        p{
+            font-size: 18px;
+        }
+    }
+}

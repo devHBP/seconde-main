@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
                 ];
                 $view->with('theme', $theme);
             }
+        });
+        View::composer('components.*', function($view){
+            $account = Account::where('slug', request()->route('account_slug'))->first();
+            $view->with('accountName', $account ? $account->name : "");
         });
     }
 }

@@ -253,3 +253,22 @@ div.layout-container.tiles{
         }
     }
 }
+
+.simulateur-rigth-header{
+    text-align: center;
+    position: relative;
+    z-index: 3;
+    p{
+        font-size: 22px;
+        margin-bottom:0.2em ;
+        padding:0 0.8em;
+        rotate: -5deg;
+    }
+    p:first-child{
+        background-color: var(--font-primary);
+        color: var(--background-primary);
+    }
+    p:last-child{
+        background-color: var(--font-secondary);
+    }
+}

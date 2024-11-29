@@ -35,9 +35,11 @@
 
                         <x-slot name="content">
                             <div class="z-50">
-                                <x-dropdown-link :href="route('admin.settings')">
-                                    {{__('Paramètres')}} 
-                                </x-dropdown-link>
+                                @if (session('subsession') !== null && session('subsession.role_name') === "administrateur")
+                                    <x-dropdown-link :href="route('admin.settings')">
+                                        {{__('Paramètres')}} 
+                                    </x-dropdown-link>
+                                @endif
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -68,7 +70,7 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    @if(Auth::user())
+    @if(Auth::user() )
         <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link>
@@ -84,9 +86,11 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link>
-                        <a href="">Paramètres</a>
-                    </x-responsive-nav-link>
+                    @if (session('subsession') !== null )
+                        <x-responsive-nav-link>
+                            <a href="">Paramètres</a>
+                        </x-responsive-nav-link>
+                    @endif
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

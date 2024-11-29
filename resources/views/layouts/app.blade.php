@@ -16,28 +16,42 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
         @if(isset($theme))
-        <style>
-            :root {
-                --background-primary: {{ $theme['background_primary'] }};
-                --background-secondary: {{ $theme['background_secondary'] }};
-                --font-primary: {{ $theme['font_primary'] }};
-                --font-secondary: {{ $theme['font_secondary'] }};
-                --pattern-logo: "{{ asset($theme['pattern_logo']) }}";
-            }
-        </style>
-    @endif
+            <style>
+                :root {
+                    --background-primary: {{ $theme['background_primary'] }};
+                    --background-secondary: {{ $theme['background_secondary'] }};
+                    --font-primary: {{ $theme['font_primary'] }};
+                    --font-secondary: {{ $theme['font_secondary'] }};
+                    --pattern-logo: "{{ asset($theme['pattern_logo']) }}";
+                }
+            </style>
+        @else
+            <style>
+                :root {
+                    --background-primary: #e7ebee ;
+                    --background-secondary: red;
+                    --font-primary: black;
+                    --font-secondary: #dee2e5;
+                    --pattern-logo: "{{ asset('customisation/recycle-svgrepo-com.svg') }}";
+                }
+            </style>
+        @endif
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen">
-            @include('layouts.navigation')
+            @if (Auth::user())
+                @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header>
-                        {{ $header }}
-                </header>
-            @endisset
+                <!-- Page Heading -->
+                @isset($header)
+                    <header>
+                            {{ $header }}
+                    </header>
+                @endisset  
+            @endif
+
 
             <!-- Page Content -->
             <main>
@@ -50,7 +64,13 @@
                 init: () => {
                     const headerNav = document.querySelector('nav.header__nav');
                     const mainBloc = document.querySelector('main');
-                    const patternLogo = "{{ asset('/storage/'.Auth::user()->picture->path ) }}"
+                    @if (!Auth::user())
+                        const patternLogo = "{{ asset('storage/customisation/recycle-svgrepo-com.svg') }}";
+                    @else
+                        const patternLogo = "{{ asset('storage/'. Auth::user()->picture->path)}}";
+                    @endif
+                    
+                    
                     if(headerNav && patternLogo){
                         pattern.applyBackground(headerNav, patternLogo);
                     }

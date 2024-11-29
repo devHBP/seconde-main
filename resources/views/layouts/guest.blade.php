@@ -15,7 +15,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
-    @include('layouts.navigation-guest')
+    <x-navigation-guest />
+    {{-- @include('layouts.navigation-guest') --}}
     @isset($header)
         <header>
                 {{ $header }}

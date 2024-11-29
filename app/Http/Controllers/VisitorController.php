@@ -6,14 +6,19 @@ use App\Models\Account;
 use App\Models\Brand;
 use App\Models\Picture;
 use App\Models\Product;
+use App\Models\Scopes\AccountScope;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VisitorController extends Controller
 {
     public function simulate($account_slug, Request $request){
         
         $account = Account::where('slug', $account_slug)->first();
+        if(!$account){
+            abort(404); 
+        }
         
         // Récup de tout les paramètres nécéssaire sans charger Account dans la vue
         $accountName = $account->name;
@@ -26,13 +31,15 @@ class VisitorController extends Controller
         $pattern = Picture::findOrFail($patternId);
         $patternPath = $pattern->path;
 
-        $types = Type::where('account_id', $account->id)->get();
-        $brands = Brand::where('account_id', $account->id)->get();
+        $types = Type::withoutGlobalScopes()->where('account_id', $account->id)->get();
+        $brands = Brand::withoutGlobalScopes()->where('account_id', $account->id)->get();
+
         $product = '';
         $states = [];
         $selectedState = null;
 
         if($request->isMethod('post')){
+            
             // Cas du post de data 
             $product = null;
             $states = [];
@@ -55,24 +62,77 @@ class VisitorController extends Controller
             $stateId = session('state_id');
 
             if($typeId){
-                $brands = Brand::whereHas('products', function($query) use ($typeId){
-                    $query->where('type_id', $typeId);
-                })->distinct()->get();
+                
+                // $brands = Brand::withoutGlobalScopes() // Désactiver les scopes globaux
+                //     ->whereHas('products', function($query) use ($typeId, $account) {
+                //     $query->where('type_id', $typeId)
+                //           ->where('account_id', $account->id); // Appliquer le filtre `account_id`
+                // })
+                $brands = Brand::withoutGlobalScopes()->select('brands.*')
+                    ->join('products', 'brands.id', '=', 'products.brand_id')
+                    ->where('products.type_id', $typeId)
+                    ->where('products.account_id', $account->id)
+                ->distinct()
+                ->get();
             }
 
             if($typeId && $brandId){
-                $product = Product::where('type_id', $typeId)
-                    ->where('brand_id', $brandId)
-                    ->first();
-                
-                if($product){
-                    $states = $product->states()->get();
+                // $product = Product::withoutGlobalScopes()
+                //     ->where('type_id', $typeId)
+                //     ->where('brand_id', $brandId)
+                //     ->where('account_id', $account->id)
+                //     ->first();
+                $currentProducts = DB::table('products')
+                    ->join('product_states', 'products.id', '=', 'product_states.product_id')
+                    ->join('states', 'product_states.state_id', '=', 'states.id')
+                    ->join('types', 'products.type_id', '=', 'types.id')
+                    ->join('brands', 'products.brand_id', '=', 'brands.id')
+                    ->where('types.id', $typeId)
+                    ->where('brands.id', $brandId)
+                    ->where('products.account_id', $account->id)  // Filtrer par account_id
+                    ->distinct()
+                    ->select(
+                        'products.*', 
+                        'states.name as state_name',
+                        'types.name as type_name',
+                        'brands.name as brand_name'
+                    )
+                ->get();
+
+                if($currentProducts){
+                    /* Reconstruire le produit */
                     if($stateId){
-                        $selectedState = $states->firstWhere('id', $stateId);
+                        $product = new Product();
+                        $productId = '';
+                        foreach($currentProducts as $currentProduct){
+                            $product->id = $currentProduct->id;
+                        }
+                        $product->type = Type::withoutGlobalScopes()->where('id', $typeId)
+                            ->where('account_id', $account->id)
+                            ->first();
+                        $product->brand = Brand::withoutGlobalScopes()->where('id', $brandId)
+                            ->where('account_id', $account->id)
+                            ->first();
+                        
+                        $states = DB::table('product_states')
+                            ->join('products', 'products.id', '=', 'product_states.product_id')
+                            ->join('states', 'states.id', '=', 'product_states.state_id')
+                            ->where('products.id', $product->id)
+                            ->where('products.account_id', $account->id)
+                            ->distinct()
+                            ->get();
+                        //$selectedState = $states->firstWhere('id', $stateId);
+                    
+                        foreach($states as $state){
+                           if($state->state_id == $stateId){
+                                $product->states = $state;
+                                $selectedState = $state;
+                                break;
+                           }
+                        }
                     }
                 }
             }
-            
             // Validation, Controle
             // Creation d'un panier ou retour en arrière 
             return view('visitor.simulation', compact(

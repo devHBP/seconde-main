@@ -8,7 +8,7 @@
                 </h2>
             </div>
             <div class="header-right-button">
-                <a href="{{route('dashboard')}}">Retour Menu</a>
+                <a href="{{route('admin.dashboard')}}">Retour Menu</a>
             </div>
         </div>
     </x-slot>

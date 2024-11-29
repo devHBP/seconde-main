@@ -4,9 +4,8 @@
         <p class="p-1 rounded-full header__store-logo__by">by</p>
         @if (Auth::user())
             <p class="self-center header__store-logo__store-name">{{ Auth::user()->name}}</p>
-        @else
-            <p class="self-center header__store-logo__store-name">Sport 2000 Argeles/mer</p>
+        @elseif (isset($accountName))
+            <p class="self-center header__store-logo__store-name">{{ $accountName }}</p>
         @endif
-        
     </div>
 </div>

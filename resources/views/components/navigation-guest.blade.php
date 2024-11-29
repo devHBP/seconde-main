@@ -10,6 +10,10 @@
                     </a>
                 </div>
             </div>
+            <div class="simulateur-rigth-header">
+                <p>Simulateur</p>
+                <p>en ligne</p>
+            </div>
         </div>
     </div>
 </nav>
