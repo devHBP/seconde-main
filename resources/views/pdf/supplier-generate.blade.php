@@ -8,7 +8,7 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
             margin: 0;
-            margin-left:-50px;
+            margin-left:-40px;
             padding: 0;
             width: 100%;
         }
@@ -33,12 +33,27 @@
         }
         .client-info, .supplier-info {
             margin-bottom: 10px;
+            display: inline-block;
         }
+
         .info-title {
             font-weight: bold;
             text-transform: uppercase;
             font-size: 14px;
             margin-bottom: 3px;
+        }
+        .inline-container{
+            width: 100%;
+            padding-bottom: 110px;
+        }
+        .inline-container > .client-info{
+            float: 45%;
+            text-align: left;
+        }
+        .inline-container > .supplier-info{
+            float: right;
+            text-align: right;
+            
         }
         .info-content {
             font-size: 12px;
@@ -80,22 +95,24 @@
             <p>Bon n°: {{ $ticket->uuid }}</p>
         </div>
 
-        <!-- Client Information -->
-        <div class="client-info">
-            <div class="info-title">Fournisseur</div>
-            <div class="info-content">
-                <p>Nom : {{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</p>
-                <p>Email : {{ $ticket->client->email }}</p>
-                <p>Téléphone : {{ $ticket->client->phone }}</p>
+        <div class="inline-container">
+            <!-- Client Information -->
+            <div class="client-info">
+                <div class="info-title">Fournisseur</div>
+                <div class="info-content">
+                    <p>Nom : {{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</p>
+                    <p>Email : {{ $ticket->client->email }}</p>
+                    <p>Téléphone : {{ $ticket->client->phone }}</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Supplier Information -->
-        <div class="supplier-info">
-            <div class="info-title">Client</div>
-            <div class="info-content">
-                <p>{{ $ticket->panier->account->name }}</p>
-                <p>SIRET ?</p>
+            <!-- Supplier Information -->
+            <div class="supplier-info">
+                <div class="info-title">Client</div>
+                <div class="info-content">
+                    <p>{{ $ticket->panier->account->name }}</p>
+                    <p>SIRET ?</p>
+                </div>
             </div>
         </div>
 
@@ -106,23 +123,25 @@
                     <th>Produit</th>
                     <th>État</th>
                     <th>Quantité</th>
-                    <th>Prix Unitaire</th>
-                    <th>Prix Total</th>
                     <th>Code Caisse</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($ticket->panier->products as $product)
+                @foreach ($products as $product)
                 <tr>
-                    <td>{{ $product->type->name }} - {{ $product->brand->name }}</td>
-                    <td>{{ $product->pivot->state }}</td>
-                    <td>{{ $product->pivot->quantity }}</td>
-                    <td>{{ number_format($product->pivot->prix_remboursement, 2, ',', ' ') }} €</td>
-                    <td>{{ number_format($product->pivot->prix_remboursement * $product->pivot->quantity, 2, ',', ' ') }} €</td>
-                    @php
-                        dd($product);
-                    @endphp
-                    <td>{{ $product }}</td>
+                    <td>{{ $product['designation'] }} - {{ $product['marque'] }}</td>
+                    <td>{{ $product['etat'] }}</td>
+                    <td>{{ $product['quantite'] }}</td>
+                    <td>
+                        <div>
+                            @if (!empty($product['code_caisse']))
+                                <img src="data:image/png;base64,{{ $product['base64']}}" alt="">
+                                <p>{{ $product['code_caisse'] }}</p>
+                            @else
+                                <p>N/C</p>
+                            @endif
+                        </div>
+                    </td>
                     {{-- Bon je dois tester sur une route ou je peux débug ? --}}
                 </tr>
                 @endforeach

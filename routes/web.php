@@ -130,8 +130,6 @@ Route::middleware('auth')->group(function(){
     Route::get('/encaissement/ticket/{ticket_uuid}/generate', [EncaissementController::class, 'printTicketUsed'])->name('encaissement.ticket.print.used');
     Route::get('/encaissement/ticket/supplier/{ticket_uuid}/print', [EncaissementController::class, 'printSupplierDelivery'])->name('encaissement.ticket.supplier.print');
     Route::get('/encaissement/ticket/supplier/{ticket_uuid}/generate', [EncaissementController::class, 'generateSupplierDelivery'])->name('encaissement.ticket.supplier.generate');
-
-
 });
 
 Route::get('/simulateur/{account_slug}', [VisitorController::class, 'simulate'])->name('simulateur.selection');

@@ -37,7 +37,7 @@ class Panier extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_panier')
-            ->withPivot('state', 'prix_remboursement', 'prix_bon_achat', 'quantity')
+            ->withPivot('state', 'prix_remboursement', 'prix_bon_achat', 'code_caisse', 'quantity')
             ->withTimestamps();
     }
 }

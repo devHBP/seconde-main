@@ -7,8 +7,8 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
             margin: 0;
-            margin-top: -30px;
-            margin-left: -30px;
+            margin-top: -35px;
+            margin-left: -38px;
             padding: 0;
         }
         .container {

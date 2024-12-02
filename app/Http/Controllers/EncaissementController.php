@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Milon\Barcode\DNS1D;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -144,8 +145,8 @@ class EncaissementController extends Controller
             ->setPaper(0, 0, 226, 600);
         return $pdf->stream('ticket-{ $ticket->uuid }.pdf');
     }
+    
     // Tests et mise à l'épreuve du système.
-
     public function printTicket($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
@@ -173,15 +174,43 @@ class EncaissementController extends Controller
     public function printSupplierDelivery($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+
         return view('pdf.supplier-print', [
             'ticket' => $ticket,
         ]);
     }
+
     public function generateSupplierDelivery($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+        // Sur le ticket , pour chaques produit du panier
+        $productsList = [];
+        foreach ($ticket->panier->products as $product) {
+            // Récupéré les informations
+            $productDesignation = $product->type->name;
+            $productBrand = $product->brand->name;
+            $productState = $product->pivot->state;
+            $productQuantity = $product->pivot->quantity;
+            $productCodeCaisse = $product->pivot->code_caisse ?? null;
+
+            //Logique de création de code barre
+            $barCodeGenerator = new DNS1D();
+            if($productCodeCaisse){
+                $productBarcode = $barCodeGenerator->getBarcodePNG($productCodeCaisse, 'C128', 2, 30);
+            }
+
+            $productsList[] = [
+                'designation' => $productDesignation,
+                'marque' => $productBrand,
+                'etat' => $productState,
+                'quantite'=> $productQuantity,
+                'code_caisse'=> $productCodeCaisse,
+                'base64' => $productBarcode ?? '',
+            ];
+        }
         $data = [
             'ticket' => $ticket,
+            'products' => $productsList,
         ];
         $pdf = Pdf::loadView('pdf.supplier-generate', $data)
             ->setPaper('a4', 'landscape');

@@ -213,12 +213,14 @@ class ReceptionController
 
         $prixRemboursement = null;
         $prixBonAchat = null;
+        $codeCaisse = null;
 
         // Recherche dans les states
         foreach($product->states as $state){
             if($state->id == $stateId){
                 $prixRemboursement = $state->pivot->prix_remboursement;
                 $prixBonAchat = $state->pivot->prix_bon_achat;
+                $codeCaisse = $state->pivot->code_caisse;
                 break;
             }
         }
@@ -236,6 +238,7 @@ class ReceptionController
                 'state' => $state->name,
                 'prix_remboursement' => $prixRemboursement,
                 'prix_bon_achat' => $prixBonAchat,
+                'code_caisse' => $codeCaisse,
                 'quantity' => 1,
             ]);
         }
