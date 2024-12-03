@@ -67,7 +67,9 @@
                     @if (!Auth::user())
                         const patternLogo = "{{ asset('storage/customisation/recycle-svgrepo-com.svg') }}";
                     @else
-                        const patternLogo = "{{ asset('storage/'. Auth::user()->picture->path)}}";
+                        @if(Auth::user()->picture)
+                            const patternLogo = "{{ asset('storage/'. Auth::user()->picture->path)}}";
+                        @endif
                     @endif
                     
                     

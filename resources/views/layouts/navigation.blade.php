@@ -35,7 +35,7 @@
 
                         <x-slot name="content">
                             <div class="z-50">
-                                @if (session('subsession') !== null && session('subsession.role_name') === "administrateur")
+                                @if ((session('subsession') !== null && session('subsession.role_name') === "administrateur") || Auth::user()->login === SUPER_ADMIN_LOGIN)
                                     <x-dropdown-link :href="route('admin.settings')">
                                         {{__('Paramètres')}} 
                                     </x-dropdown-link>

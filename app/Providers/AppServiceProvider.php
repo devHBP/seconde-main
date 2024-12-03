@@ -22,15 +22,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        define('SUPER_ADMIN_LOGIN', env('SUPER_ADMIN_LOGIN'));
+        
         View::composer('*', function($view){
             if(Auth::check()){
                 $account = Auth::user();
+                $picturePath = $account->picture !== null ? $account->picture->path : null;
+                
                 $theme = [
                     'background_primary' => $account->custom_background_primary ?? '#ffffff',
                     'background_secondary' => $account->custom_background_secondary ?? '#f0f0f0',
                     'font_primary' => $account->custom_font_primary ?? '#000000',
                     'font_secondary' => $account->custom_font_secondary ?? '#333333',
-                    'pattern_logo' => '/storage/' . $account->picture->path ?? '',
+                    'pattern_logo' => '/storage/' . $picturePath,
                 ];
                 $view->with('theme', $theme);
             }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\EncaissementController;
 use App\Http\Controllers\FakeController;
+use App\Http\Controllers\GestionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\RoleController;
@@ -17,9 +18,6 @@ Route::post('register', [RegisteredUserController::class, 'store']);
 
 Route::middleware('auth')->group(function (){
     Route::get('/', [HomeController::class, 'getHomePage'])->name('dashboard');
-    Route::post('/session', [RoleController::class, 'showRoleLogin'])->name('role.sublogin');
-    Route::post('/{role_name}/login', [RoleController::class, 'authenticate'])->name('role.authenticate');
-    Route::get('/session/logout', [RoleController::class, 'destroy'])->name('role.logout');
 });
 
 /**
@@ -32,7 +30,60 @@ Route::middleware('auth')->group(function(){
     Route::get('/user/{id}', [FakeController::class, 'getUser']);
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware(['auth', 'super_admin'])->group(function(){
+    // Route de gestion des enseignes , création, modification, suppression
+    Route::get('/gestion/enseigne/create', [GestionController::class, 'createEnseigne'])->name('gestion.create.enseigne');
+    // Sur cette route, penser à implémenter le 1er admin à la volée.
+    Route::post('/gestion/enseigne/create', [GestionController::class, 'createEnseigne'])->name('gestion.store.enseigne');
+    
+    Route::get('/gestion/{enseigne_slug}', [GestionController::class, 'getEnseigne'])->name('gestion.get.enseigne');
+    Route::get('/gestion/{enseigne_slug}/modify', [GestionController::class, 'modifyEnseigneDetails'])->name('gestion.modify.enseigne.view');
+    Route::put('/gestion/{enseigne_slug}/modify', [GestionController::class, 'modifyEnseigneDetails'])->name('gestion.modify.enseigne');
+    Route::delete('/gestion/{enseigne_slug}/delete', [GestionController::class, 'deleteEnseigne'])->name('gestion.delete.enseigne');
+    
+    // Route de gestion des utilisateurs /enseigne , ajout, modification, suppression
+    Route::get('/gestion/{enseigne_slug}/users', [GestionController::class, 'getUsers'])->name('gestion.get.users');
+    Route::get('/gestion/{enseigne_slug}/user',[GestionController::class, 'createUser'])->name('gestion.create.user');
+    Route::post('/gestion/{enseigne_slug}/user',[GestionController::class, 'createUser'])->name('gestion.store.user');
+    Route::get('/gestion/{enseigne_slug}/user/{user_id}', [GestionController::class, 'getOneUser'])->name('gestion.get.user'); // Formulaire
+    Route::put('/gestion/{enseigne_slug}/user/{user_id}', [GestionController::class, 'modifyOneUser'])->name('gestion.modify.user');
+    Route::delete('/gestion/{enseigne_slug}/user/{user_id}', [GestionController::class, 'deleteOneUser'])->name('gestion.delete.user');
+    
+    // Route de gestion des types
+    Route::get('/gestion/{enseigne_slug}/types', [GestionController::class, 'getTypes'])->name('gestion.get.types');
+    Route::get('/gestion/{enseigne_slug}/type', [GestionController::class, 'createType'])->name('gestion.create.type'); // Formulaire
+    Route::post('/gestion/{enseigne_slug}/type', [GestionController::class, 'storeType'])->name('gestion.store.type');
+    Route::get('/gestion/{enseigne_slug}/type/{type_id}', [GestionController::class, 'getOneType'])->name('gestion.get.type'); // Formulaire
+    Route::put('/gestion/{enseigne_slug}/type/{type_id}', [GestionController::class, 'modifyOneType'])->name('gestion.modify.type');
+    Route::delete('/gestion/{enseigne_slug}/type/{type_id}', [GestionController::class, 'deleteOneType'])->name('gestion.delete.type');
+
+    // Route de gestion des marques
+    Route::get('/gestion/{enseigne_slug}/brands', [GestionController::class, 'getBrands'])->name('gestion.get.brands');
+    Route::get('/gestion/{enseigne_slug}/brand', [GestionController::class, 'createBrand'])->name('gestion.create.brand'); // Formulaire
+    Route::post('/gestion/{enseigne_slug}/brand', [GestionController::class, 'storeBrand'])->name('gestion.store.brand');
+    Route::get('/gestion/{enseigne_slug}/brand/{brand_id}', [GestionController::class, 'getOneBrand'])->name('gestion.get.brand'); // Formulaire
+    Route::put('/gestion/{enseigne_slug}/brand/{brand_id}', [GestionController::class, 'modifyOneBrand'])->name('gestion.modify.brand');
+    Route::delete('/gestion/{enseigne_slug}/brand/{brand_id}', [GestionController::class, 'deleteOneBrand'])->name('gestion.delete.brand');
+
+    // Route de gestion des produits
+    Route::get('/gestion/{enseigne_slug}/products', [GestionController::class, 'getProducts'])->name('gestion.get.products');
+    Route::get('/gestion/{enseigne_slug}/product', [GestionController::class, 'createProduct'])->name('gestion.create.product'); // Formulaire
+    Route::post('/gestion/{enseigne_slug}/product', [GestionController::class, 'storeProduct'])->name('gestion.store.product');
+    Route::get('/gestion/{enseigne_slug}/product/{product_id}', [GestionController::class, 'getOneProduct'])->name('gestion.get.product'); // Formulaire
+    Route::put('/gestion/{enseigne_slug}/product/{product_id}', [GestionController::class, 'modifyOneProduct'])->name('gestion.modify.product');
+    Route::delete('/gestion/{enseigne_slug}/product/{product_id}', [GestionController::class, 'deleteOneProduct'])->name('gestion.delete.product');
+
+    // Route gestion des tickets
+    Route::get('/gestion/{enseigne_slug}/tickets', [GestionController::class, 'getTickets'])->name('gestion.get.tickets');
+    // A Voir si besoin de plus de routes.
+
+});
+
+Route::middleware(['auth', 'subsession'])->group(function(){
+    // Connexion aux sublogin
+    Route::post('/session', [RoleController::class, 'showRoleLogin'])->name('role.sublogin');
+    Route::post('/{role_name}/login', [RoleController::class, 'authenticate'])->name('role.authenticate');
+    Route::get('/session/logout', [RoleController::class, 'destroy'])->name('role.logout');
     /**
      * Routes concernant les admins
      */

@@ -28,7 +28,7 @@ main{
     .header__store-logo__by{
         background-color: var(--font-secondary);
         font-size: 16px;
-        margin: auto;
+        margin: 3px;
     }
     .header__store-logo__store-name{
         color:var(--font-secondary);
@@ -145,6 +145,46 @@ div.layout-container a.disabled{
     &:hover{
         filter: 0.6;
     }   
+}
+
+.stores-cards{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    flex-wrap: wrap;
+    margin-top: 2em;
+    .store-card{
+        display: flex;
+        width: 33%;
+        flex-direction: row;
+        justify-content: center;
+        margin: 1em;
+        padding:2em;
+        gap:1em;
+        background-color: var(--font-secondary);
+        border-radius: 10px;
+        .store-name{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        &:hover{
+            filter:brightness(0.9);
+        }
+        .store-card-buttons{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            a, button{
+                padding:0.5em;
+                &:hover{
+                    background-color: var(--background-primary);
+                    border-radius: 10px;
+                    filter: brightness(0.7);
+                }
+            }
+        }
+    }
 }
 
 @media  screen and (max-width: 500px){

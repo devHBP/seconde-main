@@ -17,6 +17,10 @@ class SubSessionRole
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if($request->routeIs('sole.sublogin', 'role.authenticate', 'role.logout')){
+            return $next($request);
+        }
+
         $roleNames = Role::pluck('name')->map(function ($name){
             return strtolower($name);
         });
@@ -27,7 +31,7 @@ class SubSessionRole
                     return redirect()->route('dashboard')->withErrors(['access' => "Vous devez sélectionner un rôle."]);
                 }
                 $subsession = Session::get('subsession');
-                if($subsession['role_name'] !== ucfirst($roleName)){
+                if($subsession['role_name'] !== $roleName){
                     return back();
                 }
             }

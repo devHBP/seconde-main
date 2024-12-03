@@ -8,7 +8,7 @@
                 </h2>
             </div>
             <div class="header-right-button">
-                <a href="{{route('admin.dashboard')}}">Retour Menu</a>
+                <a href="{{ Auth::user()->login === SUPER_ADMIN_LOGIN ? route('dashboard') : route('admin.dashboard')}}">Retour Menu</a>
             </div>
         </div>
     </x-slot>
@@ -95,7 +95,7 @@
                         <button type="submit" class="">
                             Valider
                         </button>
-                        <a href="{{ route('admin.dashboard') }}" class="cancel">Annuler</a>
+                        <a href="{{ Auth::user()->login === SUPER_ADMIN_LOGIN ? route('dashboard') : route('admin.dashboard') }}" class="cancel">Annuler</a>
                     </div>
                 </form>
             </div>

@@ -64,7 +64,9 @@ class AdminController
             $account->custom_font_primary = $validatedData['custom_font_primary'];
             $account->custom_font_secondary = $validatedData['custom_font_secondary'];
             $account->save();
-
+            if($account->login === SUPER_ADMIN_LOGIN ){
+                return redirect()->route('dashboard');
+            }
             return redirect()->route('admin.dashboard');
         }
 
@@ -534,9 +536,6 @@ class AdminController
                         'code_caisse' => $codeCaisse,
                     ];
                 }
-            }
-            foreach($product->states as $state){
-                dd($state);
             }
             $product->states()->sync($stateData);
 
