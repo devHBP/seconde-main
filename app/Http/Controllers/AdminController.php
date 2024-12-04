@@ -40,10 +40,22 @@ class AdminController
             
             $validatedData = $request->validate([
                 "name" => 'nullable|string|max:255',
-                "custom_background_primary" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-                "custom_background_secondary" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-                "custom_font_primary" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-                "custom_font_secondary" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_subtitle" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_button_background" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_button_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_subtitle" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_button" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_button_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_background" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_svg" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_button" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
                 "pattern_logo" => 'nullable|file|mimes:png,svg|max:2048',
             ]);
             if($request->has('pattern_logo')){
@@ -59,10 +71,25 @@ class AdminController
 
             $account->name = $validatedData['name'];
             $account->getSlugOptions();
-            $account->custom_background_primary = $validatedData['custom_background_primary'];
-            $account->custom_background_secondary = $validatedData['custom_background_secondary'];
-            $account->custom_font_primary = $validatedData['custom_font_primary'];
-            $account->custom_font_secondary = $validatedData['custom_font_secondary'];
+            $account->header_background = $validatedData['header_background'];
+            $account->header_title = $validatedData['header_title'];
+            $account->header_subtitle = $validatedData['header_subtitle'];
+            $account->header_button_background = $validatedData['header_button_background'];
+            $account->header_button_font = $validatedData['header_button_font'];
+
+            $account->subheader_background = $validatedData['subheader_background'];
+            $account->subheader_title = $validatedData['subheader_title'];
+            $account->subheader_subtitle = $validatedData['subheader_subtitle'];
+            $account->subheader_button = $validatedData['subheader_button'];
+            $account->subheader_button_font = $validatedData['subheader_button_font'];
+
+            $account->main_background = $validatedData['main_background'];
+            $account->main_cards_background = $validatedData['main_cards_background'];
+            $account->main_cards_title = $validatedData['main_cards_title'];
+            $account->main_cards_font = $validatedData['main_cards_font'];
+            $account->main_cards_svg = $validatedData['main_cards_svg'];
+            $account->main_cards_button = $validatedData['main_cards_button'];
+
             $account->save();
             if($account->login === SUPER_ADMIN_LOGIN ){
                 return redirect()->route('dashboard');
@@ -353,7 +380,7 @@ class AdminController
      */
     public function getStates()
     {
-        return view('admin.states.states', ['states' => State::all(), "user" => $this->user]);
+        return view('admin.states.states', ['states' => State::withoutGlobalScopes()->get(), "user" => $this->user]);
     }
 
     public function createState(Request $request)
@@ -447,7 +474,7 @@ class AdminController
 
     public function createProduct(Request $request)
     {
-        $states = State::all();
+        $states = State::withoutGlobalScopes()->get();
         if($request->isMethod('post')){
             $account = $request->user();
             $validatedData = $request->validate([

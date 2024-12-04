@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\DB;
 class VisitorController extends Controller
 {
     public function simulate($account_slug, Request $request){
-        
-        $account = Account::where('slug', $account_slug)->first();
+        $account = Account::where('slug', $account_slug)->firstOrFail();
         if(!$account){
             abort(404); 
         }
@@ -23,13 +22,36 @@ class VisitorController extends Controller
         // Récup de tout les paramètres nécéssaire sans charger Account dans la vue
         $accountName = $account->name;
         $accountSlug = $account->slug;
-        $customBgPrimary = $account->custom_background_primary;
-        $customBgSecondary = $account->custom_background_secondary;
-        $customFontPrimary = $account->custom_font_primary;
-        $customFontSecondary = $account->custom_font_secondary;
+        
+        // Ici on vient récup et stocké les data de customisation
+        $customThemeColors = [
+            'header_background' => $account->header_background,
+            'header_title' => $account->header_title,
+            'header_subtitle' => $account->header_subtitle,
+            'header_button_background' => $account->header_button_background,
+            'header_button_font' => $account->header_button_font,
+
+            'subheader_background' => $account->subheader_background,
+            'subheader_title' => $account->subheader_title,
+            'subheader_subtitle' => $account->subheader_subtitle,
+            'subheader_button' => $account->subheader_button,
+            'subheader_button_font' => $account->subheader_button_font,
+
+            'main_background' => $account->main_background,
+            'main_cards_background' => $account->main_cards_background,
+            'main_cards_title' => $account->main_cards_title,
+            'main_cards_font' => $account->main_cards_font,
+            'main_cards_svg' => $account->main_cards_svg,
+            'main_cards_button' => $account->main_cards_button,
+        ];
+
+        
         $patternId = $account->pattern_logo;
-        $pattern = Picture::findOrFail($patternId);
-        $patternPath = $pattern->path;
+        $patternPath ='';
+        if($patternId){
+            $pattern = Picture::findOrFail($patternId);
+            $patternPath = $pattern->path;
+        }
 
         $types = Type::withoutGlobalScopes()->where('account_id', $account->id)->get();
         $brands = Brand::withoutGlobalScopes()->where('account_id', $account->id)->get();
@@ -37,7 +59,6 @@ class VisitorController extends Controller
         $product = '';
         $states = [];
         $selectedState = null;
-
         if($request->isMethod('post')){
             
             // Cas du post de data 
@@ -138,10 +159,7 @@ class VisitorController extends Controller
             return view('visitor.simulation', compact(
                 'accountName',
                 'accountSlug',
-                'customBgPrimary',
-                'customBgSecondary',
-                'customFontPrimary',
-                'customFontSecondary',
+                'customThemeColors',
                 'patternPath',
                 'states',
                 'product',
@@ -153,10 +171,7 @@ class VisitorController extends Controller
         return view('visitor.simulation', [
             'accountName' => $accountName,
             'accountSlug' => $accountSlug,
-            'customBgPrimary' => $customBgPrimary,
-            'customBgSecondary' => $customBgSecondary,
-            'customFontPrimary' => $customFontPrimary,
-            'customFontSecondary' => $customFontSecondary,
+            'customThemeColors'=> $customThemeColors,
             'patternPath' => $patternPath,
             'types' => $types,
             'brands' => $brands,

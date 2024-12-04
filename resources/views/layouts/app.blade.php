@@ -20,20 +20,48 @@
         @if(isset($theme))
             <style>
                 :root {
-                    --background-primary: {{ $theme['background_primary'] }};
-                    --background-secondary: {{ $theme['background_secondary'] }};
-                    --font-primary: {{ $theme['font_primary'] }};
-                    --font-secondary: {{ $theme['font_secondary'] }};
-                    --pattern-logo: "{{ asset($theme['pattern_logo']) }}";
+                    --header-background: {{ $theme['header_background'] }};
+                    --header-title: {{ $theme['header_title'] }};
+                    --header-subtitle: {{ $theme['header_subtitle'] }};
+                    --header-button-background: {{ $theme['header_button_background'] }};
+                    --header-button-font: {{ asset($theme['header_button_font']) }};
+
+                    --subheader-background: {{ $theme['subheader_background'] }};
+                    --subheader-title: {{ $theme['subheader_title'] }};
+                    --subheader-subtitle: {{ $theme['subheader_subtitle'] }};
+                    --subheader-button: {{ $theme['subheader_button'] }};
+                    --subheader-button-font: {{ asset($theme['subheader_button_font']) }};
+
+                    --main-background: {{ $theme['main_background'] }};
+                    --main-cards-background: {{ $theme['main_cards_background'] }};
+                    --main-cards-title: {{ $theme['main_cards_title'] }};
+                    --main-cards-font: {{ $theme['main_cards_font'] }};
+                    --main-cards-svg: {{ asset($theme['main_cards_svg']) }};
+                    --main-cards-button: {{ asset($theme['main_cards_button']) }};
                 }
             </style>
         @else
             <style>
                 :root {
-                    --background-primary: #e7ebee ;
-                    --background-secondary: red;
-                    --font-primary: black;
-                    --font-secondary: #dee2e5;
+                    --header-background: ;
+                    --header-title: ;
+                    --header-subtitle: ;
+                    --header-button-background: ;
+                    --header-button-font:  ;
+
+                    --subheader-background: ;
+                    --subheader-title: ;
+                    --subheader-subtitle: ;
+                    --subheader-button: ;
+                    --subheader-button-font: ;
+
+                    --main-background: #e7ebee;
+                    --main-cards-background: #dee2e5;
+                    --main-cards-title: ;
+                    --main-cards-font: black;
+                    --main-cards-svg: ;
+                    --main-cards-button: whitesmoke;
+
                     --pattern-logo: "{{ asset('customisation/recycle-svgrepo-com.svg') }}";
                 }
             </style>

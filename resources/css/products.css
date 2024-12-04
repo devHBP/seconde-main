@@ -13,17 +13,17 @@ div.layout-container.tiles{
             padding:1em;
             width: 30%;
             min-height: 150px;
-            background-color: var(--font-secondary);
+            background-color: var(--main-cards-background);
             border-radius: 10px;
-            color: var(--font-primary);
+            color: var(--main-cards-font);
             font-weight: bold;
             .state-definition{
                 font-size: 12px;
-                color: var(--background-secondary);
+                color: var(--main-cards-font);
                 font-weight: 100;
             }
             svg{
-                fill:var(--background-primary);
+                fill:var(--main-cards-svg);
             }
             &:hover{
                 filter: brightness(0.8);
@@ -56,7 +56,7 @@ div.layout-container.tiles{
     justify-content: center;
     text-align: center;
     margin: 2em auto;
-    background-color: var(--font-secondary);
+    border: 2px solid var(--main-cards-font);
     border-radius: 10px;
     width:80%;
     padding:1em;
@@ -68,21 +68,21 @@ div.layout-container.tiles{
         &>p{
             display: flex ;
             flex-direction: column;
-            background-color: var(--font-primary);
-            color: var(--background-primary);
+            background-color: var(--main-cards-background);
+            color: var();
             padding:1em;
             border-radius: 10px;
-            box-shadow: 1px 1px 1px var(--background-primary);
+            box-shadow: 1px 1px 1px black;
             span{
                 align-self: center;
             }
         }
         .price-focus{
             font-weight: bold;
-            color: darkgreen;
-            box-shadow: 2px 2px 2px var(--background-primary);
+            box-shadow: 2px 2px 2px black;
             span{
                 font-size: 1.3em;
+                color: darkgreen;
             }
         }
 
@@ -97,7 +97,8 @@ div.layout-container.tiles{
         gap:1em;
         button{
             padding: 1em;
-            background-color: var(--background-primary);
+            background-color: var(--main-cards-font);
+            color: var(--main-cards-button);
             border-radius: 10px;
             &:hover{
                 filter: brightness(0.8);
@@ -118,6 +119,7 @@ div.layout-container.tiles{
 
 /* Simulateur Prices boxes */
 .price-box.simulateur{
+    border: unset;
     margin: 1em  auto 0 auto;
     padding: 1em 0 0 0;
     background-color: unset;
@@ -135,8 +137,8 @@ div.layout-container.tiles{
         margin: 0 auto 1em auto;
         font-size: 24px;
         font-weight: 900;
-        background-color: var(--font-primary);
-        color: var(--background-primary);
+        background-color: var(--main-cards-background);
+        color: var(--main-cards-font);
         padding: 0em 0.8em;
     }
     .inversed{
@@ -148,20 +150,23 @@ div.layout-container.tiles{
         margin-top: -15px;
         min-height: unset;
         padding:0em 0.8em;
-        background-color: var(--font-secondary);
-        color: var(--font-primary);
+        background-color: var(--main-cards-font);
+        color: var(--main-cards-title);
     }
     p, .price-focus{
-        background-color: var(--font-secondary);
-        color:var(--font-primary);
+        background-color: var(--main-cards-background);
+        color:var(--main-cards-font);
         padding: 0.2em 1em;
         box-shadow: none;
         border-radius: 0;
         font-weight: bold;
         box-shadow: 2px 2px 2px black;
+        span{
+            color:unset;
+        }
     }
     p{
-        color: var(--background-primary);
+        color: var(--main-cards-button);
     }
     .prices{
         div:first-child{
@@ -176,13 +181,13 @@ div.layout-container.tiles{
             width: 50%;
             padding:2em;
             margin-bottom: 2em;
-            border: 1px solid var(--font-primary);
+            border: 1px solid var(--main-cards-font);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             .img-container{
-                background-color: var(--font-primary);
+                background-color: var(--main-cards-font);
                 position: absolute;
                 display: flex;
                 justify-content: center;
@@ -193,7 +198,7 @@ div.layout-container.tiles{
                 height: 50px;
                 border-radius: 50%;
                 svg{
-                    stroke:var(--font-secondary);
+                    stroke:var(--main-cards-button);
                 }
             }
             h4{
@@ -222,8 +227,8 @@ div.layout-container.tiles{
         transform: rotate(5deg);
         text-transform: uppercase;
         padding: 0em 1em 0em 1em;
-        background-color: var(--font-primary);
-        color: var(--background-primary);
+        background-color: var(--main-cards-font);
+        color: var(--main-cards-button);
         box-shadow: 2px 2px 2px black;
         span{
             color:var(--font-secondary)
@@ -245,9 +250,9 @@ div.layout-container.tiles{
         margin:1em auto 1em auto;
         text-align: center;
         padding: 0.8em;
-        background-color: var(--font-primary);
+        background-color: darkred;
         border-radius: 10px;
-        color: darkred;
+        color: var(--main-cards-font);
         &:hover{
             filter:brightness(0.8);
         }

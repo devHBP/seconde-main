@@ -2,13 +2,13 @@ table{
     position:relative;
     z-index: 2;
     th{
-        background-color: var(--background-primary);
+        background-color: var(--main-background);
         filter: brightness(0.8);
     }
     td{
-        background-color: var(--font-secondary);
+        background-color: var(--main-cards-background);
         button{
-            background-color: var(--background-primary);
+            background-color: var(--main-cards-button);
             border-radius: 10px;
             &:hover{
                 filter: brightness(0.8);
@@ -31,7 +31,7 @@ table{
     }
     .button-substract{
         background-color: darkred;
-        color: var(--font-primary);
+        color: var(--main-cards-font);
         &:hover{
             text-decoration: underline;
         }
@@ -47,11 +47,11 @@ table{
 }
 
 input#print_ticket[type="checkbox"]:checked{
-    background-color: var(--background-primary);
+    background-color: var(--main-cards-button);
 }
 
 input{
-    color: var(--background-primary);
+    color: var(--main-cards-background);
 }
 .validate-cart, .delete-cart{
     position:relative;
@@ -59,7 +59,7 @@ input{
     border-radius: 10px;
 }
 .validate-cart{
-    background-color: var(--font-secondary);
+    background-color: darkgreen;
     &:hover{
         filter:brightness(0.8);
     }
@@ -72,28 +72,29 @@ input{
 }
 
 div.layout-search input{
-    color: var(--background-primary);
+    color: var(--main-cards-title);
     &::focus{
-        border: 2px solid var(--font-secondary);
+        border: 2px solid var(--main-cards-background);
     }
 }
 button.button-search{
     padding: 0.5em;
     border-radius: 10px;
-    color: var(--font-primary);
+    background-color: var(--main-cards-button);
+    color: var(--main-cards-font);
 }
 
 .cart-create-client{
     position:relative;
     z-index: 2;
-    background-color: var(--font-secondary);
+    background-color: var(--main-cards-background);
     border-radius: 10px;
-    color: var(--font-primary);
+    color: var(--main-cards-font);
     input{
-        color: var(--background-primary);
+        color: var(--main-cards-button);
     }
     button{
-        background-color: var(--background-primary);
+        background-color: var(--main-cards-button);
         &:hover{
             filter:brightness(0.8);
         }
@@ -105,5 +106,5 @@ button.button-search{
     z-index: 2;
     padding:1em 0 2.5em 1em;
     border-radius: 10px 10px 0 0;
-    background-color: var(--font-secondary);
+    background-color: var(--main-cards-background);
 }

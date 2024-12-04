@@ -1,7 +1,7 @@
 header{
     /* Ici inversion de design */
-    background-color: var(--font-secondary);
-    color: var(--font-primary);
+    background-color: var(--subheader-background);
+    color: var(--subheader-title);
     text-transform: uppercase;
     padding:0;
     height: 15vh;
@@ -15,7 +15,7 @@ header{
     }
     a{
         text-decoration: none;
-        color: var(--font-primary);
+        color: var(--subheader-button-font);
     }
 }
 div.dashboard-primary{
@@ -54,23 +54,32 @@ div.dashboard-header{
     }
     .title-reminder{
         font-size: 12px;
-        color: var(--background-primary);
+        color: var(--subheader-subtitle);
+        background-color: var(--subheader-button);
+        padding: 0 0.8em;
+        width: fit-content;
+    }
+    a{
+        color: var(--subheader-button);
+        &:hover{
+            text-decoration: underline;
+        }
     }
     a>.cart-button:hover{
         svg{
-            fill:var(--background-primary);
+            filter: brightness(0.8);
         }
     }
     a>.logout-dashboard:hover{
         svg{
-            stroke:var(--background-primary);
+            filter: brightness(0.8);
         }
     }
     .cart-button svg{
-        fill: var(--font-primary);
+        fill: var(--subheader-button);
     }
     .logout-dashboard svg{
-        stroke: var(--font-primary);
+        stroke: var(--subheader-button);
     }
 }
 div.dropdown{

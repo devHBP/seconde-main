@@ -9,7 +9,7 @@ table{
     thead{
         th{
             position: relative;
-            color: antiquewhite;
+            color: var(--main-cards-font);
             text-align: left;
             &:first-child{
                 border-radius: 10px 0 0 0;
@@ -28,10 +28,10 @@ table{
             }
         }
     }
-    color: var(--background-primary);
+    color: var(--main-cards-font);
     button, a{
         padding:0.6em;
-        color:var(--font-primary);
+        color:var(--main-cards-font);
         &:hover{
             filter: brightness(0.8);
         }
@@ -39,7 +39,7 @@ table{
     a{
         padding: 0.75em;
         border-radius: 10px;
-        background-color: var(--background-primary);
+        background-color: var(--main-cards-button);
     }
     form button{
         background-color: darkred;
@@ -75,10 +75,10 @@ form input, form select{
     font-size: 14px;
     padding: 0.2em 0.4em;
     background-color: unset;
-    color:var(--background-primary);
+    color:var(--main-cards-button);
     &:hover{
         filter: unset;
-        background-color: var(--background-primary);
+        background-color: var(--main-cards-button);
         color: var(--font-primary);
     }
 }

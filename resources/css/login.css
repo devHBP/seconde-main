@@ -4,7 +4,7 @@
     width:60%;
     margin: 2em auto;
     border-radius: 10px;
-    background-color: var(--font-secondary);
+    background-color: var(--main-cards-background);
 }
 .login-box{
     display: flex;
@@ -12,7 +12,7 @@
     justify-content: center;
     width:100%;
     border-radius: 10px;
-    background-color: var(--font-secondary);
+    background-color: var(--main-cards-background);
     form>div{
         display: flex;
         flex-direction: column;
@@ -22,12 +22,12 @@
         width: 300px;
         padding: 0.5em;
         border-radius: 8px;
-        color: var(--background-primary);
+        color: black;
     }
     button{
         display: block;
-        background-color: var(--font-primary);
-        color:var(--font-secondary);
+        background-color: var(--main-cards-button);
+        color:var(--main-cards-font);
         margin: 2em auto;
         padding: 0.8em;
         border-radius: 8px;

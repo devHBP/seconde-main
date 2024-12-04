@@ -9,8 +9,8 @@ main{
 .header__nav{
     position: relative;
     height: 100px;
-    background-color: var(--background-primary);
-    color: var(--font-primary);
+    background-color: var(--header-background);
+    color: var(--header-title);
     font-weight: bold;
     font-size: 25px;
     text-transform: uppercase;
@@ -26,12 +26,12 @@ main{
         z-index: 2;
     }
     .header__store-logo__by{
-        background-color: var(--font-secondary);
+        background-color: var(--header-subtitle);
         font-size: 16px;
         margin: 3px;
     }
     .header__store-logo__store-name{
-        color:var(--font-secondary);
+        color:var(--header-subtitle);
         font-weight: bolder;
         filter: drop-shadow(1px 1px 1px black);
     }
@@ -45,8 +45,8 @@ main{
 }
 
 main{
-    color: var(--font-primary);
-    background-color: var(--background-primary);
+    color: var(--main-cards-font);
+    background-color: var(--main-background);
 }
 .card-container{
     position: relative;
@@ -62,17 +62,20 @@ main{
         }
         width:70%;
         box-shadow: 1px 2px 1px black;
-        background-color: var(--font-secondary);
+        background-color: var(--main-cards-background);
         border-radius: 10px;
         h3{
             text-transform: uppercase;
-            color: var(--background-primary);
+            color: var(--main-cards-title);
         }
         p{
             text-transform: uppercase;
+            color:var(--main-cards-font);
         }
         svg{
             align-self: center;
+            fill: var(--main-cards-svg);
+            stroke: var(--main-cards-font);
         }
     }
 }
@@ -80,7 +83,7 @@ main{
 .layout-container{
     position: relative;
     z-index: 2;
-    color: var(--background-primary);
+    color: var(--main-background);
 }
 
 .layout-search{
@@ -106,7 +109,7 @@ main{
 .layout-liste{
     position: relative;
     z-index: 2;
-    color:var(--background-primary);
+    color:var(--main-cards-title);
     width:95%;
     margin-bottom: 1em;
 }
@@ -114,18 +117,18 @@ main{
 .layout-ticket{
     position: relative;
     z-index: 2;
-    background-color: var(--font-secondary);
+    background-color: var(--main-cards-background);
     color: var(--font-primary);
     border-radius: 10px;
     h1, h2{
-        color: var(--background-primary);
+        color: var(--main-cards-title);
     }
     p{
-        color: var(--background-primary);
+        color: var(--main-cards-font);
     }
     th{
-        background-color: var(--background-primary);
-        color: var(--font-primary);
+        background-color: var(--main-cards-title);
+        color: var(--main-cards-font);
     }
 }
 .button-returned{

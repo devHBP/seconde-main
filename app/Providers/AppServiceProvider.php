@@ -30,10 +30,25 @@ class AppServiceProvider extends ServiceProvider
                 $picturePath = $account->picture !== null ? $account->picture->path : null;
                 
                 $theme = [
-                    'background_primary' => $account->custom_background_primary ?? '#ffffff',
-                    'background_secondary' => $account->custom_background_secondary ?? '#f0f0f0',
-                    'font_primary' => $account->custom_font_primary ?? '#000000',
-                    'font_secondary' => $account->custom_font_secondary ?? '#333333',
+                    'header_background' => $account->header_background ?? '#ffffff',
+                    'header_title' => $account->header_title ?? '#f0f0f0',
+                    'header_subtitle' => $account->header_subtitle ?? '#000000',
+                    'header_button_background' => $account->header_button_background ?? '#333333',
+                    'header_button_font' => $account->header_button_font ?? '#333333',
+                    
+                    'subheader_background' => $account->subheader_background ?? '#ffffff',
+                    'subheader_title' => $account->subheader_title ?? '#f0f0f0',
+                    'subheader_subtitle' => $account->subheader_subtitle ?? '#000000',
+                    'subheader_button' => $account->subheader_button ?? '#333333',
+                    'subheader_button_font' => $account->subheader_button_font ?? '#333333',
+
+                    'main_background' => $account->main_background ?? '#ffffff',
+                    'main_cards_background' => $account->main_cards_background ?? '#f0f0f0',
+                    'main_cards_title' => $account->main_cards_title ?? '#000000',
+                    'main_cards_font' => $account->main_cards_font ?? '#333333',
+                    'main_cards_svg' => $account->main_cards_svg ?? '#333333',
+                    'main_cards_button' => $account->main_cards_button ?? '#333333',
+
                     'pattern_logo' => '/storage/' . $picturePath,
                 ];
                 $view->with('theme', $theme);

@@ -11,7 +11,9 @@ h2.title{
     font-size: 2.5em;
     font-weight: bold;
     span{
-        color:lightgray;
+        color: var(--subheader-subtitle);
+        background-color: var(--subheader-button);
+        padding: 0 0.5em;
         font-size: 0.4em;
         align-self:center;
     }
@@ -39,8 +41,8 @@ div.layout-container{
         justify-content: center;
         align-items: center;
         margin: 0.6em;
-        background-color: var(--font-secondary);
-        color: var(--font-primary);
+        background-color: var(--main-cards-background);
+        color: var(--main-cards-font);
         height: 150px;
         width: 40%;
         border-radius: 10px;
@@ -50,15 +52,15 @@ div.layout-container{
             font-weight: 600;
         }
         svg{
-            fill:var(--font-primary);
+            fill:var(--main-cards-svg);
         }
         &:hover{
-        filter:brightness(0.8);
+            filter:brightness(0.8);
         }
     }
     a.cart-returned{
         svg{
-            stroke:var(--font-primary);
+            stroke:var(--main-cards-svg);
         }
     }
 }
@@ -68,7 +70,7 @@ div.layout-container{
         position:absolute;
         top:0;
         right:-5px;
-        background-color: var(--font-primary);
+        background-color: var(--main-cards-font);
         color:darkred;
         border-radius: 50%;
         padding:0 7px;

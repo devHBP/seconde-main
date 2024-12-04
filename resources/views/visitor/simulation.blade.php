@@ -178,7 +178,7 @@
                 <div class='prices'>
                     <div class="prices-simulateur">
                         <div class="img-container">
-                            <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" xml:space="preserve" fill=""><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css">  .st0{fill:{{$customFontSecondary}};}  </style> <g> <path class="st0" d="M0,120v272h512V120H0z M32,313.813V198.156c22.969-3.875,40.844-22.703,43.188-46.156h132.938 c-30.016,20.375-50.313,59.25-50.313,104c0,44.734,20.281,83.625,50.297,104H75.188C72.844,336.547,54.969,317.688,32,313.813z M287.969,238.156l-3.313,15.969h-54.516c-0.063,0.906-0.109,1.844-0.109,2.75c0,2.281,0.203,4.609,0.594,6.953h52.063 l-3.281,15.969h-42.563c7.75,12.063,20.969,19.359,35.469,19.359c4.906,0,9.859-0.891,14.656-2.672l3.844-1.438v22.469 l-2.109,0.563c-5.391,1.453-10.922,2.188-16.391,2.188c-26.094,0-49.563-16.188-59.016-40.469h-13.5v-15.969h9.578 c-0.297-2.453-0.438-4.719-0.438-6.953c0-0.906,0.031-1.844,0.063-2.75h-9.203v-15.969h12.047 c8.188-26.391,32.734-44.656,60.469-44.656c7.375,0,14.594,1.313,21.531,3.844l2.297,0.828l-4.313,21.141l-3.219-1.344 c-5.266-2.219-10.75-3.344-16.297-3.344c-16.031,0-30.75,9.297-37.844,23.531H287.969z M303.875,152h132.906 c2.344,23.453,20.25,42.281,43.219,46.156v115.656c-22.969,3.891-40.875,22.734-43.219,46.188H303.891 c30.016-20.375,50.297-59.266,50.297-104C354.188,211.25,333.906,172.375,303.875,152z"></path> <circle class="st0" cx="125.125" cy="256" r="13.75"></circle> <circle class="st0" cx="386.875" cy="256" r="13.75"></circle> </g> </g></svg>
+                            <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" xml:space="preserve" fill=""><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css">  .st0{fill:var(--main-cards-button);}  </style> <g> <path class="st0" d="M0,120v272h512V120H0z M32,313.813V198.156c22.969-3.875,40.844-22.703,43.188-46.156h132.938 c-30.016,20.375-50.313,59.25-50.313,104c0,44.734,20.281,83.625,50.297,104H75.188C72.844,336.547,54.969,317.688,32,313.813z M287.969,238.156l-3.313,15.969h-54.516c-0.063,0.906-0.109,1.844-0.109,2.75c0,2.281,0.203,4.609,0.594,6.953h52.063 l-3.281,15.969h-42.563c7.75,12.063,20.969,19.359,35.469,19.359c4.906,0,9.859-0.891,14.656-2.672l3.844-1.438v22.469 l-2.109,0.563c-5.391,1.453-10.922,2.188-16.391,2.188c-26.094,0-49.563-16.188-59.016-40.469h-13.5v-15.969h9.578 c-0.297-2.453-0.438-4.719-0.438-6.953c0-0.906,0.031-1.844,0.063-2.75h-9.203v-15.969h12.047 c8.188-26.391,32.734-44.656,60.469-44.656c7.375,0,14.594,1.313,21.531,3.844l2.297,0.828l-4.313,21.141l-3.219-1.344 c-5.266-2.219-10.75-3.344-16.297-3.344c-16.031,0-30.75,9.297-37.844,23.531H287.969z M303.875,152h132.906 c2.344,23.453,20.25,42.281,43.219,46.156v115.656c-22.969,3.891-40.875,22.734-43.219,46.188H303.891 c30.016-20.375,50.297-59.266,50.297-104C354.188,211.25,333.906,172.375,303.875,152z"></path> <circle class="st0" cx="125.125" cy="256" r="13.75"></circle> <circle class="st0" cx="386.875" cy="256" r="13.75"></circle> </g> </g></svg>
                         </div>
                         <h4>Prix Remboursement</h4>
                         <p><span>{{ $selectedState->prix_remboursement ?? 'N/A' }} €</span></p>
@@ -205,11 +205,27 @@
     </main>
     @if (isset($accountName))
         <style>
+            /* TODO  Attention, les couleur sont envoyés par le controlleur ..*/
             :root{
-                --background-primary: {{ $customBgPrimary }};
-                --background-secondary: {{ $customBgSecondary }};
-                --font-primary: {{$customFontPrimary }};
-                --font-secondary: {{ $customFontSecondary }};
+                --header-background: {{ $customThemeColors['header_background'] }};
+                --header-title: {{ $customThemeColors['header_title'] }};
+                --header-subtitle: {{$customThemeColors['header_subtitle'] }};
+                --header-button-background: {{ $customThemeColors['header_button_background'] }};
+                --header-button-font: {{ $customThemeColors['header_button_font'] }};
+
+                --subheader-background: {{ $customThemeColors['subheader_background'] }};
+                --subheader-title: {{ $customThemeColors['subheader_title'] }};
+                --subheader-subtitle: {{$customThemeColors['subheader_subtitle'] }};
+                --subheader-button: {{ $customThemeColors['subheader_button'] }};
+                --subheader-button-font: {{ $customThemeColors['subheader_button_font'] }};
+
+                --main-background: {{ $customThemeColors['main_background'] }};
+                --main-cards-background: {{ $customThemeColors['main_cards_background'] }};
+                --main-cards-title: {{$customThemeColors['main_cards_title'] }};
+                --main-cards-font: {{ $customThemeColors['main_cards_font'] }};
+                --main-cards-svg: {{ $customThemeColors['main_cards_svg'] }};
+                --main-cards-button: {{ $customThemeColors['main_cards_button'] }};
+
                 --pattern-logo:{{$patternPath}};
             }
         </style> 
@@ -222,13 +238,15 @@
                 const headerNav = document.querySelector('nav.header__nav');
                 const mainBloc = document.querySelector('main');
                 const patternLogo = "{{ asset('/storage/'. $patternPath) }}";
-                if(headerNav && patternLogo){
+                console.log( );
+                if(patternLogo !== "{{asset('/storage/')}}"){
+                    if(headerNav && patternLogo){
                     pattern.applyBackground(headerNav, patternLogo, 1);
+                    }
+                    if(mainBloc && patternLogo){
+                        pattern.applyBackground(mainBloc, patternLogo, 1.3);
+                    }
                 }
-                if(mainBloc && patternLogo){
-                    pattern.applyBackground(mainBloc, patternLogo, 1.3);
-                }
-                
             },
 
             applyBackground: (element, logoUrl, coeff) => {

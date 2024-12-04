@@ -18,10 +18,29 @@ class Account extends Authenticatable
         'login',
         'name',
         'password',
-        'icon_path'
+        'icon_path',
+        /* Ajouts feature full custom */
+        'header_background',
+        'header_title',
+        'header_subtitle',
+        'header_button_background',
+        'header_button_font',
+        'subheader_background',
+        'subheader_title',
+        'subheader_subtitle',
+        'subheader_button',
+        'subheader_button_font',
+        'main_background',
+        'main_cards_background',
+        'main_cards_title',
+        'main_cards_font',
+        'main_cards_svg',
+        'main_cards_button',
+        'pattern_logo'
     ];
 
     protected $hidden = [
+        "slug",
         "password",
     ];
 

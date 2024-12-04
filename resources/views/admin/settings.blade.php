@@ -30,45 +30,202 @@
                     <div class="mb-3">
                         <p>Slug : {{ $account->slug }}</p>
                     </div>
+                    <div class="flex flex-col border p-4">
+                        <!-- Couleur CSS header_background- -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="header_background" class="block font-bold">Header: Arriere plan</label>
+                            <div class="flex gap-2 self-center">
+                                <input type="color" name="header_background" id="header_background" value="{{ old('header_background', $account->header_background ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="header_background_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('header_background', $account->header_background ?? '') }}"></div>
+                            </div>
+                            @error('header_background')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <!-- Couleur CSS background-primary -->
-                    <div class="mb-3">
-                        <label for="custom_background_primary" class="block font-bold">Couleur primaire</label>
-                        <input type="color" name="custom_background_primary" id="custom_background_primary" value="{{ old('custom_background_primary', $account->custom_background_primary ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
-                        <div id="custom_background_primary_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('custom_background_primary', $account->custom_background_primary ?? '') }}"></div>
-                        @error('custom_background_primary')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+                        <!-- Couleur CSS header_title -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="header_title" class="block font-bold">Header: Titre</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="header_title" id="header_title" value="{{ old('header_title', $account->header_title ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="header_title_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('header_title', $account->header_title ?? '') }}"></div>
+                            </div>
+                            @error('header_title')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS header_subtitle -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="header_subtitle" class="block font-bold">Header: Second titre</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="header_subtitle" id="header_subtitle" value="{{ old('header_subtitle', $account->header_subtitle ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="header_subtitle_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('header_subtitle', $account->header_subtitle ?? '') }}"></div>
+                            </div>
+                            @error('header_subtitle')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS header_button_background -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="header_button_background" class="block font-bold">Header: Bouton navigation arriere plan</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="header_button_background" id="header_button_background" value="{{ old('header_button_background', $account->header_button_background ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="header_button_background_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('header_button_background', $account->header_button_background ?? '') }}"></div>
+                            </div>
+                            @error('header_button_background')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS header_button_font -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="header_button_font" class="block font-bold">Header: Bouton navigation police</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="header_button_font" id="header_button_font" value="{{ old('header_button_font', $account->header_button_font ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="header_button_font_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('header_button_font', $account->header_button_font ?? '') }}"></div>
+                            </div>
+                            @error('header_button_font')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="flex flex-col border p-4 mt-2">
+                        <!-- Couleur CSS subheader_background- -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="subheader_background" class="block font-bold">Sub-Header: Arriere plan</label>
+                            <div class="flex gap-2 self-center">
+                                <input type="color" name="subheader_background" id="subheader_background" value="{{ old('subheader_background', $account->subheader_background ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="subheader_background_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('subheader_background', $account->subheader_background ?? '') }}"></div>
+                            </div>
+                            @error('subheader_background')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS subheader_title -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="subheader_title" class="block font-bold">Sub-Header: Titre</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="subheader_title" id="subheader_title" value="{{ old('subheader_title', $account->subheader_title ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="subheader_title_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('subheader_title', $account->subheader_title ?? '') }}"></div>
+                            </div>
+                            @error('subheader_title')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS subheader_subtitle -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="subheader_subtitle" class="block font-bold">Sub-Header: sous-titre</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="subheader_subtitle" id="subheader_subtitle" value="{{ old('subheader_subtitle', $account->subheader_subtitle ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="subheader_subtitle_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('subheader_subtitle', $account->subheader_subtitle ?? '') }}"></div>
+                            </div>
+                            @error('subheader_subtitle')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS subheader_button -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="subheader_button" class="block font-bold">Sub-Header: Bouton arriere plan</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="subheader_button" id="subheader_button" value="{{ old('subheader_button', $account->subheader_button ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="subheader_button_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('subheader_button', $account->subheader_button ?? '') }}"></div>
+                            </div>
+                            @error('subheader_button')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS subheader_button_font -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="subheader_button_font" class="block font-bold">Sub-Header: Bouton police</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="subheader_button_font" id="subheader_button_font" value="{{ old('subheader_button_font', $account->subheader_button_font ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="subheader_button_font_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('subheader_button_font', $account->subheader_button_font ?? '') }}"></div>
+                            </div>
+                            @error('subheader_button_font')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
 
-                    <!-- Couleur CSS background-secondary -->
-                    <div class="mb-3">
-                        <label for="custom_background_secondary" class="block font-bold">Couleur secondaire</label>
-                        <input type="color" name="custom_background_secondary" id="custom_background_secondary" value="{{ old('custom_background_secondary', $account->custom_background_secondary ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
-                        <div id="custom_background_secondary_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('custom_background_secondary', $account->custom_background_secondary ?? '') }}"></div>
-                        @error('custom_background_secondary')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <div class="flex flex-wrap"></div>
+                    <div class="flex flex-col border p-4 mt-2">
+                        <!-- Couleur CSS main_background- -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_background" class="block font-bold">Main: Arriere plan</label>
+                            <div class="flex gap-2 self-center">
+                                <input type="color" name="main_background" id="main_background" value="{{ old('main_background', $account->main_background ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_background_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_background', $account->main_background ?? '') }}"></div>
+                            </div>
+                            @error('main_background')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <!-- Couleur CSS font-primary -->
-                    <div class="mb-3">
-                        <label for="custom_font_primary" class="block font-bold">Couleur de police primaire</label>
-                        <input type="color" name="custom_font_primary" id="custom_font_primary" value="{{ old('custom_font_primary', $account->custom_font_primary ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
-                        <div id="custom_font_primary_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('custom_font_primary', $account->custom_font_primary ?? '') }}"></div>
-                        @error('custom_font_primary')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
+                        <!-- Couleur CSS main_cards_background -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_cards_background" class="block font-bold">Main: Cards arrière plan</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="main_cards_background" id="main_cards_background" value="{{ old('main_cards_background', $account->main_cards_background ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_cards_background_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_cards_background', $account->main_cards_background ?? '') }}"></div>
+                            </div>
+                            @error('main_cards_background')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                    <!-- Couleur CSS font-secondary -->
-                    <div class="mb-3">
-                        <label for="custom_font_secondary" class="block font-bold">Couleur de police secondaire</label>
-                        <input type="color" name="custom_font_secondary" id="custom_font_secondary" value="{{ old('custom_font_secondary', $account->custom_font_secondary ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
-                        <div id="custom_font_secondary_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('custom_font_secondary', $account->custom_font_secondary ?? '') }}"></div>
-                        @error('custom_font_secondary')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+                        <!-- Couleur CSS main_cards_title -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_cards_title" class="block font-bold">Main: Cards titres</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="main_cards_title" id="main_cards_title" value="{{ old('main_cards_title', $account->main_cards_title ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_cards_title_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_cards_title', $account->main_cards_title ?? '') }}"></div>
+                            </div>
+                            @error('main_cards_title')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS main_cards_font -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_cards_font" class="block font-bold">Main: Cards police</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="main_cards_font" id="main_cards_font" value="{{ old('main_cards_font', $account->main_cards_font ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_cards_font_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_cards_font', $account->main_cards_font ?? '') }}"></div>
+                            </div>
+                            @error('main_cards_font')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS main_cards_svg -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_cards_svg" class="block font-bold">Main: Cards svg</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="main_cards_svg" id="main_cards_svg" value="{{ old('main_cards_svg', $account->main_cards_svg ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_cards_svg_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_cards_svg', $account->main_cards_svg ?? '') }}"></div>
+                            </div>
+                            @error('main_cards_svg')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Couleur CSS main_cards_button -->
+                        <div class="mb-3 flex justify-between items-center">
+                            <label for="main_cards_button" class="block font-bold">Main: Cards bouton</label>
+                            <div class="flex gap-2">
+                                <input type="color" name="main_cards_button" id="main_cards_button" value="{{ old('main_cards_button', $account->main_cards_button ?? '')}}" class="shadow appearance-none border rounded py-2 px-3">
+                                <div id="main_cards_button_preview" class="w-8 h-8 border rounded" style="background-color: {{ old('main_cards_button', $account->main_cards_button ?? '') }}"></div>
+                            </div>
+                            @error('main_cards_button')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="mb-4">
@@ -103,29 +260,42 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const backgroundPrimary = document.querySelector('#custom_background_primary');
-            const backgroundPrimaryPrev = document.querySelector('#custom_background_primary_preview');
+            const elements = [
+                { inputId: 'header_background', previewId: 'header_background_preview'},
+                { inputId: 'header_title', previewId: 'header_title_preview'},
+                { inputId: 'header_subtitle', previewId: 'header_subtitle_preview'},
+                { inputId: 'header_button_background', previewId: 'header_button_background_preview'},
+                { inputId: 'header_button_font', previewId: 'header_button_font_preview'},
 
-            const backgroundSecondary = document.querySelector('#custom_background_secondary');
-            const backgroundSecondaryPrev = document.querySelector('#custom_background_secondary_preview');
+                { inputId: 'subheader_background', previewId: 'subheader_background_preview'},
+                { inputId: 'subheader_title', previewId: 'subheader_title_preview'},
+                { inputId: 'subheader_subtitle', previewId: 'subheader_subtitle_preview'},
+                { inputId: 'subheader_button', previewId: 'subheader_button_preview'},
+                { inputId: 'subheader_button_font', previewId: 'subheader_button_font_preview'},
 
-            const fontPrimary = document.querySelector('#custom_font_primary');
-            const fontPrimaryPrev = document.querySelector('#custom_font_primary_preview');
+                { inputId: 'main_background', previewId: 'main_background_preview'},
+                { inputId: 'main_cards_background', previewId: 'main_cards_background_preview'},
+                { inputId: 'main_cards_title', previewId: 'main_cards_title_preview'},
+                { inputId: 'main_cards_font', previewId: 'main_cards_font_preview'},
+                { inputId: 'main_cards_svg', previewId: 'main_cards_svg_preview'},
+                { inputId: 'main_cards_button', previewId: 'main_cards_button_preview'},
+            ]
+            const updatePreview = (input, preview) => {
+                input.addEventListener('input', (evt) => {
+                    preview.style.backgroundColor = evt.target.value;
+                });
+            };
 
-            const fontSecondary = document.querySelector('#custom_font_secondary');
-            const fontSecondaryPrev = document.querySelector('#custom_font_secondary_preview');
+            elements.forEach(({inputId, previewId}) => {
+                const inputElement = document.querySelector(`#${inputId}`);
+                const previewElement = document.querySelector(`#${previewId}`);
 
-            backgroundPrimary.addEventListener('input', (evt)=>{
-                backgroundPrimaryPrev.style.backgroundColor = evt.target.value;
-            });
-            backgroundSecondary.addEventListener('input', (evt)=>{
-                backgroundSecondaryPrev.style.backgroundColor = evt.target.value;
-            });
-            fontPrimary.addEventListener('input', (evt)=>{
-                fontPrimaryPrev.style.backgroundColor = evt.target.value;
-            });
-            fontSecondary.addEventListener('input', (evt)=>{
-                fontSecondaryPrev.style.backgroundColor = evt.target.value;
+                if (inputElement && previewElement){
+                    updatePreview(inputElement, previewElement);
+                } 
+                else{
+                    console.warn(`Element non trouvé : ${inputId}, ${previewId}`);
+                }
             });
         })
     </script>
