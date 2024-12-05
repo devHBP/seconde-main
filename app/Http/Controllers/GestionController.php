@@ -11,6 +11,74 @@ use Illuminate\Support\Facades\Hash;
 
 class GestionController extends Controller
 {
+    public function getSettings(Request $request)
+    {
+        $user = $request->user();
+        $account = Account::findOrFail($user->id);
+        if($request->isMethod('put')){
+            
+            $validatedData = $request->validate([
+                "name" => 'nullable|string|max:255',
+                "header_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_subtitle" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_button_background" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "header_button_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_subtitle" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_button" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "subheader_button_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_background" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_background" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_title" => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_font" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_svg" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "main_cards_button" => ['nullable','regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+                "pattern_logo" => 'nullable|file|mimes:png,svg|max:2048',
+            ]);
+            if($request->has('pattern_logo')){
+                $path = $request->file('pattern_logo')->store('customisation', 'public');
+                $picture = new Picture();
+                $picture->name = $request->file('pattern_logo')->getClientOriginalName();
+                $picture->path = $path;
+                $picture->type = 'icon';
+                $picture->save();
+
+                $account->pattern_logo = $picture->id;
+            }
+
+            $account->name = $validatedData['name'];
+            $account->getSlugOptions();
+            $account->header_background = $validatedData['header_background'];
+            $account->header_title = $validatedData['header_title'];
+            $account->header_subtitle = $validatedData['header_subtitle'];
+            $account->header_button_background = $validatedData['header_button_background'];
+            $account->header_button_font = $validatedData['header_button_font'];
+
+            $account->subheader_background = $validatedData['subheader_background'];
+            $account->subheader_title = $validatedData['subheader_title'];
+            $account->subheader_subtitle = $validatedData['subheader_subtitle'];
+            $account->subheader_button = $validatedData['subheader_button'];
+            $account->subheader_button_font = $validatedData['subheader_button_font'];
+
+            $account->main_background = $validatedData['main_background'];
+            $account->main_cards_background = $validatedData['main_cards_background'];
+            $account->main_cards_title = $validatedData['main_cards_title'];
+            $account->main_cards_font = $validatedData['main_cards_font'];
+            $account->main_cards_svg = $validatedData['main_cards_svg'];
+            $account->main_cards_button = $validatedData['main_cards_button'];
+
+            $account->save();
+            if($account->login === SUPER_ADMIN_LOGIN ){
+                return redirect()->route('dashboard');
+            }
+            return redirect()->route('dashboard');
+        }
+
+        return view('gestion.settings', [ "account"=> $account]);
+    }
+
     public function createEnseigne(Request $request)
     {
         if($request->isMethod('post'))

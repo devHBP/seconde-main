@@ -31,6 +31,10 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::middleware(['auth', 'super_admin'])->group(function(){
+    // Self Settings
+    Route::get('/gestion/settings', [GestionController::class, 'getSettings'])->name('gestion.settings');
+    Route::put('/gestion/settings', [GestionController::class, 'getSettings'])->name('gestion.settings.update');
+
     // Route de gestion des enseignes , création, modification, suppression
     Route::get('/gestion/enseigne/create', [GestionController::class, 'createEnseigne'])->name('gestion.create.enseigne');
     // Sur cette route, penser à implémenter le 1er admin à la volée.

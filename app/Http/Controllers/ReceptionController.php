@@ -256,12 +256,12 @@ class ReceptionController
                         ->where('status', 'en_cours')
                         ->with('products')
                         ->first();
-
+        
         if(!$panier){
             return redirect()->route('reception.dashboard')->with('error', 'Auncun panier en cours');
         }
-        $totalRemboursement = null;
-        $totalBonAchat = null;
+        $totalRemboursement = 0;
+        $totalBonAchat = 0;
 
         foreach($panier->products as $product){
             $totalRemboursement += floatval($product->pivot->prix_remboursement) * $product->pivot->quantity;
@@ -361,15 +361,14 @@ class ReceptionController
     {
         $user = session('subsession');
         $panier = Panier::where('user_id', $user['user']->id)
-            ->where('is_validated', false)
+            ->where('status', 'en_cours')
             ->first();
-        
         // Check des données envoyées dans la requête. 
         $validatedData = $request->validate([
             'product_id' => 'required|numeric|exists:products,id',
             'state' => 'required|string|exists:states,name'
         ]);
-        // Récupération es input de la requete
+        // Récupération des input de la requete
         $productId = $validatedData['product_id'];
         $state = $validatedData['state'];
         
@@ -396,6 +395,7 @@ class ReceptionController
         $panierId = $validatedData['panier_id'];
         
         $panier = Panier::where('id', $panierId)->where('status', 'en_cours')->first();
+
         if($panier){
             $panier->products()->detach();
             $panier->delete();

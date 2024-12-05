@@ -36,9 +36,15 @@
                         <x-slot name="content">
                             <div class="z-50">
                                 @if ((session('subsession') !== null && session('subsession.role_name') === "administrateur") || Auth::user()->login === SUPER_ADMIN_LOGIN)
-                                    <x-dropdown-link :href="route('admin.settings')">
-                                        {{__('Paramètres')}} 
-                                    </x-dropdown-link>
+                                    @if (Auth::user()->login === SUPER_ADMIN_LOGIN)
+                                        <x-dropdown-link :href="route('gestion.settings')">
+                                            {{__('Paramètres')}} 
+                                        </x-dropdown-link>
+                                    @else  
+                                        <x-dropdown-link :href="route('admin.settings')">
+                                            {{__('Paramètres')}} 
+                                        </x-dropdown-link>
+                                    @endif
                                 @endif
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}">
