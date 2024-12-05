@@ -95,19 +95,21 @@
                     @if (!Auth::user())
                         const patternLogo = "{{ asset('storage/customisation/recycle-svgrepo-com.svg') }}";
                     @else
-                        @if(Auth::user()->picture)
+                        @if(Auth::user()->picture !== null )
                             const patternLogo = "{{ asset('storage/'. Auth::user()->picture->path)}}";
+                        @else
+                            const patternLogo = "{{ asset('storage/')}}"
                         @endif
                     @endif
                     
-                    
-                    if(headerNav && patternLogo){
-                        pattern.applyBackground(headerNav, patternLogo);
+                    if(patternLogo !== "{{asset('/storage/')}}"){
+                        if(headerNav && patternLogo){
+                            pattern.applyBackground(headerNav, patternLogo);
+                        }
+                        if(mainBloc && patternLogo){
+                            pattern.applyBackground(mainBloc, patternLogo);
+                        }
                     }
-                    if(mainBloc && patternLogo){
-                        pattern.applyBackground(mainBloc, patternLogo);
-                    }
-                    
                 },
 
                 applyBackground: (element, logoUrl) => {

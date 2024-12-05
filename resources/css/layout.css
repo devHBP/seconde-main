@@ -47,6 +47,10 @@ main{
 main{
     color: var(--main-cards-font);
     background-color: var(--main-background);
+    div.portal{
+        margin: 0 auto;
+        width:70%;
+    }
 }
 .card-container{
     position: relative;

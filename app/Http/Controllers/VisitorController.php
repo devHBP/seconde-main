@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Picture;
 use App\Models\Product;
 use App\Models\Scopes\AccountScope;
+use App\Models\State;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -119,9 +120,9 @@ class VisitorController extends Controller
                         'brands.name as brand_name'
                     )
                 ->get();
-
                 if($currentProducts){
                     /* Reconstruire le produit */
+                    $states = State::withoutGlobalScopes()->where('account_id', $account->id)->get();
                     if($stateId){
                         $product = new Product();
                         $productId = '';
@@ -142,6 +143,7 @@ class VisitorController extends Controller
                             ->where('products.account_id', $account->id)
                             ->distinct()
                             ->get();
+                        
                         //$selectedState = $states->firstWhere('id', $stateId);
                     
                         foreach($states as $state){

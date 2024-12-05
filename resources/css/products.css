@@ -8,6 +8,7 @@ div.layout-container.tiles{
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        width:80%;
         .tile{
             margin: 0.5em 0.5em;
             padding:1em;
@@ -108,8 +109,10 @@ div.layout-container.tiles{
 }
 /* Ajustement simulateur */
 .tiles-simulateur{
+    width: unset;
+    min-width: 200px;
     img{
-        width: 120px;
+        min-width: 120px;
     }
     p{
         font-size: 15px;
@@ -137,8 +140,8 @@ div.layout-container.tiles{
         margin: 0 auto 1em auto;
         font-size: 24px;
         font-weight: 900;
-        background-color: var(--main-cards-background);
-        color: var(--main-cards-font);
+        background-color: var(--main-cards-svg);
+        color: var(--main-cards-title);
         padding: 0em 0.8em;
     }
     .inversed{
@@ -150,12 +153,12 @@ div.layout-container.tiles{
         margin-top: -15px;
         min-height: unset;
         padding:0em 0.8em;
-        background-color: var(--main-cards-font);
-        color: var(--main-cards-title);
+        background-color: var(--main-cards-background);
+        color: var(--main-cards-font);
     }
     p, .price-focus{
         background-color: var(--main-cards-background);
-        color:var(--main-cards-font);
+        color:var(--main-cards-svg);
         padding: 0.2em 1em;
         box-shadow: none;
         border-radius: 0;
@@ -166,7 +169,7 @@ div.layout-container.tiles{
         }
     }
     p{
-        color: var(--main-cards-button);
+        color: var(--main-cards-title);
     }
     .prices{
         div:first-child{
@@ -246,7 +249,7 @@ div.layout-container.tiles{
         position:relative;
         z-index: 2;
         display:block;
-        width:17%;
+        width:fit-content;
         margin:1em auto 1em auto;
         text-align: center;
         padding: 0.8em;

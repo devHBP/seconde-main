@@ -23,6 +23,7 @@
         padding: 0.5em;
         border-radius: 8px;
         color: black;
+        background-color: whitesmoke;
     }
     button{
         display: block;

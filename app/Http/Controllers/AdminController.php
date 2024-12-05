@@ -380,7 +380,7 @@ class AdminController
      */
     public function getStates()
     {
-        return view('admin.states.states', ['states' => State::withoutGlobalScopes()->get(), "user" => $this->user]);
+        return view('admin.states.states', ['states' => State::all(), "user" => $this->user]);
     }
 
     public function createState(Request $request)
@@ -474,7 +474,7 @@ class AdminController
 
     public function createProduct(Request $request)
     {
-        $states = State::withoutGlobalScopes()->get();
+        $states = State::all();
         if($request->isMethod('post')){
             $account = $request->user();
             $validatedData = $request->validate([
