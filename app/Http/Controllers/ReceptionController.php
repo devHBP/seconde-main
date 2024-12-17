@@ -20,12 +20,32 @@ use Milon\Barcode\DNS1D;
 
 class ReceptionController
 {
+    private $itemsInCart;
+    private $cartInProgress;
+    private $user;
+    
+    public function __construct()
+    {
+        $this->user = session("subsession");
+        $panier = Panier::where('user_id', $this->user['user']->id)
+        ->where('status', 'en_cours')
+        ->with('products')
+        ->first();
+
+        if($panier){
+            $this->cartInProgress = true;
+            $this->itemsInCart = count($panier->products);
+        }
+
+        
+    }
+
     public function dashboard()
     {
         $user = session('subsession.user');
         $roleName = session('subsession.role_name');
         $panierCount = count(Panier::where('status', 'annule')->get());
-        return view('reception.dashboard', ['user' => $user, 'role' => $roleName, 'panierCount'=>$panierCount]);
+        return view('reception.dashboard', ['user' => $user, 'role' => $roleName, 'panierCount'=>$panierCount, 'itemsInCart' => $this->itemsInCart, "cartInProgress" => $this->cartInProgress ]);
     }
 
     public function addProduct(Request $request)
@@ -494,7 +514,7 @@ class ReceptionController
             Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
         }
 
-        if(!$client->email || $printTicket === "on"){
+        if(isset($printTicket) && (!$client->email || $printTicket === "on")){
             session()->flash('print_ticket_uuid', $ticket->uuid);
         }
 

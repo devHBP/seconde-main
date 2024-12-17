@@ -64,6 +64,14 @@ div.layout-container{
         }
     }
 }
+.cart-in-progress{
+    font-size: 11px;
+    background-color: var(--main-cards-font);
+    color: var(--main-cards-background);
+    text-transform: uppercase;
+    padding:0 1em;
+    border-radius: 5px;
+}
 .cart-returned{
     position: relative;
     span{

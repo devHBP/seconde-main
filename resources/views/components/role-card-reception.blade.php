@@ -45,6 +45,6 @@
         <use xlink:href="#surface11" mask="url(#mask2-reception)"/>
         </g>
     </svg>
-    <h3 class="text-xl font-semibold">Reception</h3>
+    <h3 class="text-xl font-semibold">Rachat</h3>
     <p class="mt-2">Récupère les produit client, et édite le bon d'achat/remboursement</p>
 </div>

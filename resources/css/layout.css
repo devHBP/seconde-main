@@ -131,7 +131,7 @@ main{
         color: var(--main-cards-font);
     }
     th{
-        background-color: var(--main-cards-title);
+        background-color: var(--main-background);
         color: var(--main-cards-font);
     }
 }
