@@ -45,7 +45,14 @@ class ReceptionController
         $user = session('subsession.user');
         $roleName = session('subsession.role_name');
         $panierCount = count(Panier::where('status', 'annule')->get());
-        return view('reception.dashboard', ['user' => $user, 'role' => $roleName, 'panierCount'=>$panierCount, 'itemsInCart' => $this->itemsInCart, "cartInProgress" => $this->cartInProgress ]);
+        return view('reception.dashboard', [
+            'user' => $user,
+            'role' => $roleName,
+            'panierCount'=>$panierCount,
+            'itemsInCart' => $this->itemsInCart,
+            'cartInProgress' => $this->cartInProgress,
+            'tickets' => TicketReprise::where('is_activated', false)->get()
+        ]);
     }
 
     public function addProduct(Request $request)
@@ -514,7 +521,7 @@ class ReceptionController
             Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
         }
 
-        if(isset($printTicket) && (!$client->email || $printTicket === "on")){
+        if(isset($printTicket) && (!$client->email || $printTicket === "on") || (!$client->email)){
             session()->flash('print_ticket_uuid', $ticket->uuid);
         }
 

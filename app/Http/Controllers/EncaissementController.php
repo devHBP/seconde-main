@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Mail\TicketConsume;
 use App\Mail\TicketRestitute;
+use App\Models\Panier;
 use App\Models\TicketReprise;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Milon\Barcode\DNS1D;
 
@@ -16,17 +18,18 @@ use function PHPUnit\Framework\isEmpty;
 class EncaissementController extends Controller
 {
     private $user;
+    private $account;
 
     public function __construct()
     {
         $sessionUserData = session('subsession');
         $this->user = $sessionUserData['user'];
+        $this->account = Auth::user();
     }
 
     // Route du dashbaboard
     public function dashboard()
     {
-        $user = session('subsession');
         return view('encaissement.dashboard', [
             "tickets" => TicketReprise::where('is_activated', false)->get(),
             "user" => $this->user,
@@ -57,12 +60,16 @@ class EncaissementController extends Controller
             $ticket = TicketReprise::all();
         }
 
+        if($this->account->compacted_mode){
+            return view('reception.dashboard', ['tickets'=>$ticket , "user"=>$this->user, "query"=>$query ]);
+        }
         return view('encaissement.dashboard', ['tickets' => $ticket, "user"=> $this->user, "query" => $query ]);
     }
     // Route pour afficher un panier
     public function showTicket($ticket_uuid)
     {
         $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+
         return view('encaissement.tickets.ticket', ["ticket" => $ticket, "user" => $this->user]);
     }
 
@@ -89,11 +96,33 @@ class EncaissementController extends Controller
             $ticket->is_activated = true;
             $ticket->save();
 
-            session()->flash('print_ticket_uuid', $ticket->uuid);
+            session()->flash('print_ticket_uuid_encaissement', $ticket->uuid);
             session()->flash('print_supplier_delivery', $ticket_uuid);
             // Si mail , envoi du mail avec un récap de la comsommation du ticket 
             if($ticket->client->email){
                 Mail::to($ticket->client->email)->send(new TicketConsume($ticket));
+            }
+
+            if($this->account->compacted_mode){
+                // Prérequis pour débarquer sur la vue reception/dashboard en mode compacted
+                $panier = Panier::where("user_id", $this->user->id)
+                    ->where('status', 'en_cours')
+                    ->with('products')
+                    ->first();
+
+                if($panier){
+                    $cartInProgess = true;
+                    $itemsInCart = count($panier->products);
+                }
+
+                return view('reception.dashboard', [
+                    'tickets'=> TicketReprise::where('is_activated', false)->get(),
+                    'user'=>$this->user,
+                    'role'=> $this->user['role_name'],
+                    'cartInProgress' => $cartInProgess ?? null,
+                    'itemsInCart' => $itemsInCart ?? 0,
+                    'panierCount' => count(Panier::where('status', 'annule')->get())
+                ]);
             }
             return redirect()->route('encaissement.dashboard')->with('success', "Ticket de reprise $ticket->uuid validé.");
         }
@@ -104,7 +133,8 @@ class EncaissementController extends Controller
     {
         $validatedData = $request->validate([
             'ticket_uuid' => 'required|string|max:14|exists:tickets_reprise,uuid',
-        ], [
+        ],
+        [
             "uuid.exists" => "Le code barre ne correspond à aucuns ticket valide",
         ]);
 
@@ -124,6 +154,29 @@ class EncaissementController extends Controller
         if($ticket->client->email){
             Mail::to($ticket->client->email)->send(new TicketRestitute($ticket));
         }
+
+        if($this->account->compacted_mode){
+            // Prérequis pour débarquer sur la vue reception/dashboard en mode compacted
+            $panier = Panier::where("user_id", $this->user->id)
+                ->where('status', 'en_cours')
+                ->with('products')
+                ->first();
+            
+            if($panier){
+                $cartInProgess = true;
+                $itemsInCart = count($panier->products);
+            }
+
+            return view('reception.dashboard', [
+                'tickets'=> TicketReprise::where('is_activated', false)->get(),
+                'user'=>$this->user,
+                'role'=> $this->user['role_name'],
+                'cartInProgress' => $cartInProgess ?? null,
+                'itemsInCart' => $itemsInCart ?? 0,
+                'panierCount' => count(Panier::where('status', 'annule')->get())
+            ]);
+        }
+
         return redirect()->route('encaissement.dashboard')->with('success', "Le Ticket $ticket->uuid à bien été annulé.");
     }
 

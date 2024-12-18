@@ -193,6 +193,22 @@ div.layout-container a.disabled{
         }
     }
 }
+.layout-merged-caisse{
+    h3{
+        margin-top: 2em;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    width:80%;
+    margin: 2em auto;
+    padding: 0;
+    border-top: 3px solid var(--main-cards-svg);
+    &>div{
+        width: 100%;
+    }
+}
 
 @media  screen and (max-width: 500px){
     .header__nav{

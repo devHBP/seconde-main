@@ -90,6 +90,8 @@ class AdminController
             $account->main_cards_svg = $validatedData['main_cards_svg'];
             $account->main_cards_button = $validatedData['main_cards_button'];
 
+            $account->compacted_mode = !$request->has("compacted_mode") ? false : true;
+
             $account->save();
             if($account->login === SUPER_ADMIN_LOGIN ){
                 return redirect()->route('dashboard');

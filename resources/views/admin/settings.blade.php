@@ -247,6 +247,21 @@
                         <p>{{ $message }}</p>
                     @enderror
 
+                    <div class="mb-3 flex gap-4">
+                        <label for="compacted_mode" class="block font-bold">Mode Compacte (petite structure)</label>
+                            <input 
+                                type="checkbox" 
+                                name="compacted_mode" 
+                                id="compacted_mode" 
+                                value="1" 
+                                class="w-5"
+                                {{ old('compacted_mode', $account->compacted_mode ?? "0") ? 'checked' : '' }}>
+                            {{ $account->compacted_mode }}
+                        @error('compacted_mode')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <!-- Bouton de soumission -->
                     <div class="flex items-center justify-between">
                         <button type="submit" class="">

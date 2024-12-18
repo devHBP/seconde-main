@@ -1,4 +1,8 @@
 <x-app-layout>
+    @php
+        $user = Auth::user();
+        $isCompactedMode = $user->compacted_mode
+    @endphp
     <x-slot name="header">
         <div class="dashboard-header">
             <h2 class="title">Bonjour {{ $user->name }} <span> *connecté en tant que {{ $role }}</span></h2>
@@ -171,6 +175,12 @@
                 <div class="dashboard-cards">Paniers à rendre</div>
             </a>
         </div>
+        @if($isCompactedMode)
+            <div class="layout-merged-caisse">
+                <h3>Interface de Caisse</h3>
+                @include('components.partial-encaissement')
+            </div>
+        @endif
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -181,5 +191,24 @@
                 window.open(printUrl, "_blank");
             } 
         });
+        @if($isCompactedMode)
+            document.addEventListener('DOMContentLoaded', () => {
+                const printTicketUuid = "{{ session('print_ticket_uuid_encaissement') }}";
+                const restituteTicketUuid = "{{ session('print_ticket_return')}}";
+                const printSupplierDelivery = "{{ session('print_supplier_delivery') }}";
+                if(printTicketUuid){
+                    const printUrl = "{{ route('encaissement.ticket.print', ':uuid') }}".replace(':uuid', printTicketUuid);
+                    window.open(printUrl, "_blank");
+                }
+                if(printSupplierDelivery){
+                    const printDeliveryUrl = "{{ route('encaissement.ticket.supplier.print', ':uuid') }}".replace(':uuid', printSupplierDelivery);
+                    window.open(printDeliveryUrl, "_blank");
+                }
+                if(restituteTicketUuid){
+                    const printRestituteUrl = "{{ route('encaissement.ticket.restitute.print', ':uuid') }}".replace(':uuid', restituteTicketUuid);
+                    window.open(printRestituteUrl, "_blank");
+                }
+            });
+        @endif
     </script>
 </x-app-layout>

@@ -94,6 +94,7 @@ class GestionController extends Controller
                 'custom_font_primary' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
                 'custom_font_secondary' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
                 'pattern_logo' => 'nullable|file|mimes:.png,.svg|max:2048',
+                
                 'user_name' => 'required|string|max:255',
                 'user_email' => 'required|email',
                 'user_password' => 'required|string|max:255',
