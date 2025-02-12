@@ -132,6 +132,8 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/administrateur/produits/filter-name/{filter_name}', [AdminController::class, 'dropSessionFilters'])->name('admin.products.drop.filters');
     // Tickets remises et Statistiques
     Route::get('/administrateur/tickets', [AdminController::class, 'getTickets'])->name('admin.tickets');
+    Route::get('/administrateur/tickets/search', [AdminController::class, 'searchTicket'])->name('admin.search.tickets');
+    Route::get('/administrateur/tickets/{ticket_id}', [AdminController::class, 'showTicket'])->name('admin.ticket.show');
     Route::get('/administrateur/stats', [AdminController::class, 'getStats'])->name('admin.stats');
 
     /**

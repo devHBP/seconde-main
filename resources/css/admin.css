@@ -92,3 +92,30 @@ form input, form select{
         filter: brightness(0.8);
     }
 }
+
+.error, .success{
+    padding:0.5em;
+    text-align: center;
+    width:fit-content;
+    margin: 1em auto 0 auto;
+    font-weight: 600;
+    border-radius: 10px;
+}
+.error{
+    background-color: red;
+}
+.success{
+    background-color: green;
+}
+
+.list-header{
+    color: black;
+    position: relative;
+    z-index: 5;
+    filter: brightness(90%);
+    border-bottom:2px black solid ;
+    li:hover{
+        cursor:default;
+        filter:none;
+    }
+}

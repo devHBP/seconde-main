@@ -8,6 +8,7 @@ use App\Models\Picture;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\State;
+use App\Models\TicketReprise;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -132,6 +133,7 @@ class AdminController
     
     public function createUser(Request $request)
     {
+        $accountId = $this->user["account_id"];
         if($request->isMethod('post')){
             $account = $request->user();
             $validatedData = $request->validate([
@@ -141,6 +143,12 @@ class AdminController
                 "confirm_password" => 'required|string|max:255|same:password',
                 "roles" => 'required|array'
             ]);
+            
+            $existingUser = User::where('email', $validatedData['email'])->first();
+            if($existingUser){
+                return redirect()->route('admin.users')->with('error', 'Un utilisateur est déjà enregistré avec cette adresse mail : ' . $validatedData['email'] . ' .');
+            }
+            
             $validatedData['password'] = Hash::make($validatedData['password']);
             // Pour la création de User je dois passer par ce systeme là
             // la methode User::create ne tolère que les propriété 'fillables', 
@@ -157,7 +165,7 @@ class AdminController
             return redirect()->route('admin.users')->with('success', 'Utilisateur créé avec succès');
         }
         return view('admin.users.create-or-modify', ["roles" => Role::all(), "currentUser" => $this->user]);
-    }
+}
 
     public function modifyUser(Request $request, $user_id)
     {
@@ -166,7 +174,7 @@ class AdminController
             try {
                 $validatedData = $request->validate([
                     "name" => 'required|string|max:255',
-                    "email" => 'required|string|max:255',
+                    "email" => 'required|string|max:255|unique:users,email,NULL,id',
                     "password" => 'nullable|string|max:255',
                     "confirm_password" => 'required_with:password|same:password',
                     "roles" => 'required|array'
@@ -185,7 +193,7 @@ class AdminController
 
                 return redirect()->route('admin.users')->with('success', 'Utilisateur mis à jour');
             } catch (\Illuminate\Validation\ValidationException $e) {
-                dd($e->errors());
+                return redirect()->route('admin.users')->with('error', $e->errors());
             }
         }
         return view('admin.users.create-or-modify',[
@@ -591,7 +599,40 @@ class AdminController
      */
     public function getTickets()
     {
-        //
+        $tickets = TicketReprise::where('is_activated', true)->get();
+        return view('admin.tickets.tickets', ['user' => $this->user, "tickets" => $tickets]);
+    }
+
+    public function searchTicket(Request $request)
+    {
+        $validatedData = $request->validate([
+            "query" => 'string|nullable|max:80'
+        ]);
+
+        $query = $validatedData['query'] ?? '';
+
+        $ticketsQuery = TicketReprise::where('is_activated', true);
+        if(!empty($query)){
+            $ticketsQuery = TicketReprise::where('is_activated', true)
+                ->where(function($q) use ($query){
+                    $q->where('uuid', $query)
+                    ->orWhereHas('client', function($queryBuilder) use ($query){
+                        $queryBuilder->where('firstname', 'LIKE', "%{$query}%")
+                            ->orWhere('lastname', 'LIKE', "%{$query}%");
+                    });
+                }
+            );
+        }
+
+        $tickets = $ticketsQuery->paginate(25)->withQueryString();
+
+        return view('admin.tickets.tickets', ["user"=> $this->user, "tickets" => $tickets]);
+    }
+
+    public function showTicket($ticket_id)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_id)->first();
+        return view('admin.tickets.ticket', ['user' => $this->user, 'ticket'=>$ticket]);
     }
 
     public function getStats()

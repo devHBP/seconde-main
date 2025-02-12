@@ -19,11 +19,6 @@
         </div>
     </x-slot>
     <div>
-        @if (session('success'))
-            <div class="bg-lime-500 text-white p-4 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 layout-search">
             <!-- Formulaire de recherche client -->
             <form method="GET" action="{{ route('encaissement.ticket.search') }}" class="mb-6">

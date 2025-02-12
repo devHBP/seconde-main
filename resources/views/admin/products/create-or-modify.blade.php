@@ -24,7 +24,7 @@
                     <!-- Type Produit -->
                     <div class="mb-3">
                         <label for="type" class="block font-bold">Type de Produit</label>
-                        <select name="type" id="type" class="appearance-none border rounded w-full py-2 px-3">
+                        <select name="type" id="type" class="text-gray-700 appearance-none border rounded w-full py-2 px-3">
                             @foreach ($types as $type)
                                 <option value="{{ $type->id }}" {{ isset($product) && old('type', $product->type->id ) == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
                             @endforeach
@@ -37,7 +37,7 @@
                     <!-- Marque Produit -->
                     <div class="mb-3">
                         <label for="brand" class="block font-bold">Marque du Produit</label>
-                        <select name="brand" id="brand" class="shadow appearance-none border rounded w-full py-2 px-3 ">
+                        <select name="brand" id="brand" class="text-gray-700 shadow appearance-none border rounded w-full py-2 px-3 ">
                             @foreach ($brands as $brand)
                                 <option value="{{ $brand->id }}" {{ isset($product) && old('brand', $product->brand->id ) == $brand->id ? 'selected' : ''}} >{{ $brand->name }}</option>
                             @endforeach
@@ -66,15 +66,15 @@
                             <label for="prix_bon_achat_state_{{ $state->id }}" class="text-sm">Bon d'achat :</label>
                             <input type="number" step="0.01" min="0" name="prix_bon_achat_state_{{ $state->id }}" id="prix_bon_achat_state_{{ $state->id }}"
                                 value="{{ isset($product) ? old("prix_bon_achat_state_{$state->id}", $product->states->where('id', $state->id)->first()?->pivot->prix_bon_achat) : 'NC'}}"
-                                class="shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
+                                class="text-gray-700 shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
                         </div>
 
                         <!--  Champ code_caisse -->
                         <div class="flex items-center space-x-2 w-1/2">
-                            <label for="code_caisse_state_{{ $state->id }}" class="text-sm">Code caisse :</label>
+                            <label for="code_caisse_state_{{ $state->id }}" class="text-sm">Code caisse:</label>
                             <input type="text" name="code_caisse_state_{{ $state->id }}" id="code_caisse_state_{{ $state->id }}"
                                 value="{{ isset($product) ? old("code_caisse_state_{ $state->id }", $product->states->where('id', $state->id)->first()?->pivot->code_caisse) : 'NC'}}"
-                                class="shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
+                                class="w-2/3 text-gray-700 shadow border rounded w-20 py-1 px-2 focus:outline-none focus:shadow-outline">
                         </div>
                         @error('state')
                             <span class="text-red-500 text-sm">{{ $message }}</span>

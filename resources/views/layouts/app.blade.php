@@ -83,6 +83,7 @@
 
             <!-- Page Content -->
             <main>
+                @include('components.flashes-message')
                 {{ $slot }}
             </main>
         </div>

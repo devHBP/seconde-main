@@ -147,10 +147,16 @@ class ReceptionController
             $validatedData = $request->validate([
                 "firstname" => 'required|string|max:255',
                 "lastname" => 'required|string|max:255',
-                "email" => 'nullable|email|required_without:phone',
+                "email" => 'nullable|email|required_without:phone|unique:users,email,NULL,id',
                 "phone" => 'nullable|digits:10|required_without:email',
                 "consent" => 'required|boolean'
             ]);
+            
+            $existingUser = User::where('email', $validatedData['email'])->first();
+            if($existingUser){
+                return redirect()->route('reception.clients')->with('error', 'Un client est déjà enregistré avec cette adresse mail : ' . $validatedData['email'] . ' .');
+            }
+
             $client = new Client();
             $client->firstname = $validatedData['firstname'];
             $client->lastname = $validatedData['lastname'];
@@ -175,7 +181,7 @@ class ReceptionController
             $validatedData = $request->validate([
                 "firstname" => 'required|string|max:255',
                 "lastname" => 'required|string|max:255',
-                "email" => 'nullable|email|required_without:phone',
+                "email" => 'nullable|email|required_without:phone|unique:users,email,NULL,id',
                 "phone" => 'nullable|digits:10|required_without:email',
                 "consent" => 'required|boolean'
             ]);
@@ -469,7 +475,7 @@ class ReceptionController
             $validatedData = $request->validate([
                 "firstname" => 'required|string|max:255',
                 "lastname" => 'required|string|max:255',
-                "email" => 'nullable|email|required_without:phone',
+                "email" => 'nullable|email|required_without:phone|unique:users,email,NULL,id',
                 "phone" => 'nullable|digits:10|required_without:email',
                 "consent" => 'required|boolean'
             ]);

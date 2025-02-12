@@ -16,14 +16,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if (session('success'))
-                <div class="bg-green-500 text-white p-4 rounded mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-        </div>
+    <div class="py-2">
     </div>
     <div class="layout-liste max-w-7xl mx-auto sm:px-6 lg:px-8">
         <table class="min-w-full">

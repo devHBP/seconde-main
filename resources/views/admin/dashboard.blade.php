@@ -202,7 +202,7 @@
             </svg>
             <div class="dashboard-cards">Produits</div>
         </a>
-        <a href="" class="disabled">
+        <a href="{{ route('admin.tickets')}}" class="">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                 width="70.000000pt" height="65.000000pt" viewBox="0 0 512.000000 512.000000"
                 preserveAspectRatio="xMidYMid meet">
