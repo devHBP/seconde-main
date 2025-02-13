@@ -518,10 +518,10 @@ class ReceptionController
 
         $barcodeGenerator = new DNS1D();
         
-        $barcode = $barcodeGenerator->getBarcodeSVG($ticket->uuid, 'C128');
-
+        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
+        dd("Binaries: ". $barcodeBinary, "Base64: ".$barcodeBase64);
         $filename = $ticket->uuid . '.png';
         if($client->email){
             Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcode, $filename));
