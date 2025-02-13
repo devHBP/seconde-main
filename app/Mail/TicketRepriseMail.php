@@ -17,16 +17,16 @@ class TicketRepriseMail extends Mailable
 
 
     public TicketReprise $ticket;
-    public $barcodeBase64;
+    public $barcode;
     public $filename;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(TicketReprise $ticket, $barcodeBase64, $filename)
+    public function __construct(TicketReprise $ticket, $barcode, $filename)
     {
         $this->ticket = $ticket;
-        $this->barcodeBase64 = $barcodeBase64;
+        $this->barcode = $barcode;
         $this->filename = $filename;
     }
 
