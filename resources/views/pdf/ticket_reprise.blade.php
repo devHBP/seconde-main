@@ -85,8 +85,9 @@
             $created_by = str_pad($ticket->created_by, 3, '0', STR_PAD_LEFT)
         @endphp
         <div class="header">
-            <h2>Ticket de Reprise</h2>
-            <h3 class='uuid'>{{ $ticket->uuid }}</h3>
+            <h3>{{ Auth()->user()->name }}</h3>
+            <h4>Ticket de Reprise</h4>
+            <h4 class='uuid'>{{ $ticket->uuid }}</h4>
             <p>Réceptionné par : {{ $created_by }}</p>
             <p>Date : {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
             <p>Date de Validité : {{ $ticket->date_limite->format('d/m/Y H:i')}}</p>

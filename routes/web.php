@@ -134,6 +134,9 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/administrateur/tickets', [AdminController::class, 'getTickets'])->name('admin.tickets');
     Route::get('/administrateur/tickets/search', [AdminController::class, 'searchTicket'])->name('admin.search.tickets');
     Route::get('/administrateur/tickets/{ticket_id}', [AdminController::class, 'showTicket'])->name('admin.ticket.show');
+    Route::get('/administrateur/tickets/{ticket_id}/email', [AdminController::class, 'sendReditTicket'])->name('admin.ticket.send');
+    Route::get('/administrateur/tickets/{ticket_id}/print', [AdminController::class, 'printReditTicketView'])->name('admin.ticket.print');
+    Route::get('/administrateur/tickets/{ticket_id}/print/pdf', [AdminController::class, 'printReditTicket'])->name('admin.ticket.print.embeded');
     Route::get('/administrateur/stats', [AdminController::class, 'getStats'])->name('admin.stats');
 
     /**

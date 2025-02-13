@@ -7,8 +7,8 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
             margin: 0;
-            margin-top: -30px;
-            margin-left: -30px;
+            margin-top: -35px;
+            margin-left: -38px;
             padding: 0;
         }
         .container {
@@ -61,11 +61,9 @@
         <!-- En-tête du ticket -->
         <div class="header">
             <h3>{{ Auth()->user()->name }}</h3>
-            <h4>Ticket de Reprise <span class="block">n°{{ $ticket->uuid }}</span></h4>
-            @php
-                $deactivated_by = str_pad($ticket->deactivated_by, 3, 0, STR_PAD_LEFT)
-            @endphp
-            <p>Validé par : {{ $deactivated_by }}</p>
+            <h4>Réédition Ticket de Reprise <span class="block">n°{{ $ticket->uuid }}</span></h4>
+            <p>Date : {{ now()->format('d/m/Y H:i:s')}}</p>
+            <p>Validé par : {{ $ticket->deactivated_by }}</p>
             <p>Consommé le : {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
         </div>
         <div class="client">
@@ -89,17 +87,26 @@
 
         <!-- Totaux -->
         <table>
-            <tr>
-                <td>Vous avez choisis l'annulation</td>
-            </tr>
+            @if($ticket->type_utilisation === "remboursement")
+                <tr>
+                    <td class="bold">Vous avez choisis le remboursement d'un total de:</td>
+                </tr>
+                <tr>
+                    <td>{{ number_format($ticket->panier->total_remboursement, 2, ',', ' ') }} €</td>
+                </tr>
+            @elseif ($ticket->type_utilisation === "bon_achat")
+                <tr>
+                    <td class="bold">Vous avez choisis la remise en bon d'achat pour un total de :</td>  
+                </tr>
+                <tr>
+                    <td>{{ number_format($ticket->panier->total_bon_achat, 2, ',', ' ') }} €</td>
+                </tr>
+            @endif
         </table>
         <hr>
 
         <!-- Pied de page -->
         <div class="footer">
-            <p>Nous vous invitons à vous diriger</p>
-            <p>vers l'accueil Seconde Main de votre magasin</p>
-            <p>afin de procéder à la restitution</p>
             <p>Merci de votre visite !</p>
         </div>
     </div>

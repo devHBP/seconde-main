@@ -11,10 +11,11 @@
     </style>
 </head>
 <body>
-    <h2>Comsommation de votre Ticket</h2>
+    <h2>Votre Ticket</h2>
+    <p>Date : {{ now()->format('d/m/Y H:i:s') }} </p>
     <p>Bonjour {{ $ticket->client->firstname }} {{ $ticket->client->lastname }},</p>
 
-    <p>Votre ticket de reprise à été comsommé</p>
+    <p>Ré édition de votre ticket de reprise</p>
 
     <table>
         <tr>

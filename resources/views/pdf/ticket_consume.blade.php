@@ -60,12 +60,13 @@
     <div class="container">
         <!-- En-tête du ticket -->
         <div class="header">
-            <h2>Ticket de Reprise <span class="block">n°{{ $ticket->uuid }}</span></h2>
+            <h3>{{ Auth()->user()->name }}</h3>
+            <h4>Ticket de Reprise <span class="block">n°{{ $ticket->uuid }}</span></h4>
             <p>Validé par : {{ $ticket->deactivated_by }}</p>
             <p>Consommé le : {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
         </div>
         <div class="client">
-            <h3>Client</h3>
+            <h4>Client</h4>
             <p>{{ $ticket->client->firstname}} {{ $ticket->client->lastname }}</p>
             <p>{{ $ticket->client->email }}</p>
             <p>{{ $ticket->client->phone }}</p>

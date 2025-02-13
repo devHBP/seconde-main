@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketRedit;
 use App\Models\Account;
 use App\Models\Brand;
 use App\Models\Picture;
@@ -11,8 +12,11 @@ use App\Models\State;
 use App\Models\TicketReprise;
 use App\Models\Type;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isNull;
 
@@ -599,6 +603,7 @@ class AdminController
      */
     public function getTickets()
     {
+
         $tickets = TicketReprise::where('is_activated', true)->get();
         return view('admin.tickets.tickets', ['user' => $this->user, "tickets" => $tickets]);
     }
@@ -633,6 +638,35 @@ class AdminController
     {
         $ticket = TicketReprise::where('uuid', $ticket_id)->first();
         return view('admin.tickets.ticket', ['user' => $this->user, 'ticket'=>$ticket]);
+    }
+
+    public function sendReditTicket($ticket_id)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_id)->first();
+        if(!$ticket){
+            return redirect()->route('admin.dashboard')->with('error', 'Erreur sur le Ticket: Introuvable');
+        }
+        
+        if($ticket->client->email){
+            Mail::to($ticket->client->email)->send(new TicketRedit($ticket));
+            return redirect()->route('admin.ticket.show', ['ticket_id'=> $ticket->uuid])->with('success', 'Ticket Envoyé par mail à : ' . $ticket->client->email . ' .');
+        }
+        return redirect()->route('admin.ticket.show', ['user'=>$this->user, 'ticket'=> $ticket->uuid])->with('error', 'Le client n\'pas d\'adresse email dans son profil..');
+    }
+
+    public function printReditTicket($ticket_id)
+    {
+        session()->flash('print_ticket_uuid_redit', $ticket_id);
+        return redirect()->route('admin.ticket.show', ['ticket_id'=>$ticket_id]);
+    }
+
+    public function printReditTicketView($ticket_id)
+    {
+        $ticket = TicketReprise::where('uuid', $ticket_id)->first();
+        $data = ["ticket" => $ticket];
+        $pdf = Pdf::loadView('pdf.ticket_redit', $data)
+            ->setPaper([0, 0, 226, 600]);
+        return $pdf->stream("Ticket-{$ticket->uuid}.pdf");
     }
 
     public function getStats()
