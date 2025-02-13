@@ -518,7 +518,7 @@ class ReceptionController
 
         $barcodeGenerator = new DNS1D();
         
-        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128');
+        $barcode = $barcodeGenerator->getBarcodeHTML($ticket->uuid, 'C128');
         dd($barcode);
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
