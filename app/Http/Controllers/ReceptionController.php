@@ -521,6 +521,7 @@ class ReceptionController
         $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
+
         $filename = $ticket->uuid . '.png';
         if($client->email){
             Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
