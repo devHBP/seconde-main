@@ -61,10 +61,10 @@ class TicketRepriseMail extends Mailable
     public function attachments(): array
     {
         return [
-            // Attachment::fromData(
-            //     fn() => $this->barcode,
-            //     $this->filename
-            // )->withMime('image/png')
+            Attachment::fromData(
+                fn() => $this->barcode,
+                $this->filename
+            )->withMime('image/png')
         ];
     }
 }
