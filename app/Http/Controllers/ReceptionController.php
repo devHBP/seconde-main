@@ -519,7 +519,7 @@ class ReceptionController
         $barcodeGenerator = new DNS1D();
         
         $barcode = $barcodeGenerator->getBarcodeSVG($ticket->uuid, 'C128');
-        dd($barcode);
+
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
         $filename = $ticket->uuid . '.png';
