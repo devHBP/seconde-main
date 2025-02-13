@@ -519,12 +519,11 @@ class ReceptionController
         $barcodeGenerator = new DNS1D();
         
         $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
-        // $barcodeBinary = base64_decode($barcode);
-        // $barcodeBase64 = base64_encode($barcodeBinary);
+        $barcodeBinary = base64_decode($barcode);
+        $barcodeBase64 = base64_encode($barcodeBinary);
         $filename = $ticket->uuid . '.png';
-
         if($client->email){
-            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcode, $filename));
+            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
         }
 
         if(isset($printTicket) && (!$client->email || $printTicket === "on") || (!$client->email)){
@@ -580,12 +579,12 @@ class ReceptionController
 
         $barcodeGenerator = new DNS1D();
         $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
-        // $barcodeBinary = base64_decode($barcode);
-        // $barcodeBase64 = base64_encode($barcodeBinary);
-        
+        $barcodeBinary = base64_decode($barcode);
+        $barcodeBase64 = base64_encode($barcodeBinary);
+        dd($barcodeBase64);
         $data = [
             'ticket' => $ticket,
-            'barcode' => $barcode
+            'barcode' => $barcodeBase64
         ];
 
         $pdf = Pdf::loadView('pdf.ticket_reprise', $data)
