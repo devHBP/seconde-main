@@ -518,12 +518,13 @@ class ReceptionController
 
         $barcodeGenerator = new DNS1D();
         
-        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128', 2, 70);
+        $barcode = $barcodeGenerator->getBarcodePNG($ticket->uuid, 'C128');
+        dd($barcode);
         $barcodeBinary = base64_decode($barcode);
         $barcodeBase64 = base64_encode($barcodeBinary);
         $filename = $ticket->uuid . '.png';
         if($client->email){
-            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
+            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcode, $filename));
         }
 
         if(isset($printTicket) && (!$client->email || $printTicket === "on") || (!$client->email)){
