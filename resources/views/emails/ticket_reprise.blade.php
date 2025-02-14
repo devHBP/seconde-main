@@ -40,10 +40,7 @@
 
     <div class="barcode">
         <h3>Votre Code-Barres :</h3>
-        @php
-            
-        @endphp
-        {{-- <img src="{{ $message->embedData($barcodeBase64, $filename, 'image/png') }}" alt="Code-barres"> --}}
+        <img src="{{ $message->embedData($barcodeBase64, $filename, 'image/png') }}" alt="Code-barres">
         <p>{{$ticket->uuid}}</p>
     </div>
     @php
