@@ -57,7 +57,7 @@ class EncaissementController extends Controller
             }
         }
         else{
-            $ticket = TicketReprise::all();
+            $ticket = TicketReprise::where('is_activated', false)->get();
         }
 
         if($this->account->compacted_mode){

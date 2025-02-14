@@ -34,6 +34,7 @@
             <ul>
                 <li class="flex justify-between p-4 bg-white cursor-pointer border border-gray-300 hover:bg-slate-100">
                     <span>N° Ticket</span>
+                    <span>Type d'Usage</span>
                     <span>Prénom/Nom Client</span>
                 </li>
             </ul>
@@ -45,6 +46,7 @@
                     <a href="{{ route('admin.ticket.show', ['ticket_id' => $ticket->uuid] ) }}">
                         <li class="flex justify-between p-4 bg-white cursor-pointer border border-gray-300 hover:bg-slate-100">
                             <span>{{ $ticket->uuid }}</span>
+                            <span class="{{ $ticket->type_utilisation === "annule" ? "annule" : "valide"}}">{{ $ticket->type_utilisation }}</span>
                             <span>{{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</span>
                         </li>
                     </a>

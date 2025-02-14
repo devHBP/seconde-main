@@ -119,3 +119,18 @@ form input, form select{
         filter:none;
     }
 }
+
+
+.valide, .annule{
+    font-weight: bolder;
+    color: var(--main-cards-font);
+    text-transform: uppercase;
+    filter:drop-shadow(2px 4px 4px black);
+    padding:0.2em 0.4em;
+}
+.valide{
+    background-color: var(--main-cards-background);
+}
+.annule{
+    background-color: darkred;
+}
