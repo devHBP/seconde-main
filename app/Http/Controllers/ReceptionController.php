@@ -524,7 +524,7 @@ class ReceptionController
 
         $filename = $ticket->uuid . '.png';
         if($client->email){
-            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBase64, $filename));
+            Mail::to($ticket->client->email)->send(new TicketRepriseMail($ticket, $barcodeBinary, $filename));
         }
 
         if(isset($printTicket) && (!$client->email || $printTicket === "on") || (!$client->email)){
