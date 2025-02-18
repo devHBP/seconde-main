@@ -30,31 +30,59 @@
                 </div>
             </form>
         </div>
-        <div class="max-w-7xl mx-auto list-header">
-            <ul>
-                <li class="flex justify-between p-4 bg-white cursor-pointer border border-gray-300 hover:bg-slate-100">
-                    <span>N° Ticket</span>
-                    <span>Type d'Usage</span>
-                    <span>Prénom/Nom Client</span>
-                </li>
-            </ul>
+        <!-- Tableau des tickets -->
+        <div class="max-w-7xl p-2 mx-auto sm-:px-6 lg:px-8 py-8">
+            <table class="w-full">
+                <thead class="bg-gray-200">
+                    <tr class="text-left border-b border-gray-300">
+                        <th class="px-4 py-2">N° Ticket</th>
+                        <th class="px-4 py-2">Type d'Usage</th>
+                        <th class="px-4 py-2">Statut</th>
+                        <th class="px-4 py-2">Client</th>
+                        <th class="px-4 py-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($tickets->count() > 0)
+                        @foreach ($tickets as $ticket)
+                        <tr class="border-b hover:bg-gray-100 transition">
+                            <td class="px-4 py-3">
+                                    {{ $ticket->uuid }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 rounded text-white 
+                                    {{ $ticket->type_utilisation === 'annule' ? 'bg-red-500' : 'bg-green-500' }}">
+                                    {{ ucfirst($ticket->type_utilisation) }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 rounded text-white 
+                                    {{ $ticket->statut === 'périmé' ? 'bg-red-500' : ($ticket->statut === 'consommé' ? 'bg-gray-500' : 'bg-green-500') }}">
+                                    {{ ucfirst($ticket->statut) }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">{{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</td>
+                            <td class="link">
+                                <a href="{{ route('admin.ticket.show', ['ticket_id' => $ticket->uuid]) }}" class="">
+                                    <span>👁️</span>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-500 py-6">
+                                Aucun ticket trouvé.
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
-        <div class="max-w-7xl mx-auto layout-liste">
-            <ul>
-                @if(count($tickets)>0)
-                    @foreach ($tickets as $ticket)
-                    <a href="{{ route('admin.ticket.show', ['ticket_id' => $ticket->uuid] ) }}">
-                        <li class="flex justify-between p-4 bg-white cursor-pointer border border-gray-300 hover:bg-slate-100">
-                            <span>{{ $ticket->uuid }}</span>
-                            <span class="{{ $ticket->type_utilisation === "annule" ? "annule" : "valide"}}">{{ $ticket->type_utilisation }}</span>
-                            <span>{{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</span>
-                        </li>
-                    </a>
-                    @endforeach
-                @else
-                    <li>Ticket non trouvé</li>
-                @endif
-            </ul>
+
+        <!-- Pagination -->
+        <div class="mt-6 flex justify-center">
+            {{ $tickets->links() }}
         </div>
     </div>
 </x-app-layout>

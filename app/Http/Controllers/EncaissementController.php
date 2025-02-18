@@ -31,7 +31,9 @@ class EncaissementController extends Controller
     public function dashboard()
     {
         return view('encaissement.dashboard', [
-            "tickets" => TicketReprise::where('is_activated', false)->get(),
+            "tickets" => TicketReprise::where('is_activated', false)
+                ->whereNull('deactivation_date')
+                ->get(),
             "user" => $this->user,
         ]);
     }
@@ -50,6 +52,7 @@ class EncaissementController extends Controller
             $ticket = TicketReprise::where('account_id', $account->id)
             ->where('uuid', $query)
             ->where('is_activated', false)
+            ->whereNull('deactivation_date') // Permet de s'assurer que uniquement les tickets en cours soit affiché
             ->get();
 
             if(!$ticket){
@@ -57,7 +60,9 @@ class EncaissementController extends Controller
             }
         }
         else{
-            $ticket = TicketReprise::where('is_activated', false)->get();
+            $ticket = TicketReprise::where('is_activated', false)
+                ->whereNull('deactivation_date')
+                ->get();
         }
 
         if($this->account->compacted_mode){

@@ -603,8 +603,11 @@ class AdminController
      */
     public function getTickets()
     {
+        $tickets = TicketReprise::where('is_activated', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(25)
+            ->withQueryString();
 
-        $tickets = TicketReprise::where('is_activated', true)->get();
         return view('admin.tickets.tickets', ['user' => $this->user, "tickets" => $tickets]);
     }
 

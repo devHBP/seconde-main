@@ -55,6 +55,18 @@ class TicketReprise extends Model
         return $this->belongsTo(User::class, 'deactivated_by');
     }
 
+    //Accessor qui va permettre de récupérer la status en fonction d'état des propriétés
+    public function getStatutAttribute()
+    {
+        if($this->is_activated){
+            return 'consommé';
+        }
+        elseif(!$this->is_activated && $this->deactivation_date !== null){
+            return 'périmé';
+        }
+        return 'actif';
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -134,3 +134,20 @@ form input, form select{
 .annule{
     background-color: darkred;
 }
+
+table a{
+    background-color: unset;
+}
+td.link{
+    font-size: 25px;
+    span{
+        padding: 0.15em;
+        background-color: var(--main-cards-font);
+        border-radius: 10px;
+        &:hover{
+            cursor: pointer;
+            filter: brightness(0.9);
+        }
+    }
+
+}
