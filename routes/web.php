@@ -138,6 +138,9 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/administrateur/tickets/{ticket_id}/print', [AdminController::class, 'printReditTicketView'])->name('admin.ticket.print');
     Route::get('/administrateur/tickets/{ticket_id}/print/pdf', [AdminController::class, 'printReditTicket'])->name('admin.ticket.print.embeded');
     Route::get('/administrateur/stats', [AdminController::class, 'getStats'])->name('admin.stats');
+    Route::get('/administrateur/clients', [AdminController::class, 'getClients'])->name('admin.clients');
+    Route::get('/administarteur/clients/search', [AdminController::class, 'searchClients'])->name('admin.clients.search');
+    Route::get('/administrateur/clients/{client_id}', [AdminController::class , 'showClient'])->name('admin.clients.show');
 
     /**
      * Routes concernant la reception

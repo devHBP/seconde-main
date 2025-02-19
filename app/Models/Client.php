@@ -30,4 +30,9 @@ class Client extends Model
     {
         return $this->hasMany(Panier::class);
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(TicketReprise::class);
+    }
 }

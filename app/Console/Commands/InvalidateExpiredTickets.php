@@ -40,6 +40,8 @@ class InvalidateExpiredTickets extends Command
 
         foreach($expiredTickets as $ticket){
             $ticket->deactivation_date = $now;
+            $ticket->deactivated_by_name = "Invalidation Logicielle";
+            $ticket->type_utilisation = "annule";
             $ticket->save();
             $count++;
         }

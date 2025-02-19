@@ -4,7 +4,7 @@
             <div>
                 <p class="title-reminder">{{ $user->name }}<span> * Connecté en rôle Administrateur</span></p>
                 <h2 class="title">
-                    Liste des Tickets
+                    Ticket n°{{ $ticket->uuid }}
                 </h2>
             </div>
             <div class="header-right-button">
@@ -16,16 +16,25 @@
     </x-slot>
     <div class="container mx-auto my-8 p-6 layout-ticket">
         <!-- Titre -->
-        <h1 class="text-2xl font-bold text-gray-700 mb-4">Détail du Ticket #{{ $ticket->uuid }}</h1>
+        <h1 class="text-2xl font-bold text-gray-700 mb-4">Détail du Ticket {{ $ticket->uuid }}</h1>
 
         <!-- Informations du ticket -->
         <div class="mb-6 flex justify-between">
             <div>
                 <p class="text-sm text-gray-500"><span class="font-semibold">Créé par :</span> {{ $ticket->created_by_name }}</p>
                 <p class="text-sm text-gray-500"><span class="font-semibold">Date de création :</span> {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
-                <p class="text-sm text-gray-500"><span class="font-semibold">Consommé le :</span> {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
-                <p class="text-sm text-gray-500"><span class="font-semibold">Consommé par :</span> {{ $ticket->deactivated_by_name }}</p>
-                <p class="text-sm text-gray-500"><span class="font-semibold">Type Utilisation</span> {{ $ticket->type_utilisation == "bon_achat" ? "Bon d'achat" : "Remboursement" }}</p>
+                @if ($ticket->deactivation_date)
+                    <p class="text-sm text-gray-500"><span class="font-semibold">Consommé le :</span> {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
+                    <p class="text-sm text-gray-500"><span class="font-semibold">Consommé par :</span> {{ $ticket->deactivated_by_name }}</p>
+                    <p class="text-sm text-gray-500"><span class="font-semibold">Type Utilisation</span> 
+                        {{ 
+                            $ticket->type_utilisation == "bon_achat" ? "Bon d'achat" : 
+                            ($ticket->type_utilisation == "remboursement" ? "Remboursement" : "Annulé") 
+                        }}
+                    </p>
+                @else
+                <p class="text-sm text-gray-500"><span class="font-semibold">⚠️ Attention : il semble que le ticket n'ait pas été encaissé ni même invalidé. ⚠️</span></p>
+                @endif
             </div>
             <div>
                 <p class="text-sm text-gray-500"><span class="font-semibold">Client : {{ $ticket->client->firstname }} {{ $ticket->client->lastname }}</span></p>
@@ -68,7 +77,7 @@
         <!-- Actions -->
         <div class="flex justify-between items-center mt-6">
             <div>
-                <a href="{{ route('admin.tickets') }}" class="p-2 bg-red-800 rounded hover:bg-red-900">Retour</a>
+                <a href="{{ session('previous_url', route('admin.tickets')) }}" class="p-2 bg-red-800 rounded hover:bg-red-900">Retour</a>
             </div>
             <div class="">
                 <a href="{{ route('admin.ticket.print.embeded', ['ticket_id' => $ticket->uuid])}}" class="p-2 bg-green-800 rounded hover:bg-green-900">Imprimer le ticket</a>

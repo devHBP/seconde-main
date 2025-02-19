@@ -46,7 +46,7 @@
     <p>Validé par : {{ $deactivated_by }}</p>
 
     <div class="footer">
-        <p>Merci de votre visite, tout l'équipe vous remercies, A bientôt chez Account->name</p>
+        <p>Merci de votre visite, tout l'équipe vous remercies, A bientôt chez {{ Auth::user()->name }}</p>
     </div>
 </body>
 </html>

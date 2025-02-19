@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\TicketRedit;
 use App\Models\Account;
 use App\Models\Brand;
+use App\Models\Client;
 use App\Models\Picture;
 use App\Models\Product;
 use App\Models\Role;
@@ -603,6 +604,7 @@ class AdminController
      */
     public function getTickets()
     {
+        session(['previous_url' => url()->current()]);
         $tickets = TicketReprise::where('is_activated', true)
             ->orderBy('created_at', 'desc')
             ->paginate(25)
@@ -613,6 +615,7 @@ class AdminController
 
     public function searchTicket(Request $request)
     {
+        session(['previous_url' => url()->current()]);
         $validatedData = $request->validate([
             "query" => 'string|nullable|max:80'
         ]);
@@ -672,6 +675,45 @@ class AdminController
         return $pdf->stream("Ticket-{$ticket->uuid}.pdf");
     }
 
+    /**
+    * Client <-> tickets , réimpression, recherches ect .
+    */
+    public function getClients()
+    {
+        $clients = Client::orderBy('created_at', 'desc')
+            ->paginate(25)
+            ->withQueryString();
+        
+        return view('admin.clients.clients', ["clients" => $clients, "user" => $this->user ]);
+    }
+
+    public function searchClients(Request $request)
+    {
+        $query = $request->input('query');
+
+        $clientsQuery = Client::orderBy('created_at', 'desc');
+
+        if(!empty($query)){
+            $clientsQuery->where(function($q) use ($query){
+                $q->where('firstname', 'LIKE', "%{$query}%")
+                ->orWhere('lastname', 'LIKE', "%{$query}%")
+                ->orWhere('email', 'LIKE', "%{$query}%")
+                ->orWhere('phone', 'LIKE', "%{$query}%");
+            });
+        }
+        $clients = $clientsQuery->paginate(25)->withQueryString();
+
+        return view('admin.clients.clients', ['user'=>$this->user, "clients"=>$clients]);
+    }
+
+    public function showClient($client_id)
+    {
+        session(['previous_url' => url()->current()]); // on vient stocker l'url actuel
+        $client = Client::with('tickets')->findOrFail($client_id);
+        return view('admin.clients.client', ['user' => $this->user, 'client'=>$client]);
+    }
+    
+    
     public function getStats()
     {
         //
