@@ -104,11 +104,11 @@
                             class="w-full py-2 px-4 border rounded">
                     </div>
                 </div>
-                <!-- Consentement -->
+                <div class="flex justify-between">
                     <!-- Consentement -->
                     <div class="mb-4">
                         <label for="consent" class="block text-sm font-bold mb-2">
-                            Consentement à l'usage des données à but interne
+                            Consentement à l'usage des données à but interne (Groupe HBP)
                         </label>
                         <div class="flex items-center space-x-4">
                             <!-- Option Oui -->
@@ -132,9 +132,29 @@
                             </label>
                         </div>
                         @error('consent')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            <span class="text-sm">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="mb-4">
+                        <label for="print_ticket" class="block text-sm font-bold mb-2">
+                            Impression Ticket
+                        </label>
+                        <div class="flex items-center space-x-4">
+                            <!-- Option Oui -->
+                            <label class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    name="print_ticket" 
+                                    value="on" 
+                                    class="form-radio h-4 w-4">
+                                <span class="ml-2">Oui</span>
+                            </label>
+                        </div>
+                        @error('print_ticket')
+                            <span class="text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
                 <button type="submit" class="px-6 py-2 rounded">
                     Créer le client
                 </button>

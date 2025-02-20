@@ -91,7 +91,7 @@ button.button-search{
     border-radius: 10px;
     color: var(--main-cards-font);
     input{
-        color: var(--main-cards-font);
+        color: var(--main-background);
     }
     button{
         background-color: var(--main-cards-button);

@@ -36,8 +36,6 @@ class ReceptionController
             $this->cartInProgress = true;
             $this->itemsInCart = count($panier->products);
         }
-
-        
     }
 
     public function dashboard()
@@ -477,8 +475,13 @@ class ReceptionController
                 "lastname" => 'required|string|max:255',
                 "email" => 'nullable|email|required_without:phone|unique:users,email,NULL,id',
                 "phone" => 'nullable|digits:10|required_without:email',
-                "consent" => 'required|boolean'
+                "consent" => 'required|boolean',
+                "print_ticket" => "nullable"
             ]);
+            //Récupération de la valeur printTicket
+            $printTicket = $validatedData['print_ticket'] ?? null;
+
+            // Creation du client
             $client = new Client();
             $client->firstname = $validatedData['firstname'];
             $client->lastname = $validatedData['lastname'];
