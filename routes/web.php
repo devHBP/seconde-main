@@ -141,6 +141,7 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/administrateur/clients', [AdminController::class, 'getClients'])->name('admin.clients');
     Route::get('/administarteur/clients/search', [AdminController::class, 'searchClients'])->name('admin.clients.search');
     Route::get('/administrateur/clients/{client_id}', [AdminController::class , 'showClient'])->name('admin.clients.show');
+    Route::post('/administrateur/clients/{client_id}/update', [AdminController::class, 'updateClient'])->name('admin.clients.update');
 
     /**
      * Routes concernant la reception

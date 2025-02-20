@@ -712,6 +712,29 @@ class AdminController
         $client = Client::with('tickets')->findOrFail($client_id);
         return view('admin.clients.client', ['user' => $this->user, 'client'=>$client]);
     }
+
+    /**
+     * Methode lié à la modification à la volée d'un client dans la vue /clients/{client_id}
+     */
+    public function updateClient(Request $request, $client_id)
+    {
+        $client = Client::where('id', $client_id)->first();
+        
+        if(!$client){
+            return response()->json([
+                "message" => "Client non trouvé",
+            ], 404);
+        }
+
+        $validatedData = $request->validate([
+            'field' => 'required|in:firstname,lastname,email,phone',
+            'value' => 'nullable|string|max:255',
+        ]);
+
+        $client->update([$validatedData['field'] => $validatedData['value']]);
+        
+        return response()->json(['message' => 'Ressource patché avec succès'], 200);
+    }
     
     
     public function getStats()

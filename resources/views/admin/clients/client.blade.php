@@ -16,10 +16,42 @@
     </x-slot>
     <div class="max-w-7xl mx-auto py-8">
         <!-- Infos Client -->
-        <div class="p-6 mb-6">
-            <h3 class="text-lg font-semibold">{{ $client->firstname }} {{ $client->lastname }}</h3>
-            <p>Email : <strong>{{ $client->email ?? 'Non renseigné' }}</strong></p>
-            <p>Téléphone : <strong>{{ $client->phone ?? 'Non renseigné' }}</strong></p>
+        <div class="mb-6 client-layout">
+            <h3 class="text-lg font-semibold">Informations du Client</h3>
+            
+            <div class="space-y-2 client-fields">
+                <div class="flex items-center gap-2 client-field">
+                    <div>
+                        <span class="font-semibold">Nom :</span> 
+                        <span class="editable" data-field="lastname">{{ $client->lastname }}</span>
+                    </div>
+                    <button class="edit-btn" data-field="lastname">✏️</button>
+                </div>
+
+                <div class="flex items-center gap-2 client-field">
+                    <div>
+                        <span class="font-semibold">Prénom :</span> 
+                        <span class="editable" data-field="firstname">{{ $client->firstname }}</span>
+                    </div>
+                    <button class="edit-btn" data-field="firstname">✏️</button>
+                </div>
+
+                <div class="flex items-center gap-2 client-field">
+                    <div>
+                        <span class="font-semibold">Email :</span> 
+                        <span class="editable" data-field="email">{{ $client->email ?? 'Non renseigné' }}</span>
+                    </div>
+                    <button class="edit-btn" data-field="email">✏️</button>
+                </div>
+
+                <div class="flex items-center gap-2 client-field">
+                    <div>
+                        <span class="font-semibold">Téléphone :</span> 
+                        <span class="editable" data-field="phone">{{ $client->phone ?? 'Non renseigné' }}</span>
+                    </div>
+                    <button class="edit-btn" data-field="phone">✏️</button>
+                </div>
+            </div>
         </div>
 
         <!-- Liste des Tickets Associés -->
@@ -71,3 +103,57 @@
         </div>
     </div>
 </x-app-layout>
+
+<!-- Script JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editButtons = document.querySelectorAll('.edit-btn');
+
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                let field = this.getAttribute('data-field');
+                let span = document.querySelector(`.editable[data-field="${field}"]`);
+
+                //remplace le texte par une input au click
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.value = span.textContent.trim();
+                input.classList.add('border', 'px-2', 'py-1', 'rounded');
+
+                // Boutton de validation
+                let saveBtn = document.createElement('button');
+                saveBtn.textContent = "✅";
+                saveBtn.classList.add('ml-2', 'px-2', 'py-1', 'rounded');
+
+                // Remplacement du texte par l'input
+                span.replaceWith(input);
+                this.replaceWith(saveBtn);
+                //Sauvegarde en DB via Fetch
+                saveBtn.addEventListener('click', async function() {
+                    let newValue = input.value;
+                    let clientId = "{{ $client->id }}";
+                    let response = await fetch(`/administrateur/clients/${clientId}/update`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body:JSON.stringify({
+                            field: field,
+                            value: newValue
+                        })
+                    });
+                    let result = await response.json();
+
+                    if(response.ok){
+                        input.replaceWith(span);
+                        saveBtn.replaceWith(btn);
+                        span.textContent = newValue;
+                    } else {
+                        alert('Erreur lors de la mise à jour du champ.')
+                    }
+                })
+            })
+        });
+    })
+</script>

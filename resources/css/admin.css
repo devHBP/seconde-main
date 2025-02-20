@@ -149,5 +149,40 @@ td.link{
             filter: brightness(0.9);
         }
     }
+}
 
+.client-layout{
+    position:relative;
+    z-index: 5;
+    padding: 2em 1em 1em 1em;
+    display: flex;
+    flex-direction: column;
+    h3{
+        background-color: var(--main-cards-button);
+        filter:brightness(0.8);
+        border-bottom: 1px solid var(--main-cards-font);
+        border-radius: 10px 10px 0 0;
+        padding: 0.5em;
+    }
+    div.client-fields{
+        background-color: var(--main-cards-background);
+        padding: 0.2em 0.5em;
+        display:flex;
+        flex-direction: column;
+        div.client-field{
+            display: flex;
+            justify-content: space-between;
+            &:last-child{
+                margin-bottom: 1em;
+            }
+            button{
+                margin-right: 1em;
+                font-size: 20px;
+            }
+            div>input{
+                background-color: var(--main-cards-font);
+                color: var(--main-cards-background);
+            }
+        }
+    }
 }
