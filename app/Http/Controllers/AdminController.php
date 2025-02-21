@@ -605,8 +605,7 @@ class AdminController
     public function getTickets()
     {
         session(['previous_url' => url()->current()]);
-        $tickets = TicketReprise::where('is_activated', true)
-            ->orderBy('created_at', 'desc')
+        $tickets = TicketReprise::orderBy('created_at', 'desc')
             ->paginate(25)
             ->withQueryString();
 

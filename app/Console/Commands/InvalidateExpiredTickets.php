@@ -30,12 +30,16 @@ class InvalidateExpiredTickets extends Command
     {
         Log::info("Lancement du traitement des tickets périmés.");
         $now = Carbon::now();
-        $expiredTickets = TicketReprise::where('is_activated', false)
+        // On dois désactiver ici le global scope la fonction est autonome personne n'est connecté et la vérification porte sur "tout" les tickets pas seulement
+        // ceux limité au Scope account_id
+        $expiredTickets = TicketReprise::withoutGlobalScopes()
+            ->where('is_activated', false)
             ->whereNotNull('date_limite')
             ->where('date_limite', '<', $now)
             ->whereNull('deactivation_date')
             ->get();
         
+        dump($expiredTickets);
         $count = 0;
 
         foreach($expiredTickets as $ticket){

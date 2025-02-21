@@ -459,9 +459,12 @@ class ReceptionController
                 return $q->where('email', 'LIKE', "%$query%")
                     ->orWhere('phone', 'LIKE', "%$query%")
                     ->orWhere('firstname', 'LIKE', "%$query%")
+                    ->orWhere('lastname', 'LIKE', "%$query%")
                 ;
             })
             ->get();
+            //! Ici prévoir une modification sur la recherche "query" qui génère un bug.
+
         return view('reception.cart.validate', compact('clients', 'query', 'panier_id', 'user'));
     }
 
