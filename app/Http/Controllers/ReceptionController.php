@@ -673,12 +673,14 @@ class ReceptionController
 
     public function generateCustomTicketCode($accountId, $userId)
     {
-        $ticketCount = TicketReprise::where('account_id', $accountId)->count();
+        $ticketCount = TicketReprise::where('account_id', $accountId)
+            ->where('user_id', $userId)
+            ->count();
 
         $ticketNumber = str_pad($ticketCount + 1, 7, '0', STR_PAD_LEFT);
         $formattedAccountId = str_pad($accountId, 2, '0', STR_PAD_LEFT);
         $formattedUserId = str_pad($userId, 3, '0', STR_PAD_LEFT);
 
-        return "S{$formattedAccountId}{$formattedUserId}-{$ticketNumber}";
+        return "S{$formattedAccountId}{$formattedUserId}-T{$ticketNumber}";
     }
 }
