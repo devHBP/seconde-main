@@ -81,6 +81,7 @@ class EncaissementController extends Controller
     // Route Post de validation.
     public function consumeTicket(Request $request)
     {
+        dump($request->all());
         if($request->has('ticket_uuid') && $request->has('type_utilisation')){
             $validatedData = $request->validate([
                 'ticket_uuid' => 'required|string|max:14',
