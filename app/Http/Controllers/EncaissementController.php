@@ -83,14 +83,13 @@ class EncaissementController extends Controller
     {
         if($request->has('ticket_uuid') && $request->has('type_utilisation')){
             $validatedData = $request->validate([
-                'ticket_uuid' => 'required|string|max:14',
+                'ticket_uuid' => 'required|string|max:15',
                 'type_utilisation' => 'required|string|in:remboursement,bon_achat'
             ]);
             $ticket_uuid = $validatedData['ticket_uuid'];
             $type_utilisation = $validatedData['type_utilisation'];
             
             $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
-            dd($ticket);
             if(!$ticket){
                 throw new Error('Une erreur est survenue, impossible de trouver le ticket');
             }
