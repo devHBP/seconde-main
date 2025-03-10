@@ -137,7 +137,7 @@ class EncaissementController extends Controller
     public function restituteTicket(Request $request)
     {
         $validatedData = $request->validate([
-            'ticket_uuid' => 'required|string|max:14|exists:tickets_reprise,uuid',
+            'ticket_uuid' => 'required|string|max:15|exists:tickets_reprise,uuid',
         ],
         [
             "uuid.exists" => "Le code barre ne correspond à aucuns ticket valide",
