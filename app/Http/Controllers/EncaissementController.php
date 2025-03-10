@@ -81,7 +81,6 @@ class EncaissementController extends Controller
     // Route Post de validation.
     public function consumeTicket(Request $request)
     {
-        dd($request->all());
         if($request->has('ticket_uuid') && $request->has('type_utilisation')){
             $validatedData = $request->validate([
                 'ticket_uuid' => 'required|string|max:14',
@@ -89,8 +88,9 @@ class EncaissementController extends Controller
             ]);
             $ticket_uuid = $validatedData['ticket_uuid'];
             $type_utilisation = $validatedData['type_utilisation'];
-
+            
             $ticket = TicketReprise::where('uuid', $ticket_uuid)->first();
+            dd($ticket);
             if(!$ticket){
                 throw new Error('Une erreur est survenue, impossible de trouver le ticket');
             }
