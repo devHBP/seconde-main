@@ -15,7 +15,7 @@
             </div>
     </x-slot>
     <div>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 layout-search">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6 mb-4 layout-search">
             <!-- Formulaire de recherche tickets -->
             <form method="GET" action="{{ route('admin.search.tickets') }}" class="mb-6">
                 <div class="flex items-center gap-4">
@@ -31,7 +31,7 @@
             </form>
         </div>
         <!-- Tableau des tickets -->
-        <div class="max-w-7xl p-2 mx-auto sm-:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl p-2 mx-auto sm-:px-6 lg:px-8 mb-4">
             <table class="w-full">
                 <thead class="bg-gray-200">
                     <tr class="text-left border-b border-gray-300">
@@ -81,7 +81,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-6 flex justify-center">
+        <div class="mb-6 flex justify-center relative z-10 text-black">
             {{ $tickets->links() }}
         </div>
     </div>

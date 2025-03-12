@@ -25,7 +25,7 @@
                 <p class="text-sm text-gray-500"><span class="font-semibold">Date de création :</span> {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
                 @if ($ticket->deactivation_date)
                     <p class="text-sm text-gray-500"><span class="font-semibold">Consommé le :</span> {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
-                    <p class="text-sm text-gray-500"><span class="font-semibold">Consommé par :</span> {{ $ticket->deactivated_by_name }}</p>
+                    <p class="text-sm text-gray-500"><span class="font-semibold">Consommé par :</span> {{ $ticket->deactivated_by_name}}</p>
                     <p class="text-sm text-gray-500"><span class="font-semibold">Type Utilisation</span> 
                         {{ 
                             $ticket->type_utilisation == "bon_achat" ? "Bon d'achat" : 

@@ -134,7 +134,10 @@
                                 {{ $product->states->pluck('name')->join(' | ') }}
                             </td>
                             <td class="px-5 py-5 border-b">
-                                {{ $product->states->pluck('pivot.prix_remboursement')->join(' | ') }}
+                                <div>
+                                    <p>RE : {{ $product->states->pluck('pivot.prix_remboursement')->join(' | ') }}</p>
+                                    <p>BA : {{ $product->states->pluck('pivot.prix_bon_achat')->join(' | ') }}</p>
+                                </div>
                             </td>
                             <td class="px-5 py-5 border-b text-center form-actions">
                                 <a href="{{ route('admin.product.modify', $product) }}">Modifier</a>

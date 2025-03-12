@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <h2>Votre Ticket</h2>
+    <h2>Votre Ticket {{ $ticket->uuid }}</h2>
     <p>Date : {{ now()->format('d/m/Y H:i:s') }} </p>
     <p>Bonjour {{ $ticket->client->firstname }} {{ $ticket->client->lastname }},</p>
 
@@ -43,7 +43,7 @@
     @php
         $deactivated_by = str_pad($ticket->created_by, 3, '0', STR_PAD_LEFT)
     @endphp
-    <p>Date de comsommation : {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
+    <p>Date de comsommation : {{ $ticket->deactivation_date ? $ticket->deactivation_date->format('d/m/Y H:i') : "Ticket non consommé"}}</p>
     <p>Validé par : {{ $deactivated_by }}</p>
 
     <div class="footer">

@@ -606,7 +606,7 @@ class AdminController
     {
         session(['previous_url' => url()->current()]);
         $tickets = TicketReprise::orderBy('created_at', 'desc')
-            ->paginate(25)
+            ->paginate(10)
             ->withQueryString();
 
         return view('admin.tickets.tickets', ['user' => $this->user, "tickets" => $tickets]);

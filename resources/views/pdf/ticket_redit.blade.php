@@ -63,8 +63,8 @@
             <h3>{{ Auth()->user()->name }}</h3>
             <h4>Réédition Ticket de Reprise <span class="block">n°{{ $ticket->uuid }}</span></h4>
             <p>Date : {{ now()->format('d/m/Y H:i:s')}}</p>
-            <p>Validé par : {{ $ticket->deactivated_by }}</p>
-            <p>Consommé le : {{ $ticket->deactivation_date->format('d/m/Y H:i') }}</p>
+            <p>Validé par : {{ $ticket->deactivated_by ?? "Pas encore consommé." }}</p>
+            <p>Consommé le : {{ $ticket->deactivation_date ? $ticket->deactivation_date->format('d/m/Y H:i') : "Pas encore consommé." }}</p>
         </div>
         <div class="client">
             <h4>Client</h4>
