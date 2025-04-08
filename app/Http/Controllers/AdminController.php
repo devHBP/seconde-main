@@ -15,9 +15,12 @@ use App\Models\Type;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use PHPUnit\Framework\Attributes\Ticket;
 
 use function PHPUnit\Framework\isNull;
 
@@ -738,6 +741,138 @@ class AdminController
     
     public function getStats()
     {
-        //
+        return view('admin.stats.stats', ['user' => $this->user]);
+    }
+
+    public function getJsonStats()
+    {
+
+        //liste des exception, tests et reprise SAV
+        $account = $this->user->account_id;
+        $ignoreRaw = env('LIST_IGNORE_CLIENTS_' . $account);
+        $clientIdsToIgnore = array_filter(explode(',', $ignoreRaw)); 
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $tickets = [
+            "all" => TicketReprise::where('is_activated', true)
+            ->whereIn('type_utilisation', ['remboursement', 'bon_achat'])
+            ->count(),
+            "monthly" => TicketReprise::where('is_activated', true)
+            ->whereIn('type_utilisation', ['remboursement', 'bon_achat'])
+            ->whereBetween('created_at',[
+                $startOfMonth,
+                $endOfMonth,
+            ])
+            ->count(),
+            "weekly" => TicketReprise::where('is_activated', true)
+            ->whereIn('type_utilisation', ['remboursement', 'bon_achat'])
+            ->whereBetween('created_at',[
+                $startOfWeek,
+                $endOfWeek,
+            ])
+            ->count(),
+        ];
+        
+        $clients = [
+            'all' => Client::whereNotIn('id', $clientIdsToIgnore)->count(),
+            'monthly' => Client::whereBetween('created_at', [
+                $startOfMonth,
+                $endOfMonth,
+            ])
+            ->whereNotIn('id', $clientIdsToIgnore)
+            ->count(),
+            'weekly' => Client::whereNotIn('id', $clientIdsToIgnore)
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->count()
+        ];
+
+        $bons = [
+            'all' => number_format($this->getTotalBon(), 2),
+            'monthly' => number_format($this->getTotalBon($startOfMonth, $endOfMonth), 2),
+            'weekly' => number_format($this->getTotalBon($startOfWeek, $endOfWeek),2) 
+        ];
+        $cash = [
+            'all' => number_format($this->getTotalRemboursement(), 2),
+            'monthly' => number_format($this->getTotalRemboursement($startOfMonth, $endOfMonth), 2),
+            'weekly' => number_format($this->getTotalRemboursement($startOfWeek, $endOfWeek),2) 
+        ];
+        $articles = [
+            'all' => $this->getTotalArticles(),
+            'monthly' => $this->getTotalArticles($startOfMonth, $endOfMonth),
+            'weekly' => $this->getTotalArticles($startOfWeek, $endOfWeek)
+        ];
+        $periods = [
+            'all' => [
+                'start' => "Depuis le début",
+                'end' => Carbon::now()->format('d/m/Y'),
+            ],
+            'monthly' => [
+                'start' => $startOfMonth->format('d/m/Y'),
+                'end' => $endOfMonth->format('d/m/Y'),
+            ],
+            'weekly' => [
+                'start' => $startOfWeek->format('d/m/Y'),
+                'end' => $endOfWeek->format('d/m/Y')
+            ]
+        ];
+        return response()->json([
+            "tickets" => $tickets,
+            "clients" => $clients,
+            "total_bon_achat" => $bons,
+            "total_remboursement" => $cash,
+            "articles" => $articles,
+            "periods" => $periods
+        ], 200);
+    }
+
+
+    function getTotalBon($start = null, $end = null)
+    {
+        $query = TicketReprise::with('panier')
+            ->where('is_activated', true)
+            ->where('type_utilisation', 'bon_achat');
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        return $query->get()
+            ->sum(fn($ticket) => $ticket->panier?->total_bon_achat ?? 0);
+    }
+    
+
+    function getTotalRemboursement($start = null, $end = null)
+    {
+        $query = TicketReprise::with('panier')
+            ->where('is_activated', true)
+            ->where('type_utilisation', 'remboursement');
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        return $query->get()
+            ->sum(fn($ticket) => $ticket->panier?->total_remboursement ?? 0);
+    }
+
+
+    function getTotalArticles($start = null, $end = null)
+    {
+        $ticketQuery = TicketReprise::where('is_activated', true)
+            ->whereIn('type_utilisation', ['bon_achat', 'remboursement']);
+
+        if ($start && $end) {
+            $ticketQuery->whereBetween('created_at', [$start, $end]);
+        }
+
+        $panierIds = $ticketQuery->pluck('panier_id')->filter()->unique();
+
+        return DB::table('product_panier')
+            ->whereIn('panier_id', $panierIds)
+            ->sum('quantity');
     }
 }

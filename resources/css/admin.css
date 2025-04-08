@@ -186,6 +186,61 @@ td.link{
         }
     }
 }
+/* Stats Styles */
+.filter-stat-buttons{
+    position: relative;
+    z-index : 5;
+    margin-top: 1em;
+    margin-right: 1em;
+    margin-left: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    cursor:pointer;
+    button{
+        background-color: var(--main-cards-background);
+        padding:0.5em;
+        border-radius: 5px;
+        &.active{
+            filter: brightness(0.8);
+        }
+    }
+}
+div.layout-container.stats{
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 1.5em;
+    h2{
+        font-size: 24px;
+        margin-right: 2em;
+        color: var(--main-cards-font);
+        padding: 1em;
+    }
+    border-bottom: 1px solid var(--main-cards-font);
+    margin: unset;
+    padding: 1em;
+}
+div.layout-container.stats>a.stat-tile{
+    width:20%;
+    height:120px;
+    cursor: pointer ;
+    h3{
+        font-size: 20px;
+        font-weight: bold;
+    }
+    p{
+        background-color: var(--main-cards-font);
+        color: var(--main-cards-button);
+        padding:0 1em;
+        font-weight: bolder;
+        transform: rotate(5deg);
+        filter: drop-shadow(2px 1px 1px black);
+        &:nth-of-type(odd){
+            transform: rotate(-5deg);
+        }
+    }
+}
 
 /* Tentative de chopper la pagination */
 nav.flex.items-center.justify-between{

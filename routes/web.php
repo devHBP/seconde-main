@@ -142,7 +142,10 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/administarteur/clients/search', [AdminController::class, 'searchClients'])->name('admin.clients.search');
     Route::get('/administrateur/clients/{client_id}', [AdminController::class , 'showClient'])->name('admin.clients.show');
     Route::post('/administrateur/clients/{client_id}/update', [AdminController::class, 'updateClient'])->name('admin.clients.update');
-
+    /**
+     * Routes API interne protégé via un secret_pass 
+     */
+    Route::get('/admin/stats/json', [AdminController::class, 'getJsonStats']);
     /**
      * Routes concernant la reception
      */
@@ -195,6 +198,7 @@ Route::middleware(['auth', 'subsession'])->group(function(){
     Route::get('/encaissement/ticket/supplier/{ticket_uuid}/print', [EncaissementController::class, 'printSupplierDelivery'])->name('encaissement.ticket.supplier.print');
     Route::get('/encaissement/ticket/supplier/{ticket_uuid}/generate', [EncaissementController::class, 'generateSupplierDelivery'])->name('encaissement.ticket.supplier.generate');
 });
+
 
 Route::get('/simulateur/{account_slug}', [VisitorController::class, 'simulate'])->name('simulateur.selection');
 Route::get('/simulateur/{account_slug}/clean', [VisitorController::class, 'cleanSession'])->name('simulateur.clean');
