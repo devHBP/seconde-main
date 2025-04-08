@@ -791,19 +791,19 @@ class AdminController
         ];
 
         $bons = [
-            'all' => number_format($this->getTotalBon(), 2),
-            'monthly' => number_format($this->getTotalBon($startOfMonth, $endOfMonth), 2),
-            'weekly' => number_format($this->getTotalBon($startOfWeek, $endOfWeek),2) 
+            'all' => number_format($this->getTotalBon(null, null, $clientIdsToIgnore), 2),
+            'monthly' => number_format($this->getTotalBon($startOfMonth, $endOfMonth, $clientIdsToIgnore), 2),
+            'weekly' => number_format($this->getTotalBon($startOfWeek, $endOfWeek, $clientIdsToIgnore),2) 
         ];
         $cash = [
-            'all' => number_format($this->getTotalRemboursement(), 2),
-            'monthly' => number_format($this->getTotalRemboursement($startOfMonth, $endOfMonth), 2),
-            'weekly' => number_format($this->getTotalRemboursement($startOfWeek, $endOfWeek),2) 
+            'all' => number_format($this->getTotalRemboursement(null, null, $clientIdsToIgnore), 2),
+            'monthly' => number_format($this->getTotalRemboursement($startOfMonth, $endOfMonth, $clientIdsToIgnore), 2),
+            'weekly' => number_format($this->getTotalRemboursement($startOfWeek, $endOfWeek, $clientIdsToIgnore),2) 
         ];
         $articles = [
-            'all' => $this->getTotalArticles(),
-            'monthly' => $this->getTotalArticles($startOfMonth, $endOfMonth),
-            'weekly' => $this->getTotalArticles($startOfWeek, $endOfWeek)
+            'all' => $this->getTotalArticles(null, null, $clientIdsToIgnore),
+            'monthly' => $this->getTotalArticles($startOfMonth, $endOfMonth, $clientIdsToIgnore),
+            'weekly' => $this->getTotalArticles($startOfWeek, $endOfWeek, $clientIdsToIgnore)
         ];
         $periods = [
             'all' => [
@@ -830,11 +830,15 @@ class AdminController
     }
 
 
-    function getTotalBon($start = null, $end = null)
+    function getTotalBon($start = null, $end = null, $clientIdsToIgnore=[])
     {
         $query = TicketReprise::with('panier')
             ->where('is_activated', true)
-            ->where('type_utilisation', 'bon_achat');
+            ->where('type_utilisation', 'bon_achat')
+            ->whereHas('panier', function ($q) use ($clientIdsToIgnore) {
+                $q->whereNotIn('client_id', $clientIdsToIgnore);
+            });
+    
 
         if ($start && $end) {
             $query->whereBetween('created_at', [$start, $end]);
@@ -845,11 +849,14 @@ class AdminController
     }
     
 
-    function getTotalRemboursement($start = null, $end = null)
+    function getTotalRemboursement($start = null, $end = null, $clientIdsToIgnore=[])
     {
         $query = TicketReprise::with('panier')
             ->where('is_activated', true)
-            ->where('type_utilisation', 'remboursement');
+            ->where('type_utilisation', 'remboursement')
+            ->whereHas('panier', function ($q) use ($clientIdsToIgnore) {
+                $q->whereNotIn('client_id', $clientIdsToIgnore);
+            });
 
         if ($start && $end) {
             $query->whereBetween('created_at', [$start, $end]);
@@ -860,10 +867,13 @@ class AdminController
     }
 
 
-    function getTotalArticles($start = null, $end = null)
+    function getTotalArticles($start = null, $end = null, $clientIdsToIgnore=[])
     {
         $ticketQuery = TicketReprise::where('is_activated', true)
-            ->whereIn('type_utilisation', ['bon_achat', 'remboursement']);
+            ->whereIn('type_utilisation', ['bon_achat', 'remboursement'])
+            ->whereHas('panier', function ($q) use ($clientIdsToIgnore) {
+                $q->whereNotIn('client_id', $clientIdsToIgnore);
+            });
 
         if ($start && $end) {
             $ticketQuery->whereBetween('created_at', [$start, $end]);
