@@ -55,6 +55,25 @@
             <p id="stat-articles">—</p>
         </a>
     </div>
+    <div class="layout-container stats mx-auto">
+        <h2>♲ SAV</h2>
+        <a class="stat-tile">
+            <h3>Nombre de Tickets</h3>
+            <p id="stat-tickets-sav">—</p>
+        </a>
+        <a class="stat-tile">
+            <h3>Articles repris</h3>
+            <p id="stat-articles-sav">—</p>
+        </a>
+        <a class="stat-tile">
+            <h3>Total Remboursement</h3>
+            <p id="stat-remboursement-sav">—</p>
+        </a>
+        <a class="stat-tile">
+            <h3>Total Bon Achat</h3>
+            <p id="stat-bons-sav">—</p>
+        </a>
+    </div>
 
     <script>
         let currentFilter = 'all';
@@ -77,6 +96,10 @@
             document.getElementById('stat-cash').textContent = stats.total_remboursement[filter] + ' €';
             document.getElementById('stat-articles').textContent = stats.articles[filter];
             document.getElementById('stat-clients').textContent = stats.clients[filter];
+            document.getElementById('stat-tickets-sav').textContent = stats.sav_tickets[filter];
+            document.getElementById('stat-articles-sav').textContent = stats.sav_articles[filter];
+            document.getElementById('stat-bons-sav').textContent = stats.sav_bons[filter] + '€';
+            document.getElementById('stat-remboursement-sav').textContent = stats.sav_remboursement[filter] +'€';
             document.getElementById('periode-affichee').textContent = formatPeriod(stats.periods[filter]);
 
             
